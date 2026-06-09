@@ -1,0 +1,99 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: laravel_tenant_kit
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - tenant-kit
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - .:/var/www/html:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - tenant-kit
+
+  mysql:
+    image: mysql:8.4
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: laravel_tenant_kit
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tenant-kit
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${FORWARD_REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tenant-kit
+
+  # Optional: use profile "pgsql" → docker compose --profile pgsql up
+  postgres:
+    profiles: ["pgsql"]
+    image: postgres:16-alpine
+    ports:
+      - "${FORWARD_PG_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: laravel_tenant_kit
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U laravel -d laravel_tenant_kit"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tenant-kit
+
+  node:
+    image: node:20-alpine
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    command: sh -c "npm ci && npm run build"
+    profiles: ["build"]
+    networks:
+      - tenant-kit
+
+networks:
+  tenant-kit:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
+  postgres_data:

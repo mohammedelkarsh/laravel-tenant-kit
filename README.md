@@ -10,7 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
-> **v1.0.0 — Stable foundation** · [View release notes](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.0.0)
+> **v1.1** — Docker, PostgreSQL & Redis support · [v1.0.0 release](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.0.0)
 
 ---
 
@@ -61,6 +61,9 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 - Workspace signup + CLI provisioning
 - **English & Arabic** (RTL) — easy to add more languages
 - GitHub Actions CI + 30-point smoke test script
+- **Docker Compose** dev stack (PHP, Nginx, MySQL, Redis)
+- **PostgreSQL** supported (Stancl database-per-tenant)
+- **Redis** cache / queue / sessions with tenant key isolation
 
 ---
 
@@ -73,7 +76,7 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 ✔ Production-minded structure — extend, don't rewrite  
 ✔ i18n: English + Arabic out of the box  
 
-**Tech stack:** Laravel 13 · PHP 8.4 · Filament 5 · Stancl Tenancy · Spatie Permission · Cashier (Stripe) · Breeze · Tailwind · Vite · MySQL
+**Tech stack:** Laravel 13 · PHP 8.4 · Filament 5 · Stancl Tenancy · Spatie Permission · Cashier (Stripe) · Breeze · Tailwind · Vite · MySQL / PostgreSQL · Redis · Docker
 
 ---
 
@@ -108,6 +111,20 @@ php artisan migrate && php artisan db:seed && npm run build
 Add to hosts: `127.0.0.1 laravel-tenant-kit.test` and `127.0.0.1 demo.laravel-tenant-kit.test`
 
 Open `http://laravel-tenant-kit.test` — done.
+
+### Docker (alternative)
+
+No Laragon? Run the full stack in one command:
+
+```bash
+# Windows
+.\scripts\docker-setup.ps1
+
+# macOS / Linux
+chmod +x scripts/docker-setup.sh && ./scripts/docker-setup.sh
+```
+
+Open **http://laravel-tenant-kit.test:8080** — see [docs/docker.md](docs/docker.md) for PostgreSQL profile and details.
 
 <details>
 <summary><strong>Full local setup (.env, credentials, verify)</strong></summary>
@@ -194,11 +211,47 @@ Built for **scalability**, **clean separation**, and **developer experience**:
 
 ---
 
+## PostgreSQL
+
+Switch from MySQL by changing `.env`:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=laravel_tenant_kit
+DB_USERNAME=laravel
+DB_PASSWORD=secret
+```
+
+Stancl creates isolated `tenant{id}` databases on PostgreSQL the same way as MySQL.  
+Docker: `docker compose --profile pgsql up -d` — see [docs/docker.md](docs/docker.md).
+
+---
+
+## Redis (production / Docker)
+
+Enable Redis for cache, queues, and sessions:
+
+```env
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+REDIS_HOST=127.0.0.1
+TENANCY_USE_REDIS_BOOTSTRAPPER=true
+```
+
+`TENANCY_USE_REDIS_BOOTSTRAPPER` prefixes Redis keys per workspace so tenant data never leaks.  
+Pre-configured in `.env.docker`.
+
+---
+
 ## Production-ready proof
 
 - GitHub Actions CI on every push
 - `scripts/system-test.php` — 30 automated checks (HTTP, DB, auth, i18n)
-- Tenant-aware cache, filesystem, and queue bootstrappers (Stancl)
+- Tenant-aware cache, filesystem, queue, and Redis bootstrappers (Stancl)
+- Docker Compose for reproducible local dev
 - Config / route / view caching documented for deploy
 - Wildcard subdomain + SSL deployment guide below
 
@@ -284,13 +337,13 @@ php artisan optimize:clear && php artisan view:cache
 
 ## Roadmap
 
-Planned for upcoming releases — contributions welcome:
-
+- [x] Docker Compose dev environment
+- [x] PostgreSQL support
+- [x] Redis cache / queue with tenant isolation
 - [ ] OAuth / social login (Google, GitHub)
+- [ ] API tokens per workspace (Sanctum)
 - [ ] SaaS analytics dashboard
 - [ ] Video demo GIF in README
-- [ ] Docker Compose dev environment
-- [ ] API tokens per workspace
 - [ ] Usage-based billing meters
 
 ---
@@ -305,6 +358,8 @@ routes/tenant.php                    # all workspace subdomains
 database/migrations/tenant/          # per-tenant schema
 lang/en|ar/                          # translations
 scripts/system-test.php              # smoke tests
+docker-compose.yml                   # PHP + Nginx + MySQL + Redis
+docs/docker.md                       # Docker & PostgreSQL guide
 ```
 
 ---
