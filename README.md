@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/mohammedelkarsh/laravel-tenant-kit/actions/workflows/tests.yml/badge.svg)](https://github.com/mohammedelkarsh/laravel-tenant-kit/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/mohammedelkarsh/laravel-tenant-kit?label=stable)](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/github/v/release/mohammedelkarsh/laravel-tenant-kit?label=stable)](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.1.0)
 [![GitHub stars](https://img.shields.io/github/stars/mohammedelkarsh/laravel-tenant-kit?style=social)](https://github.com/mohammedelkarsh/laravel-tenant-kit/stargazers)
 
 ## Build production-ready multi-tenant SaaS apps in minutes — not weeks.
@@ -10,7 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
-> **v1.1** — Docker, PostgreSQL & Redis support · [v1.0.0 release](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.0.0)
+> **v1.1.0** — Docker, PostgreSQL & Redis · [Release notes](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.1.0)
 
 ---
 
