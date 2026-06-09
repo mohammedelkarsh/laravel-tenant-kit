@@ -13,6 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('web')
                 ->domain(config('app.central_domain'))
                 ->group(base_path('routes/web.php'));
+
+            Route::middleware('api')
+                ->domain(config('app.central_domain'))
+                ->prefix('api')
+                ->group(base_path('routes/api.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

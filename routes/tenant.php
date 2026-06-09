@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\Tenant\AuthTokenController as TenantAuthTokenController;
+use App\Http\Controllers\Api\Tenant\TeamController as TenantTeamApiController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Tenant\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Tenant\Auth\RegisteredUserController;
@@ -58,5 +60,19 @@ Route::middleware([
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
             ->name('tenant.logout');
+    });
+});
+
+Route::middleware([
+    'api',
+    InitializeTenancyByDomainOrSubdomain::class,
+    PreventAccessFromCentralDomains::class,
+])->prefix('api')->group(function () {
+    Route::post('auth/token', [TenantAuthTokenController::class, 'store']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('user', [TenantAuthTokenController::class, 'me']);
+        Route::delete('auth/token', [TenantAuthTokenController::class, 'destroy']);
+        Route::get('team', [TenantTeamApiController::class, 'index']);
     });
 });

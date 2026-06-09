@@ -28,6 +28,7 @@ WORKDIR /var/www/html
 
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/99-opcache-docker.ini
 COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

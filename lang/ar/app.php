@@ -107,7 +107,20 @@ return [
         ],
     ],
 
+    'oauth' => [
+        'or_continue_with' => 'أو تابع باستخدام',
+        'google' => 'Google',
+        'github' => 'GitHub',
+    ],
+
     'filament' => [
+        'analytics_total_workspaces' => 'إجمالي مساحات العمل',
+        'analytics_new_this_month' => ':count جديدة هذا الشهر',
+        'analytics_active_subscriptions' => 'الاشتراكات النشطة',
+        'analytics_stripe_subscribers' => 'مشتركو Stripe',
+        'analytics_platform_users' => 'مستخدمي المنصة',
+        'analytics_central_users' => 'حسابات التطبيق المركزي',
+        'analytics_growth_chart' => 'نمو مساحات العمل (6 أشهر)',
         'workspaces' => 'مساحات العمل',
         'workspace' => 'مساحة عمل',
         'workspaces_plural' => 'مساحات العمل',

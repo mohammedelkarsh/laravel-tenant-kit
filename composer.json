@@ -17,6 +17,8 @@
         "filament/filament": "^5.6",
         "laravel/cashier": "^16.5",
         "laravel/framework": "^13.8",
+        "laravel/sanctum": "^4.3",
+        "laravel/socialite": "^5.27",
         "laravel/tinker": "^3.0",
         "spatie/laravel-permission": "^8.0",
         "stancl/tenancy": "^3.10"

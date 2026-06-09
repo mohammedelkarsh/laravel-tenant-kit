@@ -2,6 +2,7 @@
 .DS_Store
 .env
 .env.backup
+.env.laragon.backup
 .env.production
 .phpactor.json
 .phpunit.result.cache
@@ -25,3 +26,10 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Local SQLite tenant DBs created during tests
+/database/tenant*
+/laravel_tenant_kit
+
+# GIF build frames (demo.gif is committed)
+/docs/screenshots/gif-frames/

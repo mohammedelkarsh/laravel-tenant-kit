@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/mohammedelkarsh/laravel-tenant-kit/actions/workflows/tests.yml/badge.svg)](https://github.com/mohammedelkarsh/laravel-tenant-kit/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/mohammedelkarsh/laravel-tenant-kit?label=stable)](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.1.0)
+[![Release](https://img.shields.io/github/v/release/mohammedelkarsh/laravel-tenant-kit?label=stable)](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.2.0)
 [![GitHub stars](https://img.shields.io/github/stars/mohammedelkarsh/laravel-tenant-kit?style=social)](https://github.com/mohammedelkarsh/laravel-tenant-kit/stargazers)
 
 ## Build production-ready multi-tenant SaaS apps in minutes — not weeks.
@@ -10,7 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
-> **v1.1.0** — Docker, PostgreSQL & Redis · [Release notes](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.1.0)
+> **v1.2.0** — OAuth, Sanctum API & SaaS analytics · [Release notes](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.2.0)
 
 ---
 
@@ -60,10 +60,13 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 - Filament admin panel (`/admin`)
 - Workspace signup + CLI provisioning
 - **English & Arabic** (RTL) — easy to add more languages
-- GitHub Actions CI + 30-point smoke test script
+- GitHub Actions CI + 35 PHPUnit tests + 36-point smoke test script
 - **Docker Compose** dev stack (PHP, Nginx, MySQL, Redis)
 - **PostgreSQL** supported (Stancl database-per-tenant)
 - **Redis** cache / queue / sessions with tenant key isolation
+- **OAuth** login (Google, GitHub) on the central app
+- **Sanctum API** tokens — central platform + per-workspace tenant API
+- **SaaS analytics** widgets in Filament (growth chart, subscriptions, users)
 
 ---
 
@@ -80,9 +83,17 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 
 ---
 
+## Demo (GIF)
+
+Workspace signup → tenant login → dashboard → team → Filament analytics (after `db:seed`):
+
+![Demo walkthrough](docs/screenshots/demo.gif)
+
+---
+
 ## Screenshots
 
-| Landing page | Admin panel |
+| Landing page | Admin panel (SaaS analytics) |
 |:---:|:---:|
 | ![Landing page](docs/screenshots/landing.png) | ![Admin panel](docs/screenshots/admin-panel.png) |
 
@@ -94,7 +105,7 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 |:---:|:---:|
 | ![Team management](docs/screenshots/team-management.png) | |
 
-> **Live demo** (after `db:seed`): [demo workspace](http://demo.laravel-tenant-kit.test) · [admin panel](/admin)
+> **Live demo** (after `db:seed`): [demo workspace](http://demo.laravel-tenant-kit.test:8080) (Docker) or [without port](http://demo.laravel-tenant-kit.test) (Laragon) · [admin panel](http://laravel-tenant-kit.test:8080/admin)
 
 ---
 
@@ -124,7 +135,7 @@ No Laragon? Run the full stack in one command:
 chmod +x scripts/docker-setup.sh && ./scripts/docker-setup.sh
 ```
 
-Open **http://laravel-tenant-kit.test:8080** — see [docs/docker.md](docs/docker.md) for PostgreSQL profile and details.
+Open **http://laravel-tenant-kit.test:8080** (demo: **http://demo.laravel-tenant-kit.test:8080**) — Docker uses port **8080**, not 80. See [docs/docker.md](docs/docker.md).
 
 <details>
 <summary><strong>Full local setup (.env, credentials, verify)</strong></summary>
@@ -145,12 +156,12 @@ APP_AVAILABLE_LOCALES=en,ar
 | Context | URL | Email | Password |
 |---------|-----|-------|----------|
 | Admin | `/admin` | `admin@laravel-tenant-kit.test` | `password` |
-| Demo workspace | `http://demo.laravel-tenant-kit.test` | `demo@demo.test` | `password` |
+| Demo workspace | `http://demo.laravel-tenant-kit.test` (Laragon) or `:8080` (Docker) | `demo@demo.test` | `password` |
 
 ### Verify
 
 ```bash
-php scripts/system-test.php   # expect 30/30 passed
+php scripts/system-test.php   # expect 36/36 passed
 ```
 
 </details>
@@ -246,10 +257,32 @@ Pre-configured in `.env.docker`.
 
 ---
 
+## API & OAuth
+
+**Sanctum tokens** for headless clients and mobile apps:
+
+| Context | Base URL | Docs |
+|---------|----------|------|
+| Central platform | `https://your-domain.test/api` | [docs/api.md](docs/api.md) |
+| Workspace (tenant) | `https://{workspace}.your-domain.test/api` | [docs/api.md](docs/api.md) |
+
+```bash
+# Issue a central API token
+curl -X POST https://laravel-tenant-kit.test/api/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@laravel-tenant-kit.test","password":"password","device_name":"cli"}'
+```
+
+**OAuth** (Google, GitHub) — add credentials to `.env`; login buttons appear automatically on the central login page.
+
+Filament `/admin` includes **SaaS analytics** widgets: workspace growth, active Stripe subscriptions, platform users.
+
+---
+
 ## Production-ready proof
 
 - GitHub Actions CI on every push
-- `scripts/system-test.php` — 30 automated checks (HTTP, DB, auth, i18n)
+- `scripts/system-test.php` — 36 automated checks (HTTP, DB, auth, API, i18n)
 - Tenant-aware cache, filesystem, queue, and Redis bootstrappers (Stancl)
 - Docker Compose for reproducible local dev
 - Config / route / view caching documented for deploy
@@ -340,10 +373,10 @@ php artisan optimize:clear && php artisan view:cache
 - [x] Docker Compose dev environment
 - [x] PostgreSQL support
 - [x] Redis cache / queue with tenant isolation
-- [ ] OAuth / social login (Google, GitHub)
-- [ ] API tokens per workspace (Sanctum)
-- [ ] SaaS analytics dashboard
-- [ ] Video demo GIF in README
+- [x] OAuth / social login (Google, GitHub)
+- [x] API tokens per workspace (Sanctum)
+- [x] SaaS analytics dashboard
+- [x] Video demo GIF in README
 - [ ] Usage-based billing meters
 
 ---
@@ -360,6 +393,7 @@ lang/en|ar/                          # translations
 scripts/system-test.php              # smoke tests
 docker-compose.yml                   # PHP + Nginx + MySQL + Redis
 docs/docker.md                       # Docker & PostgreSQL guide
+docs/api.md                          # Sanctum API & OAuth setup
 ```
 
 ---

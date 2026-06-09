@@ -11,6 +11,8 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use App\Filament\Widgets\SaaSAnalyticsWidget;
+use App\Filament\Widgets\WorkspacesGrowthChart;
 use App\Filament\Widgets\WorkspacesStatsWidget;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -40,6 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                SaaSAnalyticsWidget::class,
+                WorkspacesGrowthChart::class,
                 WorkspacesStatsWidget::class,
                 AccountWidget::class,
             ])

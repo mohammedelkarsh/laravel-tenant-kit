@@ -10,6 +10,7 @@ $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 $host = config('app.central_domain');
+$httpBase = rtrim(getenv('SYSTEM_TEST_HTTP_BASE') ?: "http://{$host}", '/');
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $results = [];
 $passed = 0;
@@ -27,7 +28,7 @@ function httpGet(string $url, ?string $host = null): array
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_TIMEOUT => 30,
+        CURLOPT_TIMEOUT => 90,
         CURLOPT_HTTPHEADER => $host ? ["Host: {$host}"] : [],
     ]);
     $body = curl_exec($ch);
@@ -35,6 +36,31 @@ function httpGet(string $url, ?string $host = null): array
     curl_close($ch);
 
     return ['status' => $status, 'body' => (string) $body];
+}
+
+function httpPostJson(string $url, array $payload, ?string $host = null, ?string $token = null): array
+{
+    $headers = ['Content-Type: application/json', 'Accept: application/json'];
+    if ($host) {
+        $headers[] = "Host: {$host}";
+    }
+    if ($token) {
+        $headers[] = "Authorization: Bearer {$token}";
+    }
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_TIMEOUT => 90,
+        CURLOPT_HTTPHEADER => $headers,
+    ]);
+    $body = curl_exec($ch);
+    $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    return ['status' => $status, 'body' => (string) $body, 'json' => json_decode((string) $body, true)];
 }
 
 // ── Database ──────────────────────────────────────────────────────────
@@ -84,26 +110,26 @@ $centralUrls = [
 ];
 
 foreach ($centralUrls as $name => $path) {
-    $r = httpGet("http://{$host}{$path}", $host);
+    $r = httpGet("{$httpBase}{$path}", $host);
     $ok = $r['status'] >= 200 && $r['status'] < 400;
     record($results, $passed, $failed, 'HTTP Central', $name, $ok, "HTTP {$r['status']}");
 }
 
 // Protected central routes should redirect (302)
 foreach (['Admin dashboard' => '/admin', 'Billing page' => '/billing/demo'] as $name => $path) {
-    $r = httpGet("http://{$host}{$path}", $host);
+    $r = httpGet("{$httpBase}{$path}", $host);
     $ok = in_array($r['status'], [302, 303], true);
     record($results, $passed, $failed, 'HTTP Central', "{$name} (guest → redirect)", $ok, "HTTP {$r['status']}");
 }
 
 // Landing content checks
-$landing = httpGet("http://{$host}/", $host);
+$landing = httpGet("{$httpBase}/", $host);
 record($results, $passed, $failed, 'Content', 'Landing has hero text', stripos($landing['body'], 'multi-tenant') !== false);
 record($results, $passed, $failed, 'Content', 'Landing has architecture section', str_contains($landing['body'], 'tenant:provision'));
 record($results, $passed, $failed, 'Content', 'Landing CSS assets', str_contains($landing['body'], '/build/assets/'));
 
 // Locale switch + Arabic translations
-$localeSwitch = httpGet("http://{$host}/locale/ar", $host);
+$localeSwitch = httpGet("{$httpBase}/locale/ar", $host);
 record($results, $passed, $failed, 'Localization', 'Locale switch route', in_array($localeSwitch['status'], [302, 303], true), "HTTP {$localeSwitch['status']}");
 record($results, $passed, $failed, 'Localization', 'Enabled locales include en,ar', \App\Support\Locales::isEnabled('en') && \App\Support\Locales::isEnabled('ar'));
 app()->setLocale('ar');
@@ -111,39 +137,93 @@ record($results, $passed, $failed, 'Localization', 'Arabic app translation', __(
 record($results, $passed, $failed, 'Localization', 'Arabic RTL direction', \App\Support\Locales::direction('ar') === 'rtl');
 app()->setLocale('en');
 
+// ── API (Sanctum) ─────────────────────────────────────────────────────
+$apiTokenUrl = "{$httpBase}/api/auth/token";
+$invalidToken = httpPostJson($apiTokenUrl, [], $host);
+record($results, $passed, $failed, 'API Central', 'Token endpoint validates input', $invalidToken['status'] === 422, "HTTP {$invalidToken['status']}");
+
+if ($admin) {
+    $tokenResponse = httpPostJson($apiTokenUrl, [
+        'email' => $admin->email,
+        'password' => 'password',
+        'device_name' => 'system-test',
+    ], $host);
+    $hasToken = $tokenResponse['status'] === 200 && filled($tokenResponse['json']['token'] ?? null);
+    record($results, $passed, $failed, 'API Central', 'Issue token for platform admin', $hasToken, "HTTP {$tokenResponse['status']}");
+
+    if ($hasToken) {
+        // httpGet does not send bearer — use kernel for authenticated API
+        $request = Illuminate\Http\Request::create("http://{$host}/api/workspaces", 'GET');
+        $request->headers->set('HOST', $host);
+        $request->headers->set('Authorization', 'Bearer '.$tokenResponse['json']['token']);
+        $response = $kernel->handle($request);
+        $status = $response->getStatusCode();
+        $kernel->terminate($request, $response);
+        record($results, $passed, $failed, 'API Central', 'List workspaces with token', $status === 200, "HTTP {$status}");
+    }
+}
+
+Illuminate\Support\Facades\Auth::shouldUse('web');
+
 // ── HTTP — Tenant (guest) ─────────────────────────────────────────────
 $tenantHost = "demo.{$host}";
 foreach (['Tenant home' => '/', 'Tenant login' => '/login', 'Tenant register' => '/register'] as $name => $path) {
-    $r = httpGet("http://{$tenantHost}{$path}", $tenantHost);
+    $r = httpGet("{$httpBase}{$path}", $tenantHost);
     $ok = $r['status'] >= 200 && $r['status'] < 400;
     record($results, $passed, $failed, 'HTTP Tenant', $name, $ok, "HTTP {$r['status']}");
 }
 
-$dash = httpGet("http://{$tenantHost}/dashboard", $tenantHost);
+$dash = httpGet("{$httpBase}/dashboard", $tenantHost);
 record($results, $passed, $failed, 'HTTP Tenant', 'Dashboard (guest → redirect)', in_array($dash['status'], [302, 303], true), "HTTP {$dash['status']}");
 
-$tenantHome = httpGet("http://{$tenantHost}/", $tenantHost);
+$tenantHome = httpGet("{$httpBase}/", $tenantHost);
 record($results, $passed, $failed, 'Content', 'Tenant CSS via /build/', str_contains($tenantHome['body'], '/build/assets/'));
+
+// ── API (Tenant / Sanctum) ────────────────────────────────────────────
+$tenantApiTokenUrl = "{$httpBase}/api/auth/token";
+if (isset($demoUser) && $demoUser) {
+    $tenantTokenResponse = httpPostJson($tenantApiTokenUrl, [
+        'email' => 'demo@demo.test',
+        'password' => 'password',
+        'device_name' => 'system-test-tenant',
+    ], $tenantHost);
+    $hasTenantToken = $tenantTokenResponse['status'] === 200 && filled($tenantTokenResponse['json']['token'] ?? null);
+    record($results, $passed, $failed, 'API Tenant', 'Issue token for demo user', $hasTenantToken, "HTTP {$tenantTokenResponse['status']}");
+
+    if ($hasTenantToken) {
+        $request = Illuminate\Http\Request::create("{$httpBase}/api/team", 'GET');
+        $request->headers->set('HOST', $tenantHost);
+        $request->headers->set('Authorization', 'Bearer '.$tenantTokenResponse['json']['token']);
+        $response = $kernel->handle($request);
+        $status = $response->getStatusCode();
+        $kernel->terminate($request, $response);
+        record($results, $passed, $failed, 'API Tenant', 'List team with token', $status === 200, "HTTP {$status}");
+    }
+}
+
+// OAuth routes disabled without credentials
+$oauthGoogle = httpGet("{$httpBase}/auth/google/redirect", $host);
+record($results, $passed, $failed, 'OAuth', 'Google redirect (disabled → 404)', $oauthGoogle['status'] === 404, "HTTP {$oauthGoogle['status']}");
 
 // ── Authenticated kernel tests (non-Livewire routes) ─────────────────
 if ($admin) {
-    Illuminate\Support\Facades\Auth::login($admin);
+    Illuminate\Support\Facades\Auth::guard('web')->login($admin);
     $request = Illuminate\Http\Request::create("http://{$host}/billing/demo", 'GET');
     $request->headers->set('HOST', $host);
     $response = $kernel->handle($request);
     $status = $response->getStatusCode();
     $kernel->terminate($request, $response);
     record($results, $passed, $failed, 'Auth Central', 'Billing demo', $status >= 200 && $status < 400, "HTTP {$status}");
-    Illuminate\Support\Facades\Auth::logout();
+    Illuminate\Support\Facades\Auth::guard('web')->logout();
 }
 
 // Filament admin uses Livewire — verify via HTTP redirect chain instead
-$adminDash = httpGet("http://{$host}/admin", $host);
+$adminDash = httpGet("{$httpBase}/admin", $host);
 record($results, $passed, $failed, 'Filament', 'Admin reachable (login or dashboard)', in_array($adminDash['status'], [200, 302], true), 'test in browser after login');
 
 if ($tenant && isset($demoUser) && $demoUser) {
     tenancy()->initialize($tenant);
-    Illuminate\Support\Facades\Auth::login($demoUser);
+    Illuminate\Support\Facades\Auth::guard('web')->login($demoUser);
     foreach (['Tenant dashboard' => '/dashboard', 'Tenant team' => '/team'] as $name => $path) {
         $request = Illuminate\Http\Request::create("http://{$tenantHost}{$path}", 'GET');
         $request->headers->set('HOST', $tenantHost);
@@ -154,7 +234,7 @@ if ($tenant && isset($demoUser) && $demoUser) {
         record($results, $passed, $failed, 'Auth Tenant', $name, $ok, "HTTP {$status}");
     }
     tenancy()->end();
-    Illuminate\Support\Facades\Auth::logout();
+    Illuminate\Support\Facades\Auth::guard('web')->logout();
 }
 
 // ── CLI ───────────────────────────────────────────────────────────────

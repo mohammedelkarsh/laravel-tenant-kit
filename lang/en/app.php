@@ -107,7 +107,20 @@ return [
         ],
     ],
 
+    'oauth' => [
+        'or_continue_with' => 'Or continue with',
+        'google' => 'Google',
+        'github' => 'GitHub',
+    ],
+
     'filament' => [
+        'analytics_total_workspaces' => 'Total workspaces',
+        'analytics_new_this_month' => ':count new this month',
+        'analytics_active_subscriptions' => 'Active subscriptions',
+        'analytics_stripe_subscribers' => 'Stripe subscribers',
+        'analytics_platform_users' => 'Platform users',
+        'analytics_central_users' => 'Central app accounts',
+        'analytics_growth_chart' => 'Workspace growth (6 months)',
         'workspaces' => 'Workspaces',
         'workspace' => 'workspace',
         'workspaces_plural' => 'workspaces',

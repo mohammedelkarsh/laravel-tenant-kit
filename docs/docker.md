@@ -22,7 +22,19 @@ docker compose exec app php artisan migrate --seed
 docker compose --profile build run --rm node
 ```
 
-Open **http://laravel-tenant-kit.test:8080**
+Open **http://laravel-tenant-kit.test** (port 80) or **http://laravel-tenant-kit.test:8080**
+
+Demo workspace: **http://demo.laravel-tenant-kit.test/login** (or same with `:8080`)
+
+> Nginx is published on **both 80 and 8080** so Laragon-style URLs work without a port suffix. Stop Laragon/Apache if port 80 is already in use.
+
+### Slow on Windows?
+
+Docker bind-mounts from `D:\` are slow (15–40s per page is common). Options:
+
+1. **Use Laragon** for daily browsing (fast) and Docker only for CI/parity checks.
+2. **Move the repo into WSL2** (`\\wsl$\...`) before `docker compose up`.
+3. After code changes in Docker, run `docker compose restart app` (OPcache skips file stat).
 
 Default credentials are the same as local Laragon setup (see README).
 

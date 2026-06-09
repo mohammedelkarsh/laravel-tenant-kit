@@ -24,7 +24,8 @@ services:
   nginx:
     image: nginx:1.27-alpine
     ports:
-      - "${APP_PORT:-8080}:80"
+      - "${APP_PORT:-80}:80"
+      - "${APP_PORT_ALT:-8080}:80"
     volumes:
       - .:/var/www/html:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
