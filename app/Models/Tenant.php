@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\TenantUrls;
 use Laravel\Cashier\Billable;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDatabase;
@@ -17,20 +18,36 @@ class Tenant extends BaseTenant implements TenantWithDatabase
         return [
             'id',
             'name',
+            'suspended_at',
             'created_at',
             'updated_at',
         ];
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'suspended_at' => 'datetime',
+        ];
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->suspended_at !== null;
     }
 
     public function url(): string
     {
         $primaryDomain = $this->domains()->first()?->domain ?? $this->id;
 
-        if (str_contains($primaryDomain, '.')) {
-            return 'http://'.$primaryDomain;
-        }
+        return TenantUrls::forSubdomain($primaryDomain);
+    }
 
-        return 'http://'.$primaryDomain.'.'.config('app.central_domain');
+    public function urlHost(): string
+    {
+        $primaryDomain = $this->domains()->first()?->domain ?? $this->id;
+
+        return TenantUrls::hostLabel($primaryDomain);
     }
 
     public function stripeName(): ?string

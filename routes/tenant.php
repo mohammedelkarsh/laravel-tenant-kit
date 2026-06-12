@@ -18,6 +18,7 @@ Route::middleware([
     'web',
     InitializeTenancyByDomainOrSubdomain::class,
     PreventAccessFromCentralDomains::class,
+    'tenant.not_suspended',
 ])->group(function () {
     Route::get('/locale/{locale}', LocaleController::class)->name('tenant.locale.switch');
 
@@ -67,12 +68,18 @@ Route::middleware([
     'api',
     InitializeTenancyByDomainOrSubdomain::class,
     PreventAccessFromCentralDomains::class,
+    'tenant.not_suspended',
 ])->prefix('api')->group(function () {
-    Route::post('auth/token', [TenantAuthTokenController::class, 'store']);
+    Route::post('auth/token', [TenantAuthTokenController::class, 'store'])
+        ->middleware('throttle:api-auth');
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('user', [TenantAuthTokenController::class, 'me']);
+        Route::get('user', [TenantAuthTokenController::class, 'me'])
+            ->middleware('abilities:user:read');
         Route::delete('auth/token', [TenantAuthTokenController::class, 'destroy']);
-        Route::get('team', [TenantTeamApiController::class, 'index']);
+        Route::get('team', [TenantTeamApiController::class, 'index'])
+            ->middleware('abilities:team:read');
+        Route::post('team/invitations', [TenantTeamApiController::class, 'invite'])
+            ->middleware(['abilities:team:invite', 'role:owner|admin']);
     });
 });

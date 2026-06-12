@@ -48,6 +48,7 @@ return [
         'register' => 'Register',
         'members' => 'Members',
         'url' => 'URL',
+        'suspended' => 'This workspace has been suspended. Contact support for help.',
     ],
 
     'workspace' => [
@@ -139,6 +140,11 @@ return [
         'stats_admins_desc' => 'Central app users',
         'stats_domain' => 'Central domain',
         'stats_domain_desc' => 'Subdomains are created under this host',
+        'status' => 'Status',
+        'suspend' => 'Suspend',
+        'unsuspend' => 'Unsuspend',
+        'suspended' => 'Suspended',
+        'active' => 'Active',
     ],
 
 ];

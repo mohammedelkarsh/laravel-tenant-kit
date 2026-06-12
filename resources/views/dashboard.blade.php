@@ -12,7 +12,7 @@
                 <a href="{{ route('tenants.create') }}" class="block bg-white shadow-sm sm:rounded-lg p-6 hover:ring-2 hover:ring-indigo-500 transition">
                     <h3 class="font-semibold text-gray-900">{{ __('app.dashboard.create_workspace') }}</h3>
                 </a>
-                <a href="http://demo.{{ config('app.central_domain') }}" target="_blank" class="block bg-white shadow-sm sm:rounded-lg p-6 hover:ring-2 hover:ring-indigo-500 transition">
+                <a href="{{ \App\Support\TenantUrls::demo() }}" target="_blank" class="block bg-white shadow-sm sm:rounded-lg p-6 hover:ring-2 hover:ring-indigo-500 transition">
                     <h3 class="font-semibold text-gray-900">{{ __('app.dashboard.demo_workspace') }}</h3>
                 </a>
             </div>

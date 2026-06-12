@@ -14,7 +14,7 @@ class DashboardController extends Controller
             'tenantName' => tenant('name'),
             'tenantId' => tenant('id'),
             'memberCount' => User::count(),
-            'billingUrl' => 'http://'.config('app.central_domain').'/billing/'.tenant('id'),
+            'billingUrl' => \App\Support\TenantUrls::central('/billing/'.tenant('id')),
         ]);
     }
 }

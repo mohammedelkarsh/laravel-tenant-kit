@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Tenants\Schemas;
 
+use App\Support\TenantUrls;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -19,7 +20,7 @@ class TenantForm
                     ->maxLength(63)
                     ->unique(ignoreRecord: true)
                     ->helperText(fn (?string $state): string => $state
-                        ? 'Workspace URL: http://'.$state.'.'.config('app.central_domain')
+                        ? 'Workspace URL: '.TenantUrls::forSubdomain($state)
                         : 'Used as the tenant ID and workspace URL prefix.'),
                 TextInput::make('name')
                     ->label('Workspace name')

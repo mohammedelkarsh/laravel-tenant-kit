@@ -3,6 +3,14 @@ set -e
 
 cd /var/www/html
 
+# Self-heal: older images may lack intl (required by Filament /admin/tenants).
+if ! php -r 'exit(extension_loaded("intl") ? 0 : 1);'; then
+    echo "Installing missing PHP intl extension..."
+    apt-get update -qq
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq libicu-dev
+    docker-php-ext-install intl
+fi
+
 if [ ! -f vendor/autoload.php ]; then
     composer install --no-interaction --prefer-dist
 fi

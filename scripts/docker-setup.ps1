@@ -16,9 +16,9 @@ docker compose --profile build run --rm node
 
 Write-Host ""
 Write-Host "Done! Open:" -ForegroundColor Green
-Write-Host "  Central: http://laravel-tenant-kit.test" -ForegroundColor Green
-Write-Host "  Demo:    http://demo.laravel-tenant-kit.test/login" -ForegroundColor Green
-Write-Host "  (also :8080 if you prefer)" -ForegroundColor DarkGray
+Write-Host "  Central: http://laravel-tenant-kit.test:8080" -ForegroundColor Green
+Write-Host "  Demo:    http://demo.laravel-tenant-kit.test:8080/login" -ForegroundColor Green
+Write-Host "  Admin:   http://laravel-tenant-kit.test:8080/admin" -ForegroundColor Green
 Write-Host "Ensure hosts file contains:" -ForegroundColor Yellow
 Write-Host "  127.0.0.1 laravel-tenant-kit.test"
 Write-Host "  127.0.0.1 demo.laravel-tenant-kit.test"

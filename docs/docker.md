@@ -5,6 +5,7 @@ Run the full stack (PHP 8.4, Nginx, MySQL, Redis) without Laragon or Valet.
 ## Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- After changing `docker/php/Dockerfile`, rebuild: `docker compose up -d --build`
 - Add to your hosts file:
 
 ```
@@ -26,7 +27,29 @@ Open **http://laravel-tenant-kit.test** (port 80) or **http://laravel-tenant-kit
 
 Demo workspace: **http://demo.laravel-tenant-kit.test/login** (or same with `:8080`)
 
-> Nginx is published on **both 80 and 8080** so Laragon-style URLs work without a port suffix. Stop Laragon/Apache if port 80 is already in use.
+> On Windows with **Laragon on port 80**, Docker is usually on **8080** only. Use **`:8080`** on every URL (`http://laravel-tenant-kit.test:8080`, `http://demo.laravel-tenant-kit.test:8080`).  
+> Do **not** open tenant URLs without a port while `.env` has `DB_HOST=mysql` — Laragon will serve PHP and fail to resolve the Docker hostname.  
+> If you want Laragon without a port, copy `.env.example` to `.env`, run `php artisan migrate --seed` against Laragon MySQL, and use Laragon only (not Docker for browsing).
+
+### `/admin/tenants` shows "intl extension required"
+
+Filament needs the PHP **intl** extension. If you see a 500 error:
+
+```bash
+docker compose restart app
+docker compose exec app php scripts/check-tenants-page.php
+```
+
+Expected output: `intl_loaded=yes` and `status=200`.
+
+If `intl_loaded=no`, rebuild the app image (includes intl permanently):
+
+```bash
+docker compose build app
+docker compose up -d --force-recreate app
+```
+
+Then hard-refresh the browser (Ctrl+Shift+R) and sign in to `/admin` again.
 
 ### Slow on Windows?
 

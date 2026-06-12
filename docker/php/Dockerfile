@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libicu-dev \
     libpq-dev \
     curl \
     && docker-php-ext-install \
@@ -17,6 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         zip \
         bcmath \
         pcntl \
+        intl \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && apt-get clean \

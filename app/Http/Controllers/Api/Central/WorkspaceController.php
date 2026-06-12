@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTenantRequest;
 use App\Models\Tenant;
 use App\Services\TenantProvisioner;
+use App\Support\SubscriptionPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -17,13 +18,7 @@ class WorkspaceController extends Controller
             ->with('domains')
             ->orderBy('name')
             ->get()
-            ->map(fn (Tenant $tenant): array => [
-                'id' => $tenant->id,
-                'name' => $tenant->name,
-                'url' => $tenant->url(),
-                'domains' => $tenant->domains->pluck('domain'),
-                'created_at' => $tenant->created_at?->toIso8601String(),
-            ]);
+            ->map(fn (Tenant $tenant): array => $this->workspacePayload($tenant));
 
         return response()->json(['data' => $workspaces]);
     }
@@ -33,14 +28,17 @@ class WorkspaceController extends Controller
         $tenant->load('domains');
 
         return response()->json([
-            'data' => [
-                'id' => $tenant->id,
-                'name' => $tenant->name,
-                'url' => $tenant->url(),
-                'domains' => $tenant->domains->pluck('domain'),
-                'subscribed' => $tenant->subscribed('default'),
-                'created_at' => $tenant->created_at?->toIso8601String(),
-            ],
+            'data' => $this->workspacePayload($tenant),
+        ]);
+    }
+
+    public function subscription(Tenant $tenant): JsonResponse
+    {
+        return response()->json([
+            'data' => array_merge(
+                ['workspace_id' => $tenant->id],
+                SubscriptionPresenter::forTenant($tenant),
+            ),
         ]);
     }
 
@@ -67,5 +65,21 @@ class WorkspaceController extends Controller
         return response()->json([
             'user' => $request->user()->only(['id', 'name', 'email']),
         ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function workspacePayload(Tenant $tenant): array
+    {
+        return [
+            'id' => $tenant->id,
+            'name' => $tenant->name,
+            'url' => $tenant->url(),
+            'domains' => $tenant->domains->pluck('domain'),
+            'suspended' => $tenant->isSuspended(),
+            'subscribed' => $tenant->subscribed('default'),
+            'created_at' => $tenant->created_at?->toIso8601String(),
+        ];
     }
 }

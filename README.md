@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/mohammedelkarsh/laravel-tenant-kit/actions/workflows/tests.yml/badge.svg)](https://github.com/mohammedelkarsh/laravel-tenant-kit/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/mohammedelkarsh/laravel-tenant-kit?label=stable)](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.2.0)
+[![Release](https://img.shields.io/github/v/release/mohammedelkarsh/laravel-tenant-kit?label=stable)](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.2.1)
 [![GitHub stars](https://img.shields.io/github/stars/mohammedelkarsh/laravel-tenant-kit?style=social)](https://github.com/mohammedelkarsh/laravel-tenant-kit/stargazers)
 
 ## Build production-ready multi-tenant SaaS apps in minutes — not weeks.
@@ -10,6 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.2.1** — API rate limiting, token abilities, team invites API, subscription endpoint, workspace suspend · [CHANGELOG](CHANGELOG.md)  
 > **v1.2.0** — OAuth, Sanctum API & SaaS analytics · [Release notes](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.2.0)
 
 ---
@@ -60,13 +61,14 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 - Filament admin panel (`/admin`)
 - Workspace signup + CLI provisioning
 - **English & Arabic** (RTL) — easy to add more languages
-- GitHub Actions CI + 35 PHPUnit tests + 36-point smoke test script
+- GitHub Actions CI + 47 PHPUnit tests + 42-point smoke test script
 - **Docker Compose** dev stack (PHP, Nginx, MySQL, Redis)
 - **PostgreSQL** supported (Stancl database-per-tenant)
 - **Redis** cache / queue / sessions with tenant key isolation
 - **OAuth** login (Google, GitHub) on the central app
-- **Sanctum API** tokens — central platform + per-workspace tenant API
+- **Sanctum API** tokens — central platform + per-workspace tenant API (abilities + rate limiting)
 - **SaaS analytics** widgets in Filament (growth chart, subscriptions, users)
+- **Workspace suspension** from Filament admin
 
 ---
 
@@ -144,12 +146,15 @@ Open **http://laravel-tenant-kit.test:8080** (demo: **http://demo.laravel-tenant
 
 ```env
 APP_URL=http://laravel-tenant-kit.test
+APP_PORT_ALT=8080
 CENTRAL_DOMAIN=laravel-tenant-kit.test
 DB_DATABASE=laravel_tenant_kit
 DB_USERNAME=root
 DB_PASSWORD=your_password
 APP_AVAILABLE_LOCALES=en,ar
 ```
+
+For Docker on port **8080**, set `APP_URL=http://laravel-tenant-kit.test:8080` (see `.env.docker`).
 
 ### Default credentials
 
@@ -161,7 +166,7 @@ APP_AVAILABLE_LOCALES=en,ar
 ### Verify
 
 ```bash
-php scripts/system-test.php   # expect 36/36 passed
+php scripts/system-test.php   # expect 42/42 passed
 ```
 
 </details>
@@ -282,7 +287,7 @@ Filament `/admin` includes **SaaS analytics** widgets: workspace growth, active 
 ## Production-ready proof
 
 - GitHub Actions CI on every push
-- `scripts/system-test.php` — 36 automated checks (HTTP, DB, auth, API, i18n)
+- `scripts/system-test.php` — 39 automated checks (HTTP, DB, auth, API, i18n)
 - Tenant-aware cache, filesystem, queue, and Redis bootstrappers (Stancl)
 - Docker Compose for reproducible local dev
 - Config / route / view caching documented for deploy
@@ -377,7 +382,10 @@ php artisan optimize:clear && php artisan view:cache
 - [x] API tokens per workspace (Sanctum)
 - [x] SaaS analytics dashboard
 - [x] Video demo GIF in README
-- [ ] Usage-based billing meters
+- [x] API rate limiting & token abilities (v1.2.1)
+- [x] Workspace subscription API & team invites API (v1.2.1)
+- [x] Workspace suspend from Filament (v1.2.1)
+- [ ] Usage-based billing meters (v1.3.0)
 
 ---
 

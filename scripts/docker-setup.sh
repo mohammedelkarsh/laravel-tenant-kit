@@ -16,9 +16,9 @@ docker compose --profile build run --rm node
 
 echo ""
 echo "Done! Open:"
-echo "  Central: http://laravel-tenant-kit.test"
-echo "  Demo:    http://demo.laravel-tenant-kit.test/login"
-echo "  (also :8080 if you prefer)"
+echo "  Central: http://laravel-tenant-kit.test:8080"
+echo "  Demo:    http://demo.laravel-tenant-kit.test:8080/login"
+echo "  Admin:   http://laravel-tenant-kit.test:8080/admin"
 echo "Ensure hosts file contains:"
 echo "  127.0.0.1 laravel-tenant-kit.test"
 echo "  127.0.0.1 demo.laravel-tenant-kit.test"

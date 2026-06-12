@@ -10,7 +10,10 @@ $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 $host = config('app.central_domain');
-$httpBase = rtrim(getenv('SYSTEM_TEST_HTTP_BASE') ?: "http://{$host}", '/');
+$defaultHttpBase = env('DB_HOST') === 'mysql'
+    ? 'http://nginx'
+    : rtrim((string) config('app.url'), '/');
+$httpBase = rtrim(getenv('SYSTEM_TEST_HTTP_BASE') ?: $defaultHttpBase, '/');
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $results = [];
 $passed = 0;
@@ -22,20 +25,26 @@ function record(array &$results, int &$passed, int &$failed, string $group, stri
     $ok ? $passed++ : $failed++;
 }
 
-function httpGet(string $url, ?string $host = null): array
+function httpGet(string $url, ?string $host = null, ?string $token = null): array
 {
+    $headers = $host ? ["Host: {$host}"] : [];
+    if ($token) {
+        $headers[] = 'Accept: application/json';
+        $headers[] = "Authorization: Bearer {$token}";
+    }
+
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_FOLLOWLOCATION => false,
         CURLOPT_TIMEOUT => 90,
-        CURLOPT_HTTPHEADER => $host ? ["Host: {$host}"] : [],
+        CURLOPT_HTTPHEADER => $headers,
     ]);
     $body = curl_exec($ch);
     $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    return ['status' => $status, 'body' => (string) $body];
+    return ['status' => $status, 'body' => (string) $body, 'json' => json_decode((string) $body, true)];
 }
 
 function httpPostJson(string $url, array $payload, ?string $host = null, ?string $token = null): array
@@ -62,6 +71,9 @@ function httpPostJson(string $url, array $payload, ?string $host = null, ?string
 
     return ['status' => $status, 'body' => (string) $body, 'json' => json_decode((string) $body, true)];
 }
+
+// ── PHP runtime ───────────────────────────────────────────────────────
+record($results, $passed, $failed, 'PHP', 'intl extension loaded', extension_loaded('intl'));
 
 // ── Database ──────────────────────────────────────────────────────────
 try {
@@ -150,16 +162,27 @@ if ($admin) {
     ], $host);
     $hasToken = $tokenResponse['status'] === 200 && filled($tokenResponse['json']['token'] ?? null);
     record($results, $passed, $failed, 'API Central', 'Issue token for platform admin', $hasToken, "HTTP {$tokenResponse['status']}");
+    record($results, $passed, $failed, 'API Central', 'Token response includes abilities', filled($tokenResponse['json']['abilities'] ?? null));
 
     if ($hasToken) {
+        $bearer = 'Bearer '.$tokenResponse['json']['token'];
+
         // httpGet does not send bearer — use kernel for authenticated API
         $request = Illuminate\Http\Request::create("http://{$host}/api/workspaces", 'GET');
         $request->headers->set('HOST', $host);
-        $request->headers->set('Authorization', 'Bearer '.$tokenResponse['json']['token']);
+        $request->headers->set('Authorization', $bearer);
         $response = $kernel->handle($request);
         $status = $response->getStatusCode();
         $kernel->terminate($request, $response);
         record($results, $passed, $failed, 'API Central', 'List workspaces with token', $status === 200, "HTTP {$status}");
+
+        $request = Illuminate\Http\Request::create("http://{$host}/api/workspaces/demo/subscription", 'GET');
+        $request->headers->set('HOST', $host);
+        $request->headers->set('Authorization', $bearer);
+        $response = $kernel->handle($request);
+        $status = $response->getStatusCode();
+        $kernel->terminate($request, $response);
+        record($results, $passed, $failed, 'API Central', 'Workspace subscription endpoint', $status === 200, "HTTP {$status}");
     }
 }
 
@@ -191,13 +214,28 @@ if (isset($demoUser) && $demoUser) {
     record($results, $passed, $failed, 'API Tenant', 'Issue token for demo user', $hasTenantToken, "HTTP {$tenantTokenResponse['status']}");
 
     if ($hasTenantToken) {
-        $request = Illuminate\Http\Request::create("{$httpBase}/api/team", 'GET');
-        $request->headers->set('HOST', $tenantHost);
-        $request->headers->set('Authorization', 'Bearer '.$tenantTokenResponse['json']['token']);
-        $response = $kernel->handle($request);
-        $status = $response->getStatusCode();
-        $kernel->terminate($request, $response);
-        record($results, $passed, $failed, 'API Tenant', 'List team with token', $status === 200, "HTTP {$status}");
+        $tenantToken = $tenantTokenResponse['json']['token'];
+
+        $teamList = httpGet("{$httpBase}/api/team", $tenantHost, $tenantToken);
+        record($results, $passed, $failed, 'API Tenant', 'List team with token', $teamList['status'] === 200, "HTTP {$teamList['status']}");
+
+        $invite = httpPostJson("{$httpBase}/api/team/invitations", [
+            'email' => 'invite-'.uniqid().'@example.test',
+            'role' => 'member',
+        ], $tenantHost, $tenantToken);
+        record($results, $passed, $failed, 'API Tenant', 'Invite teammate via API', $invite['status'] === 201, "HTTP {$invite['status']}");
+
+        // v1.2.1 — suspended workspace blocks tenant API
+        if ($tenant) {
+            $tenant->update(['suspended_at' => now()]);
+            $suspendedAuth = httpPostJson($tenantApiTokenUrl, [
+                'email' => 'demo@demo.test',
+                'password' => 'password',
+                'device_name' => 'system-test-suspended',
+            ], $tenantHost);
+            record($results, $passed, $failed, 'API Tenant', 'Suspended workspace blocks auth', $suspendedAuth['status'] === 403, "HTTP {$suspendedAuth['status']}");
+            $tenant->update(['suspended_at' => null]);
+        }
     }
 }
 
@@ -214,6 +252,14 @@ if ($admin) {
     $status = $response->getStatusCode();
     $kernel->terminate($request, $response);
     record($results, $passed, $failed, 'Auth Central', 'Billing demo', $status >= 200 && $status < 400, "HTTP {$status}");
+
+    $request = Illuminate\Http\Request::create("http://{$host}/admin/tenants", 'GET');
+    $request->headers->set('HOST', $host);
+    $response = $kernel->handle($request);
+    $status = $response->getStatusCode();
+    $kernel->terminate($request, $response);
+    record($results, $passed, $failed, 'Filament', 'Tenants list (admin)', $status >= 200 && $status < 400, "HTTP {$status}");
+
     Illuminate\Support\Facades\Auth::guard('web')->logout();
 }
 

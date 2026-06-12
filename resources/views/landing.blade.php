@@ -36,7 +36,7 @@
                     </p>
                     <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                         <a href="{{ route('tenants.create') }}" class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold">{{ __('app.nav.create_workspace') }}</a>
-                        <a href="http://demo.{{ config('app.central_domain') }}" class="px-8 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 font-semibold">{{ __('app.landing.live_demo') }}</a>
+                        <a href="{{ \App\Support\TenantUrls::demo() }}" class="px-8 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 font-semibold">{{ __('app.landing.live_demo') }}</a>
                     </div>
                 </div>
             </section>
@@ -83,7 +83,7 @@
                     <p class="mt-1 text-sm text-gray-600 font-mono" dir="ltr">demo@demo.test / password</p>
                     <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                         <a href="/admin" class="px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium">{{ __('app.landing.admin_panel') }}</a>
-                        <a href="http://demo.{{ config('app.central_domain') }}/login" class="px-6 py-2.5 border border-gray-300 rounded-lg font-medium">{{ __('app.landing.demo_login') }}</a>
+                        <a href="{{ \App\Support\TenantUrls::demo() }}/login" class="px-6 py-2.5 border border-gray-300 rounded-lg font-medium">{{ __('app.landing.demo_login') }}</a>
                     </div>
                 </div>
             </section>

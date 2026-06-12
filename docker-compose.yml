@@ -5,6 +5,7 @@ services:
       dockerfile: docker/php/Dockerfile
     volumes:
       - .:/var/www/html
+      - ./docker/php/entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
