@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [1.2.2] — 2026-06-14
+
+### Fixed
+
+- **CI smoke test** — run Filament `/admin/tenants` check before API suspend mutations so the fresh-install path matches a real admin visit (fixes GitHub Actions `system-test.php` 41/42 failure)
+
 ## [1.2.1] — 2026-06-10
 
 ### Added

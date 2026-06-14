@@ -72,6 +72,15 @@ function httpPostJson(string $url, array $payload, ?string $host = null, ?string
     return ['status' => $status, 'body' => (string) $body, 'json' => json_decode((string) $body, true)];
 }
 
+function resetSmokeTestState(): void
+{
+    if (tenancy()->initialized) {
+        tenancy()->end();
+    }
+
+    Illuminate\Support\Facades\Auth::guard('web')->logout();
+}
+
 // ── PHP runtime ───────────────────────────────────────────────────────
 record($results, $passed, $failed, 'PHP', 'intl extension loaded', extension_loaded('intl'));
 
@@ -148,6 +157,32 @@ app()->setLocale('ar');
 record($results, $passed, $failed, 'Localization', 'Arabic app translation', __('app.landing.architecture') === 'البنية');
 record($results, $passed, $failed, 'Localization', 'Arabic RTL direction', \App\Support\Locales::direction('ar') === 'rtl');
 app()->setLocale('en');
+
+// ── Admin panel (fresh install path — before API mutations) ───────────
+resetSmokeTestState();
+
+if ($admin) {
+    Illuminate\Support\Facades\Auth::guard('web')->login($admin);
+
+    $request = Illuminate\Http\Request::create("http://{$host}/billing/demo", 'GET');
+    $request->headers->set('HOST', $host);
+    $response = $kernel->handle($request);
+    $status = $response->getStatusCode();
+    $kernel->terminate($request, $response);
+    record($results, $passed, $failed, 'Auth Central', 'Billing demo', $status >= 200 && $status < 400, "HTTP {$status}");
+
+    $request = Illuminate\Http\Request::create("http://{$host}/admin/tenants", 'GET');
+    $request->headers->set('HOST', $host);
+    $response = $kernel->handle($request);
+    $status = $response->getStatusCode();
+    $kernel->terminate($request, $response);
+    record($results, $passed, $failed, 'Filament', 'Tenants list (admin)', $status >= 200 && $status < 400, "HTTP {$status}");
+
+    Illuminate\Support\Facades\Auth::guard('web')->logout();
+}
+
+$adminDash = httpGet("{$httpBase}/admin", $host);
+record($results, $passed, $failed, 'Filament', 'Admin reachable (login or dashboard)', in_array($adminDash['status'], [200, 302], true), 'test in browser after login');
 
 // ── API (Sanctum) ─────────────────────────────────────────────────────
 $apiTokenUrl = "{$httpBase}/api/auth/token";
@@ -243,31 +278,10 @@ if (isset($demoUser) && $demoUser) {
 $oauthGoogle = httpGet("{$httpBase}/auth/google/redirect", $host);
 record($results, $passed, $failed, 'OAuth', 'Google redirect (disabled → 404)', $oauthGoogle['status'] === 404, "HTTP {$oauthGoogle['status']}");
 
-// ── Authenticated kernel tests (non-Livewire routes) ─────────────────
-if ($admin) {
-    Illuminate\Support\Facades\Auth::guard('web')->login($admin);
-    $request = Illuminate\Http\Request::create("http://{$host}/billing/demo", 'GET');
-    $request->headers->set('HOST', $host);
-    $response = $kernel->handle($request);
-    $status = $response->getStatusCode();
-    $kernel->terminate($request, $response);
-    record($results, $passed, $failed, 'Auth Central', 'Billing demo', $status >= 200 && $status < 400, "HTTP {$status}");
-
-    $request = Illuminate\Http\Request::create("http://{$host}/admin/tenants", 'GET');
-    $request->headers->set('HOST', $host);
-    $response = $kernel->handle($request);
-    $status = $response->getStatusCode();
-    $kernel->terminate($request, $response);
-    record($results, $passed, $failed, 'Filament', 'Tenants list (admin)', $status >= 200 && $status < 400, "HTTP {$status}");
-
-    Illuminate\Support\Facades\Auth::guard('web')->logout();
-}
-
-// Filament admin uses Livewire — verify via HTTP redirect chain instead
-$adminDash = httpGet("{$httpBase}/admin", $host);
-record($results, $passed, $failed, 'Filament', 'Admin reachable (login or dashboard)', in_array($adminDash['status'], [200, 302], true), 'test in browser after login');
+resetSmokeTestState();
 
 if ($tenant && isset($demoUser) && $demoUser) {
+    $tenant = $tenant->fresh();
     tenancy()->initialize($tenant);
     Illuminate\Support\Facades\Auth::guard('web')->login($demoUser);
     foreach (['Tenant dashboard' => '/dashboard', 'Tenant team' => '/team'] as $name => $path) {
