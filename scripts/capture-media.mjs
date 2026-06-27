@@ -21,6 +21,13 @@ const centralBase = `http://${centralHost}:${port}`;
 const demoBase = `http://${demoHost}:${port}`;
 
 const view = { width: 1440, height: 900 };
+const navTimeout = 90000;
+const gotoOpts = { waitUntil: 'load', timeout: navTimeout };
+
+async function goto(page, url) {
+    await page.goto(url, gotoOpts);
+    await page.waitForTimeout(800);
+}
 
 function ensureDirs() {
     fs.mkdirSync(outDir, { recursive: true });
@@ -42,7 +49,7 @@ async function frame(page, name, fullPage = false) {
 }
 
 async function loginCentral(page) {
-    await page.goto(`${centralBase}/login`, { waitUntil: 'networkidle' });
+    await goto(page, `${centralBase}/login`);
     const email = page.locator('input[name="email"]');
     if ((await email.count()) === 0) {
         return;
@@ -54,7 +61,7 @@ async function loginCentral(page) {
 }
 
 async function loginTenant(page) {
-    await page.goto(`${demoBase}/login`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/login`);
     const email = page.locator('input[name="email"]');
     if ((await email.count()) === 0) {
         return;
@@ -63,6 +70,25 @@ async function loginTenant(page) {
     await page.fill('input[name="password"]', 'password');
     await page.click('button[type="submit"]');
     await page.waitForURL(/\/dashboard/, { timeout: 30000 });
+}
+
+async function openGuidedAgent(page) {
+    await loginCentral(page);
+    await goto(page, `${centralBase}/dashboard`);
+
+    const fab = page.locator('[data-api-operator-fab]');
+    await fab.waitFor({ state: 'visible', timeout: 30000 });
+    await fab.click();
+
+    const panel = page.locator('[data-api-operator-panel]');
+    await panel.waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForTimeout(1500);
+
+    const chips = page.locator('[data-api-operator-quick-actions] button[data-agent-chip]');
+    await chips.first().waitFor({ state: 'visible', timeout: 15000 });
+    await page.waitForTimeout(800);
+
+    return true;
 }
 
 async function main() {
@@ -76,64 +102,81 @@ async function main() {
     const page = await context.newPage();
 
     console.log('Capturing GIF frames...');
-    await page.goto(`${centralBase}/`, { waitUntil: 'networkidle' });
+    await goto(page, `${centralBase}/`);
     await frame(page, '01-landing');
 
-    await page.goto(`${centralBase}/workspaces/create`, { waitUntil: 'networkidle' });
+    await goto(page, `${centralBase}/workspaces/create`);
     await frame(page, '02-signup');
 
-    await page.goto(`${demoBase}/login`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/login`);
     await frame(page, '03-tenant-login');
 
     await loginTenant(page);
-    await page.goto(`${demoBase}/dashboard`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/dashboard`);
     await frame(page, '04-tenant-dashboard');
 
-    await page.goto(`${demoBase}/team`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/team`);
     await frame(page, '05-team');
 
     await loginCentral(page);
-    await page.goto(`${centralBase}/admin`, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(1500);
+    await goto(page, `${centralBase}/admin`);
+    await page.waitForTimeout(2000);
     await frame(page, '06-admin');
 
-    await page.goto(`${centralBase}/dashboard`, { waitUntil: 'networkidle' });
-    const fab = page.locator('[data-api-operator-fab]');
-    if ((await fab.count()) > 0) {
-        await fab.click();
-        await page.waitForTimeout(1200);
-        await frame(page, '07-agent-chat');
+    console.log('Capturing guided agent frames...');
+    let agentCaptured = false;
+    try {
+        await openGuidedAgent(page);
+        await frame(page, '07-agent-open');
+        agentCaptured = true;
+
+        const workspacesChip = page.locator('[data-api-operator-quick-actions] button[data-agent-chip]').filter({ hasText: /workspace/i }).first();
+        if ((await workspacesChip.count()) > 0) {
+            await workspacesChip.click();
+            await page.waitForTimeout(1200);
+            await frame(page, '08-agent-workspaces');
+            agentCaptured = true;
+        }
+    } catch (err) {
+        console.warn('  WARN: guided agent frame skipped:', err.message);
+    }
+
+    if (!agentCaptured) {
+        console.warn('  WARN: demo.gif will not include AI agent — check Docker, API_OPERATOR_ENABLED, and npm build.');
     }
 
     console.log('Capturing static screenshots...');
-    await page.goto(`${centralBase}/`, { waitUntil: 'networkidle' });
+    await goto(page, `${centralBase}/`);
     await shot(page, 'landing.png');
 
-    await page.goto(`${centralBase}/admin`, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(1500);
+    await goto(page, `${centralBase}/admin`);
+    await page.waitForTimeout(2000);
     await shot(page, 'admin-panel.png');
 
-    await page.goto(`${demoBase}/dashboard`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/dashboard`);
     await shot(page, 'tenant-dashboard.png');
 
-    await page.goto(`${centralBase}/login`, { waitUntil: 'networkidle' });
+    await goto(page, `${centralBase}/login`);
     await loginCentral(page);
-    await page.goto(`${centralBase}/billing/demo`, { waitUntil: 'networkidle' });
+    await goto(page, `${centralBase}/billing/demo`);
     await shot(page, 'billing.png');
 
-    await page.goto(`${demoBase}/login`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/login`);
     await loginTenant(page);
-    await page.goto(`${demoBase}/team`, { waitUntil: 'networkidle' });
+    await goto(page, `${demoBase}/team`);
     await shot(page, 'team-management.png');
 
-    await page.goto(`${centralBase}/login`, { waitUntil: 'networkidle' });
-    await loginCentral(page);
-    await page.goto(`${centralBase}/dashboard`, { waitUntil: 'networkidle' });
-    const chatFab = page.locator('[data-api-operator-fab]');
-    if ((await chatFab.count()) > 0) {
-        await chatFab.click();
-        await page.waitForTimeout(1200);
+    await goto(page, `${centralBase}/login`);
+    try {
+        await openGuidedAgent(page);
+        const workspacesChip = page.locator('[data-api-operator-quick-actions] button[data-agent-chip]').filter({ hasText: /workspace/i }).first();
+        if ((await workspacesChip.count()) > 0) {
+            await workspacesChip.click();
+            await page.waitForTimeout(1200);
+        }
         await shot(page, 'api-operator-chat.png');
+    } catch (err) {
+        console.warn('  WARN: api-operator-chat.png skipped:', err.message);
     }
 
     await browser.close();
@@ -147,7 +190,8 @@ async function main() {
     const listLines = [];
     for (const f of frames) {
         listLines.push(`file '${f.replace(/'/g, "'\\''")}'`);
-        listLines.push('duration 2.5');
+        const duration = f.includes('agent') ? '4.0' : '2.5';
+        listLines.push(`duration ${duration}`);
     }
     listLines.push(`file '${frames[frames.length - 1].replace(/'/g, "'\\''")}'`);
     fs.writeFileSync(listFile, listLines.join('\n'));

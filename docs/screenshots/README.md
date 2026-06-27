@@ -4,7 +4,7 @@ Preview images for the Laravel Tenant Kit README (captured after `php artisan db
 
 | File | Page | URL (Docker `:8080`) |
 |------|------|----------------------|
-| `demo.gif` | End-to-end walkthrough | landing → signup → tenant login → dashboard → team → Filament admin → guided agent |
+| `demo.gif` | End-to-end walkthrough | landing → signup → tenant → team → Filament → **guided agent (open + workspaces menu)** |
 | `landing.png` | SaaS landing page | `http://laravel-tenant-kit.test:8080/` |
 | `admin-panel.png` | Filament dashboard + SaaS analytics widgets | `http://laravel-tenant-kit.test:8080/admin` |
 | `tenant-dashboard.png` | Workspace dashboard | `http://demo.laravel-tenant-kit.test:8080/dashboard` |
