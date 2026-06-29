@@ -128,6 +128,8 @@ Add to hosts: `127.0.0.1 laravel-tenant-kit.test` and `127.0.0.1 demo.laravel-te
 
 Open `http://laravel-tenant-kit.test` — done.
 
+Learn which setup fits you best: see [docs/laragon.md](docs/laragon.md) for a Laragon vs Docker comparison, when to use `.env.example` vs `.env.docker`, and common errors.
+
 ### Docker (alternative)
 
 No Laragon? Run the full stack in one command:
