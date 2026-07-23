@@ -66,15 +66,15 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 **Goal:** Integrate [kyc-ai/laravel](https://packagist.org/packages/kyc-ai/laravel) / [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) without forcing it on every installation.
 
-### Phase A — Prep (tenant-kit only, contributors)
+### Phase A — Prep (tenant-kit only, contributors) ✅
 
 | Item | Notes |
 |------|--------|
-| `config/kyc.php` | `enabled` default `false` |
-| `.env.example` | `KYC_ENABLED=false` + doc link |
-| `docs/kyc.md` | Stub pointing to future opt-in path |
-| `App\Support\Kyc` | `enabled()` helper |
-| Tests | When disabled, no KYC routes/panels |
+| `config/kyc.php` | ✅ `enabled` default `false` |
+| `.env.example` | ✅ `KYC_ENABLED=false` + doc link |
+| `docs/kyc.md` | ✅ Stub pointing to future opt-in path |
+| `App\Support\Kyc` | ✅ `enabled()` helper |
+| Tests | ✅ `KycPrepTest` — when disabled, no KYC routes/panels |
 
 **No `composer require` in Phase A** — avoids cross-repo confusion.
 
