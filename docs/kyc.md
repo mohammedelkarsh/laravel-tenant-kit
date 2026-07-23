@@ -74,6 +74,28 @@ $tenant->run(function () use ($user, $file) {
 
 Prefer **`KycLevel::standard`** (and `KYC_EXTERNAL_ENABLED=false`) until external drivers such as Shufti are production-ready. Do not promote `full` in product docs yet.
 
+## Test scenarios
+
+With the package installed locally:
+
+```bash
+composer require kyc-ai/laravel:^1.1
+php artisan test --filter=Kyc
+```
+
+| Scenario | Expected |
+|----------|----------|
+| Flag off (default) | `Kyc::ready()` false; no workspace Filament panel |
+| Package missing | `KycFeatureTest` skipped; prep tests still pass |
+| Owner opens `/kyc` | Onboarding form (country/level) |
+| Guest opens `/kyc` | Redirect to login |
+| `KYC_ENABLED=false` + package | `/kyc` → 404 |
+| Sync upload | Result page + `kyc_verifications` row in tenant DB |
+| Queue checkbox | `ProcessKycDocument` dispatched |
+| Per-tenant settings | `kyc_country` / `kyc_level` / `kyc_extraction_driver` applied via `TenantKycService` |
+
+> Packagist `1.1.0` may need `symfony/process` ^8 for Laravel 13. If install fails, use a path/VCS install of [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) that allows `symfony/process` `^6.4\|^7.0\|^8.0`.
+
 ## Related
 
 - Package guide: [tenant-kit.md](https://github.com/mohammedelkarsh/laravel-kyc-ai/blob/main/docs/tenant-kit.md)

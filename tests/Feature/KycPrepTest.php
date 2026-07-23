@@ -24,29 +24,29 @@ class KycPrepTest extends TestCase
         $this->assertSame(Kyc::packageInstalled(), Kyc::ready());
     }
 
-    public function test_no_kyc_routes_when_disabled(): void
+    public function test_kyc_routes_only_when_package_installed(): void
     {
-        config(['kyc.enabled' => false]);
-
         $kycRoutes = collect(Route::getRoutes())->filter(function ($route) {
             $name = (string) $route->getName();
-            $uri = (string) $route->uri();
 
-            return str_contains(strtolower($name), 'kyc')
-                || str_contains(strtolower($uri), 'kyc');
+            return str_starts_with($name, 'tenant.kyc.');
         });
 
-        $this->assertTrue($kycRoutes->isEmpty(), 'Expected no KYC routes when KYC is disabled.');
+        if (Kyc::packageInstalled()) {
+            $this->assertFalse($kycRoutes->isEmpty(), 'Expected KYC routes when package is installed.');
+        } else {
+            $this->assertTrue($kycRoutes->isEmpty(), 'Expected no KYC routes when package is missing.');
+        }
     }
 
-    public function test_no_kyc_or_workspace_panel_when_not_ready(): void
+    public function test_no_workspace_panel_when_not_ready(): void
     {
         config(['kyc.enabled' => false]);
 
-        $panelIds = collect(Filament::getPanels())->keys();
+        $panelIds = array_keys(Filament::getPanels());
 
-        $this->assertFalse($panelIds->contains('kyc'));
-        $this->assertFalse($panelIds->contains('workspace'));
+        $this->assertNotContains('kyc', $panelIds);
+        $this->assertNotContains('workspace', $panelIds);
 
         foreach (Filament::getPanels() as $panel) {
             foreach ($panel->getPlugins() as $plugin) {
