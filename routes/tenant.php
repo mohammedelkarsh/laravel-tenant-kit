@@ -59,6 +59,13 @@ Route::middleware([
             ->middleware('role:owner|admin')
             ->name('tenant.team.invite');
 
+        if (\App\Support\Kyc::ready()) {
+            Route::get('kyc', [\App\Http\Controllers\Tenant\KycOnboardingController::class, 'create'])
+                ->name('tenant.kyc.onboarding');
+            Route::post('kyc', [\App\Http\Controllers\Tenant\KycOnboardingController::class, 'store'])
+                ->name('tenant.kyc.verify');
+        }
+
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
             ->name('tenant.logout');
     });

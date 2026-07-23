@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [Unreleased] — 1.4.0 (KYC, local)
+
+### Added
+
+- **Optional KYC (Phase A+B)** — `KYC_ENABLED` flag, `docs/kyc.md`, tenant migration `kyc_verifications`, onboarding at `/kyc`, workspace Filament review panel at `/workspace`
+- **Tenant KYC service** — per-workspace settings (`kyc_country`, `kyc_level`, `kyc_extraction_driver`) and tenant-aware verify/queue via `TenantKycService`
+- Opt-in package: `composer require kyc-ai/laravel` (listed under Composer `suggest` only)
+
 ## [1.3.1] — 2026-06-11
 
 ### Added

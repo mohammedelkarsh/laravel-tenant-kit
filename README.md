@@ -437,7 +437,7 @@ php artisan optimize:clear && php artisan view:cache
 - [x] Workspace suspend from Filament (v1.2.1)
 - [x] Usage-based billing meters (v1.3.0)
 - [x] api-operator integration + in-app guided agent (v1.3.1)
-- [ ] Optional KYC module (v1.4.0) — Phase A prep done; see [docs/kyc.md](docs/kyc.md) · [ROADMAP](docs/ROADMAP.md)
+- [ ] Optional KYC module (v1.4.0) — Phase A+B wired locally; enable with `composer require kyc-ai/laravel` · [docs/kyc.md](docs/kyc.md)
 - [ ] Extended usage meters (v1.5.0)
 - [ ] Platform webhooks + agent RAG (v1.6.0)
 

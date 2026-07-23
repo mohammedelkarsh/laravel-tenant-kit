@@ -59,4 +59,18 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     {
         return $this->id.'@billing.'.config('app.central_domain');
     }
+
+    /**
+     * Per-workspace KYC defaults (Stancl virtual attributes on `data` JSON).
+     *
+     * @return array{country: string, level: string, extraction_driver: string}
+     */
+    public function kycSettings(): array
+    {
+        return [
+            'country' => strtolower((string) ($this->kyc_country ?? config('kyc.tenant.default_country', 'sa'))),
+            'level' => (string) ($this->kyc_level ?? config('kyc.default_level', 'standard')),
+            'extraction_driver' => (string) ($this->kyc_extraction_driver ?? config('kyc.extraction.default', 'fake')),
+        ];
+    }
 }

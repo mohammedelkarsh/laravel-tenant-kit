@@ -16,6 +16,11 @@
                         <x-nav-link :href="route('tenant.team.index')" :active="request()->routeIs('tenant.team.*')">
                             {{ __('Team') }}
                         </x-nav-link>
+                        @if (\App\Support\Kyc::ready())
+                            <x-nav-link :href="route('tenant.kyc.onboarding')" :active="request()->routeIs('tenant.kyc.*')">
+                                {{ __('app.nav.kyc') }}
+                            </x-nav-link>
+                        @endif
                     </div>
                 @endauth
             </div>
@@ -55,6 +60,11 @@
                 <x-responsive-nav-link :href="route('tenant.team.index')" :active="request()->routeIs('tenant.team.*')">
                     {{ __('Team') }}
                 </x-responsive-nav-link>
+                @if (\App\Support\Kyc::ready())
+                    <x-responsive-nav-link :href="route('tenant.kyc.onboarding')" :active="request()->routeIs('tenant.kyc.*')">
+                        {{ __('app.nav.kyc') }}
+                    </x-responsive-nav-link>
+                @endif
             @else
                 <x-responsive-nav-link :href="route('tenant.login')">
                     {{ __('Log in') }}

@@ -13,6 +13,7 @@ class KycPrepTest extends TestCase
     {
         $this->assertFalse(config('kyc.enabled'));
         $this->assertFalse(Kyc::enabled());
+        $this->assertFalse(Kyc::ready());
     }
 
     public function test_kyc_helper_respects_config(): void
@@ -20,6 +21,7 @@ class KycPrepTest extends TestCase
         config(['kyc.enabled' => true]);
 
         $this->assertTrue(Kyc::enabled());
+        $this->assertSame(Kyc::packageInstalled(), Kyc::ready());
     }
 
     public function test_no_kyc_routes_when_disabled(): void
@@ -37,22 +39,30 @@ class KycPrepTest extends TestCase
         $this->assertTrue($kycRoutes->isEmpty(), 'Expected no KYC routes when KYC is disabled.');
     }
 
-    public function test_no_kyc_filament_panel_when_disabled(): void
+    public function test_no_kyc_or_workspace_panel_when_not_ready(): void
     {
         config(['kyc.enabled' => false]);
 
         $panelIds = collect(Filament::getPanels())->keys();
 
         $this->assertFalse($panelIds->contains('kyc'));
+        $this->assertFalse($panelIds->contains('workspace'));
 
         foreach (Filament::getPanels() as $panel) {
             foreach ($panel->getPlugins() as $plugin) {
                 $this->assertStringNotContainsStringIgnoringCase(
                     'kyc',
                     $plugin::class,
-                    'Expected no KYC Filament plugin when KYC is disabled.',
+                    'Expected no KYC Filament plugin when KYC is not ready.',
                 );
             }
         }
+    }
+
+    public function test_tenant_migration_for_kyc_verifications_exists(): void
+    {
+        $path = database_path('migrations/tenant/2026_07_23_000001_create_kyc_verifications_table.php');
+
+        $this->assertFileExists($path);
     }
 }

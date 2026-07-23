@@ -8,6 +8,7 @@ return [
         'create_workspace' => 'Create workspace',
         'team' => 'Team',
         'billing' => 'Billing',
+        'kyc' => 'KYC',
     ],
 
     'landing' => [
@@ -49,6 +50,26 @@ return [
         'members' => 'Members',
         'url' => 'URL',
         'suspended' => 'This workspace has been suspended. Contact support for help.',
+    ],
+
+    'kyc' => [
+        'onboarding_title' => 'Identity verification',
+        'onboarding_intro' => 'Upload a government ID document. Verification uses this workspace’s KYC settings (country, level, extraction driver).',
+        'document' => 'ID document',
+        'country' => 'Country',
+        'level' => 'Level',
+        'status' => 'Status',
+        'confidence' => 'Confidence',
+        'warnings' => 'Warnings',
+        'queue_label' => 'Process in the background (queue)',
+        'submit' => 'Verify document',
+        'queued' => 'Document queued for verification. Check the review panel shortly.',
+        'result_title' => 'Verification result',
+        'verify_another' => 'Verify another document',
+        'open_review' => 'Open review panel',
+        'back_dashboard' => 'Back to dashboard',
+        'verification' => 'Verification',
+        'verifications' => 'Verifications',
     ],
 
     'workspace' => [

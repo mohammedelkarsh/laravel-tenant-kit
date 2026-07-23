@@ -16,6 +16,10 @@
                 </div>
                 <div class="bg-white shadow-sm sm:rounded-lg p-6 flex flex-col gap-2 text-sm">
                     <a href="{{ route('tenant.team.index') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">{{ __('app.nav.team') }} →</a>
+                    @if (\App\Support\Kyc::ready())
+                        <a href="{{ route('tenant.kyc.onboarding') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">{{ __('app.nav.kyc') }} →</a>
+                        <a href="{{ url('/workspace/kyc-verifications') }}" class="text-indigo-600 hover:text-indigo-800 font-medium">{{ __('app.kyc.open_review') }} →</a>
+                    @endif
                     <a href="{{ $billingUrl }}" class="text-indigo-600 hover:text-indigo-800 font-medium">{{ __('app.nav.billing') }} →</a>
                 </div>
             </div>

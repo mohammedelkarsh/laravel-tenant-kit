@@ -9,7 +9,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.2.3** | CI / smoke-test hardening | tenant-kit | ✅ Released |
 | **v1.3.0** | Usage-based billing | tenant-kit | ✅ Released |
 | **v1.3.1** | [api-operator](https://pypi.org/project/api-operator/) (PyPI) + in-app guided agent | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
-| **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | 📋 Planned |
+| **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | 🚧 Phase B done (local) |
 | **v1.5.0** | Extended usage meters + Stripe | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
@@ -78,17 +78,17 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 **No `composer require` in Phase A** — avoids cross-repo confusion.
 
-### Phase B — Integration (maintainer + laravel-kyc-ai)
+### Phase B — Integration (maintainer + laravel-kyc-ai) ✅
 
 | Item | Notes |
 |------|--------|
-| Opt-in dependency | `composer require kyc-ai/laravel`; not in default `require` |
-| Per-tenant config | Driver, country, verification level inside `$tenant->run()` |
-| Migrations | Publish `kyc_verifications` to tenant migration path (Stancl) |
-| Filament | Register `KycFilamentPlugin` on workspace panel |
-| Queue | Tenant-aware dispatch for document processing |
-| Onboarding | Example flow: upload ID → verify → audit |
-| Reference | [tenant-kit integration guide](https://github.com/mohammedelkarsh/laravel-kyc-ai) |
+| Opt-in dependency | ✅ `composer require kyc-ai/laravel`; `suggest` only — not in default `require` |
+| Per-tenant config | ✅ `Tenant::kycSettings()` + `TenantKycService::applyTenantConfig()` |
+| Migrations | ✅ `database/migrations/tenant/..._create_kyc_verifications_table.php` |
+| Filament | ✅ Workspace panel `/workspace` + Filament 5 bridge (package plugin is F3) |
+| Queue | ✅ Onboarding can `dispatch()`; Stancl queue bootstrapper |
+| Onboarding | ✅ `/kyc` upload → verify / queue → result |
+| Reference | ✅ [docs/kyc.md](kyc.md) + package [tenant-kit.md](https://github.com/mohammedelkarsh/laravel-kyc-ai/blob/main/docs/tenant-kit.md) |
 
 **Prerequisite:** stable verification drivers before promoting `KycLevel::Full` in docs.
 
