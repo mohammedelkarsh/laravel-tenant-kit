@@ -9,7 +9,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.2.3** | CI / smoke-test hardening | tenant-kit | ✅ Released |
 | **v1.3.0** | Usage-based billing | tenant-kit | ✅ Released |
 | **v1.3.1** | [api-operator](https://pypi.org/project/api-operator/) (PyPI) + in-app guided agent | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
-| **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | 🚧 Phase B done (local) |
+| **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | ✅ Released |
 | **v1.5.0** | Extended usage meters + Stripe | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
@@ -17,7 +17,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 
 **Semver:** patch (1.2.x) = fixes · minor (1.3.x–1.7) = new features · major (2.0) = breaking changes.
 
-**Contributors welcome:** [#1 French locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) · [#2 Laragon docs](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/2) · [#3 v1.4 KYC prep](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/3)
+**Contributors welcome:** [#1 French locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) · ~~[#2 Laragon docs](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/2)~~ ✅ · ~~[#3 v1.4 KYC prep](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/3)~~ ✅ (maintainer)
 
 ---
 
@@ -62,7 +62,7 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 ---
 
-## v1.4.0 — Optional KYC module 📋
+## v1.4.0 — Optional KYC module ✅
 
 **Goal:** Integrate [kyc-ai/laravel](https://packagist.org/packages/kyc-ai/laravel) / [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) without forcing it on every installation.
 
@@ -72,8 +72,8 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 |------|--------|
 | `config/kyc.php` | ✅ `enabled` default `false` |
 | `.env.example` | ✅ `KYC_ENABLED=false` + doc link |
-| `docs/kyc.md` | ✅ Stub pointing to future opt-in path |
-| `App\Support\Kyc` | ✅ `enabled()` helper |
+| `docs/kyc.md` | ✅ Opt-in install + enable guide |
+| `App\Support\Kyc` | ✅ `enabled()` / `ready()` helpers |
 | Tests | ✅ `KycPrepTest` — when disabled, no KYC routes/panels |
 
 **No `composer require` in Phase A** — avoids cross-repo confusion.
@@ -89,16 +89,23 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 | Queue | ✅ Onboarding can `dispatch()`; Stancl queue bootstrapper |
 | Onboarding | ✅ `/kyc` upload → verify / queue → result |
 | Reference | ✅ [docs/kyc.md](kyc.md) + package [tenant-kit.md](https://github.com/mohammedelkarsh/laravel-kyc-ai/blob/main/docs/tenant-kit.md) |
+| Tests | ✅ `KycFeatureTest` (skipped when package absent) |
 
 **Prerequisite:** stable verification drivers before promoting `KycLevel::Full` in docs.
 
-### v1.4.0 — stretch (if time)
+### Also in 1.4.0
+
+| Item | Notes |
+|------|--------|
+| `docs/laragon.md` | Laragon vs Docker (community PR #4) |
+| `renovate.json` | Automated dependency update PRs |
+
+### Stretch (deferred)
 
 | Item | Notes |
 |------|--------|
 | KYC webhooks | Notify workspace when verification status changes |
 | Plan gating | KYC enabled per subscription tier |
-| Copy | Pre-built Arabic/English onboarding strings |
 
 ---
 

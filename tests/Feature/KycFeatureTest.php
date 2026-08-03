@@ -105,7 +105,7 @@ class KycFeatureTest extends TestCase
     {
         [$tenant, $owner] = $this->provisionWithOwner('kycsync', 'KYC Sync');
 
-        $file = UploadedFile::fake()->image('id_front.jpg');
+        $file = UploadedFile::fake()->create('id_front.jpg', 120, 'image/jpeg');
 
         $this->withServerVariables($this->tenantHeaders('kycsync'))
             ->actingAs($owner)
@@ -132,7 +132,7 @@ class KycFeatureTest extends TestCase
 
         [$tenant, $owner] = $this->provisionWithOwner('kycqueue', 'KYC Queue');
 
-        $file = UploadedFile::fake()->image('id_queue.jpg');
+        $file = UploadedFile::fake()->create('id_queue.jpg', 120, 'image/jpeg');
 
         $this->withServerVariables($this->tenantHeaders('kycqueue'))
             ->actingAs($owner)

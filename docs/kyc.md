@@ -9,7 +9,7 @@ See [ROADMAP](ROADMAP.md) — v1.4.0.
 ## Install (adopters)
 
 ```bash
-composer require kyc-ai/laravel:^1.1
+composer require kyc-ai/laravel:^1.1.1
 ```
 
 Optional country validators:
@@ -79,7 +79,7 @@ Prefer **`KycLevel::standard`** (and `KYC_EXTERNAL_ENABLED=false`) until externa
 With the package installed locally:
 
 ```bash
-composer require kyc-ai/laravel:^1.1
+composer require kyc-ai/laravel:^1.1.1
 php artisan test --filter=Kyc
 ```
 

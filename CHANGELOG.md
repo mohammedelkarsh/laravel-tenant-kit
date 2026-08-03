@@ -2,13 +2,20 @@
 
 All notable changes to this project are documented here.
 
-## [Unreleased] — 1.4.0 (KYC, local)
+## [1.4.0] — 2026-08-03
 
 ### Added
 
 - **Optional KYC (Phase A+B)** — `KYC_ENABLED` flag, `docs/kyc.md`, tenant migration `kyc_verifications`, onboarding at `/kyc`, workspace Filament review panel at `/workspace`
 - **Tenant KYC service** — per-workspace settings (`kyc_country`, `kyc_level`, `kyc_extraction_driver`) and tenant-aware verify/queue via `TenantKycService`
-- Opt-in package: `composer require kyc-ai/laravel` (listed under Composer `suggest` only)
+- Opt-in package: `composer require kyc-ai/laravel:^1.1.1` (listed under Composer `suggest` only — not a hard dependency)
+- **Renovate** — `renovate.json` for automated dependency update PRs
+- **Laragon docs** — `docs/laragon.md` comparison vs Docker (port 80 vs 8080) from community PR #4
+- Docker PHP image installs **gd** (image uploads / KYC test fixtures)
+
+### Fixed
+
+- KYC feature tests use MIME-based fake uploads (no GD required in CI)
 
 ## [1.3.1] — 2026-06-11
 

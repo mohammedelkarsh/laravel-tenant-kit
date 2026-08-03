@@ -10,9 +10,9 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.4.0** — Optional KYC module · [docs/kyc.md](docs/kyc.md)  
 > **v1.3.1** — [api-operator](https://pypi.org/project/api-operator/) + **in-app guided agent** · [docs/api-operator.md](docs/api-operator.md)  
-> **v1.3.0** — Usage-based billing · [CHANGELOG](CHANGELOG.md)  
-> **v1.2.1** — API rate limiting, token abilities, team invites · [Release notes](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.2.1)
+> **v1.3.0** — Usage-based billing · [CHANGELOG](CHANGELOG.md)
 
 ---
 
@@ -72,6 +72,7 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 - **Workspace suspension** from Filament admin
 - **Usage-based billing** meters (`api_calls`, `team_seats`) with optional Stripe sync
 - **[api-operator](https://pypi.org/project/api-operator/)** YAML adapter + **in-app guided agent** (chat widget on central domain) — [guide](docs/api-operator.md)
+- **Optional KYC** — opt-in identity verification via [kyc-ai/laravel](https://packagist.org/packages/kyc-ai/laravel) · [docs/kyc.md](docs/kyc.md)
 
 ---
 
@@ -437,7 +438,7 @@ php artisan optimize:clear && php artisan view:cache
 - [x] Workspace suspend from Filament (v1.2.1)
 - [x] Usage-based billing meters (v1.3.0)
 - [x] api-operator integration + in-app guided agent (v1.3.1)
-- [ ] Optional KYC module (v1.4.0) — Phase A+B wired locally; enable with `composer require kyc-ai/laravel` · [docs/kyc.md](docs/kyc.md)
+- [x] Optional KYC module (v1.4.0) — enable with `composer require kyc-ai/laravel` · [docs/kyc.md](docs/kyc.md)
 - [ ] Extended usage meters (v1.5.0)
 - [ ] Platform webhooks + agent RAG (v1.6.0)
 
