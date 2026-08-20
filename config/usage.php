@@ -22,6 +22,11 @@ return [
             'description' => 'Active members in the workspace.',
             'event_name' => env('STRIPE_METER_TEAM_SEATS', 'team_seats'),
         ],
+        'agent_calls' => [
+            'label' => 'Agent calls',
+            'description' => 'Successful in-app guided agent / api-operator chat proxy requests.',
+            'event_name' => env('STRIPE_METER_AGENT_CALLS', 'agent_calls'),
+        ],
     ],
 
 ];

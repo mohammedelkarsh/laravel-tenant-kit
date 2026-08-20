@@ -50,4 +50,10 @@ return [
         'team:invite',
     ],
 
+    /*
+    | Workspace used to record agent_calls usage when the chat request does not
+    | include workspace_id. Leave null to skip metering until a workspace is set.
+    */
+    'billing_workspace_id' => env('API_OPERATOR_BILLING_WORKSPACE'),
+
 ];

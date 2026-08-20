@@ -48,6 +48,7 @@ class UsageBillingTest extends TestCase
                     'meters' => [
                         'api_calls' => ['label', 'quantity', 'event_name'],
                         'team_seats' => ['label', 'quantity', 'event_name'],
+                        'agent_calls' => ['label', 'quantity', 'event_name'],
                     ],
                 ],
             ]);
@@ -259,6 +260,8 @@ class UsageBillingTest extends TestCase
 
         $this->assertSame(0, $summary['meters']['api_calls']['quantity']);
         $this->assertSame(0, $summary['meters']['team_seats']['quantity']);
+        $this->assertSame(0, $summary['meters']['agent_calls']['quantity']);
+        $this->assertSame('Agent calls', $summary['meters']['agent_calls']['label']);
     }
 
     /**

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tenant;
 use App\Services\ApiOperatorClient;
+use App\Services\UsageMeter;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ApiOperatorChatController extends Controller
 {
@@ -21,7 +24,7 @@ class ApiOperatorChatController extends Controller
         ]);
     }
 
-    public function store(Request $request, ApiOperatorClient $client): JsonResponse
+    public function store(Request $request, ApiOperatorClient $client, UsageMeter $usageMeter): JsonResponse
     {
         if (! config('api_operator.enabled')) {
             return response()->json(['message' => __('app.api_operator.disabled')], 503);
@@ -30,6 +33,7 @@ class ApiOperatorChatController extends Controller
         $data = $request->validate([
             'message' => ['required', 'string', 'max:2000'],
             'session_id' => ['nullable', 'string', 'max:64'],
+            'workspace_id' => ['nullable', 'string', 'max:64'],
         ]);
 
         try {
@@ -46,6 +50,38 @@ class ApiOperatorChatController extends Controller
             return response()->json(['message' => (string) $detail], 502);
         }
 
+        $this->recordAgentCall($request, $usageMeter, $data['workspace_id'] ?? null);
+
         return response()->json($response);
+    }
+
+    private function recordAgentCall(Request $request, UsageMeter $usageMeter, ?string $workspaceId): void
+    {
+        $tenant = $this->resolveBillingWorkspace($workspaceId);
+
+        if (! $tenant instanceof Tenant) {
+            Log::debug('usage.agent_calls_skipped', [
+                'reason' => 'no_billing_workspace',
+                'workspace_id' => $workspaceId,
+                'user_id' => $request->user()?->id,
+            ]);
+
+            return;
+        }
+
+        $usageMeter->record($tenant, 'agent_calls');
+    }
+
+    private function resolveBillingWorkspace(?string $workspaceId): ?Tenant
+    {
+        $id = $workspaceId ?: config('api_operator.billing_workspace_id');
+
+        if (! is_string($id) || $id === '') {
+            return null;
+        }
+
+        $tenant = Tenant::query()->find($id);
+
+        return $tenant instanceof Tenant ? $tenant : null;
     }
 }

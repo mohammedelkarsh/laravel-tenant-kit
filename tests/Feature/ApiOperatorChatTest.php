@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Tenant;
+use App\Models\UsageRecord;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -161,5 +163,134 @@ class ApiOperatorChatTest extends TestCase
         $this->assertStringContainsString('api-confirm', $js);
         $this->assertStringContainsString('confirm', $js);
         $this->assertStringContainsString('data-agent-chip', $js);
+    }
+
+    public function test_successful_chat_increments_agent_calls_for_workspace(): void
+    {
+        config([
+            'api_operator.enabled' => true,
+            'api_operator.url' => 'http://api-operator.test',
+            'api_operator.token' => 'test-token',
+            'usage.enabled' => true,
+        ]);
+
+        Tenant::withoutEvents(function (): void {
+            $tenant = Tenant::query()->create(['id' => 'agentws', 'name' => 'Agent WS']);
+            $tenant->domains()->create(['domain' => 'agentws']);
+        });
+
+        Http::fake([
+            'http://api-operator.test/health' => Http::response(['status' => 'ok']),
+            'http://api-operator.test/v1/chat' => Http::response([
+                'session_id' => 'sess-usage',
+                'message' => 'ok',
+                'status' => 'ok',
+            ]),
+        ]);
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('api-operator.chat'), [
+                'message' => 'list workspaces',
+                'workspace_id' => 'agentws',
+            ])
+            ->assertOk();
+
+        $record = UsageRecord::query()
+            ->where('tenant_id', 'agentws')
+            ->where('meter', 'agent_calls')
+            ->first();
+
+        $this->assertNotNull($record);
+        $this->assertSame(1, (int) $record->quantity);
+    }
+
+    public function test_chat_uses_configured_billing_workspace_when_omitted(): void
+    {
+        config([
+            'api_operator.enabled' => true,
+            'api_operator.url' => 'http://api-operator.test',
+            'api_operator.token' => 'test-token',
+            'api_operator.billing_workspace_id' => 'billdemo',
+            'usage.enabled' => true,
+        ]);
+
+        Tenant::withoutEvents(function (): void {
+            $tenant = Tenant::query()->create(['id' => 'billdemo', 'name' => 'Bill Demo']);
+            $tenant->domains()->create(['domain' => 'billdemo']);
+        });
+
+        Http::fake([
+            'http://api-operator.test/health' => Http::response(['status' => 'ok']),
+            'http://api-operator.test/v1/chat' => Http::response([
+                'session_id' => 'sess-cfg',
+                'message' => 'ok',
+                'status' => 'ok',
+            ]),
+        ]);
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('api-operator.chat'), ['message' => 'hello'])
+            ->assertOk();
+
+        $this->assertSame(1, (int) UsageRecord::query()
+            ->where('tenant_id', 'billdemo')
+            ->where('meter', 'agent_calls')
+            ->value('quantity'));
+    }
+
+    public function test_chat_skips_agent_calls_without_billing_workspace(): void
+    {
+        config([
+            'api_operator.enabled' => true,
+            'api_operator.url' => 'http://api-operator.test',
+            'api_operator.token' => 'test-token',
+            'api_operator.billing_workspace_id' => null,
+            'usage.enabled' => true,
+        ]);
+
+        Http::fake([
+            'http://api-operator.test/health' => Http::response(['status' => 'ok']),
+            'http://api-operator.test/v1/chat' => Http::response([
+                'session_id' => 'sess-skip',
+                'message' => 'ok',
+                'status' => 'ok',
+            ]),
+        ]);
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('api-operator.chat'), ['message' => 'hello'])
+            ->assertOk();
+
+        $this->assertSame(0, UsageRecord::query()->where('meter', 'agent_calls')->count());
+    }
+
+    public function test_failed_chat_does_not_increment_agent_calls(): void
+    {
+        config([
+            'api_operator.enabled' => true,
+            'api_operator.url' => 'http://127.0.0.1:1',
+            'api_operator.token' => 'test-token',
+            'api_operator.billing_workspace_id' => 'failws',
+            'usage.enabled' => true,
+        ]);
+
+        Tenant::withoutEvents(function (): void {
+            $tenant = Tenant::query()->create(['id' => 'failws', 'name' => 'Fail WS']);
+            $tenant->domains()->create(['domain' => 'failws']);
+        });
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('api-operator.chat'), ['message' => 'hello'])
+            ->assertStatus(503);
+
+        $this->assertSame(0, UsageRecord::query()->where('meter', 'agent_calls')->count());
     }
 }

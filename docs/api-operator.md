@@ -174,6 +174,18 @@ Run `api-operator serve` from the **tenant-kit repo root** so the adapter path r
 
 3. Log in as platform admin → open any central page → click the chat button.
 
+### Usage metering (`agent_calls`)
+
+Successful `POST /api-operator/chat` responses increment the workspace **`agent_calls`** meter (same `usage_records` table as `api_calls` / `team_seats`).
+
+Attribution (first match wins):
+
+1. Optional JSON body field `workspace_id`
+2. Else `API_OPERATOR_BILLING_WORKSPACE` in `.env` (Docker defaults to `demo`)
+3. Else no record is written
+
+Failed proxy calls (502/503) and disabled usage billing do not increment the meter. See billing UI `/billing/{tenant}` and `GET /api/workspaces/{id}/usage`.
+
 ### Enable with Docker
 
 ```bash

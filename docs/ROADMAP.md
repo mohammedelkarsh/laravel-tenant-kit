@@ -10,7 +10,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.3.0** | Usage-based billing | tenant-kit | ✅ Released |
 | **v1.3.1** | [api-operator](https://pypi.org/project/api-operator/) (PyPI) + in-app guided agent | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
 | **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | ✅ Released |
-| **v1.5.0** | Extended usage meters + Stripe | tenant-kit | 💡 Planned |
+| **v1.5.0** | Extended usage meters + Stripe | tenant-kit | 🚧 In progress |
 | **v1.6.0** | Platform webhooks + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
@@ -109,17 +109,18 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 ---
 
-## v1.5.0 — Extended usage billing 💡
+## v1.5.0 — Extended usage billing 🚧
 
 **Goal:** Expand meters introduced in v1.3.0 and link agent activity.
 
 | Item | Notes |
 |------|--------|
-| `agent_calls` meter | Count successful `/api-operator/chat` proxy requests |
-| Additional meters | Storage, outbound email, webhook deliveries |
-| Stripe sync | Optional via existing `USAGE_SYNC_TO_STRIPE` pattern |
-| Billing UI | Show new meters on `/billing/{tenant}` |
-| Tests | PHPUnit + usage API coverage |
+| `agent_calls` meter | ✅ Successful `POST /api-operator/chat` → `UsageMeter::record` |
+| Attribution | ✅ Request `workspace_id` or `API_OPERATOR_BILLING_WORKSPACE` |
+| Stripe sync | ✅ Same `USAGE_SYNC_TO_STRIPE` + `STRIPE_METER_AGENT_CALLS` |
+| Billing UI / usage API | ✅ Auto via `config/usage.php` meters list |
+| Tests | ✅ `ApiOperatorChatTest` + `UsageBillingTest` |
+| Additional meters | Storage, outbound email, webhooks — deferred |
 
 ---
 

@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.0] — 2026-08-20
+
+### Added
+
+- **`agent_calls` usage meter** — counts successful `POST /api-operator/chat` proxy responses toward a workspace
+- Attribution via optional request `workspace_id` or `API_OPERATOR_BILLING_WORKSPACE` / `config('api_operator.billing_workspace_id')`
+- Stripe meter name: `STRIPE_METER_AGENT_CALLS` (optional sync via existing `USAGE_SYNC_TO_STRIPE`)
+
+### Changed
+
+- Usage API / billing UI automatically include `agent_calls` with other configured meters
+
 ## [1.4.0] — 2026-08-03
 
 ### Added
