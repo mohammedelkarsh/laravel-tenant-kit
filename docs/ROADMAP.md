@@ -17,7 +17,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 
 **Semver:** patch (1.2.x) = fixes · minor (1.3.x–1.7) = new features · major (2.0) = breaking changes.
 
-**Contributors welcome:** [#1 French locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) · ~~[#2 Laragon docs](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/2)~~ ✅ · ~~[#3 v1.4 KYC prep](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/3)~~ ✅ (maintainer)
+**Contributors welcome:** [#1 French locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) · [#6 Spanish locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6) · ~~[#2 Laragon docs](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/2)~~ ✅ · ~~[#3 v1.4 KYC prep](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/3)~~ ✅
 
 ---
 
