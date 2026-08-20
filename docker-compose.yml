@@ -23,7 +23,7 @@ services:
       - tenant-kit
 
   nginx:
-    image: nginx:1.27-alpine
+    image: nginx:1.31-alpine
     ports:
       - "${APP_PORT:-80}:80"
       - "${APP_PORT_ALT:-8080}:80"
