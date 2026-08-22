@@ -427,6 +427,8 @@ php artisan optimize:clear && php artisan view:cache
 
 ## Roadmap
 
+Full plan: [docs/ROADMAP.md](docs/ROADMAP.md)
+
 - [x] Docker Compose dev environment
 - [x] PostgreSQL support
 - [x] Redis cache / queue with tenant isolation
@@ -441,7 +443,12 @@ php artisan optimize:clear && php artisan view:cache
 - [x] api-operator integration + in-app guided agent (v1.3.1)
 - [x] Optional KYC module (v1.4.0) — enable with `composer require kyc-ai/laravel` · [docs/kyc.md](docs/kyc.md)
 - [x] Extended usage meters — `agent_calls` (v1.5.0)
-- [ ] Platform webhooks + agent RAG (v1.6.0)
+- [ ] Remaining usage meters — storage, outbound email, webhooks (v1.5.1)
+- [ ] Platform outbound webhooks (v1.6.0)
+- [ ] Plan gating per Stripe tier + KYC webhooks (v1.6.0)
+- [ ] api-operator RAG + Filament confirm-before-write (v1.6.0)
+- [ ] PostgreSQL-first production docs (v1.6.0)
+- [ ] Enterprise — SSO, audit log, tenant export (v1.7+)
 
 ---
 

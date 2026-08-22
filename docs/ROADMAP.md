@@ -10,8 +10,9 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.3.0** | Usage-based billing | tenant-kit | ✅ Released |
 | **v1.3.1** | [api-operator](https://pypi.org/project/api-operator/) (PyPI) + in-app guided agent | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
 | **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | ✅ Released |
-| **v1.5.0** | Extended usage meters + Stripe | tenant-kit | 🚧 In progress |
-| **v1.6.0** | Platform webhooks + smarter agent | tenant-kit + api-operator | 💡 Planned |
+| **v1.5.0** | `agent_calls` usage meter + Stripe | tenant-kit | ✅ Released |
+| **v1.5.1** | Remaining usage meters (storage, email, webhooks) | tenant-kit | 💡 Planned |
+| **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
 
@@ -100,18 +101,18 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 | `docs/laragon.md` | Laragon vs Docker (community PR #4) |
 | `renovate.json` | Automated dependency update PRs |
 
-### Stretch (deferred)
+### Stretch (moved to v1.6)
 
-| Item | Notes |
-|------|--------|
-| KYC webhooks | Notify workspace when verification status changes |
-| Plan gating | KYC enabled per subscription tier |
+| Item | Target | Notes |
+|------|--------|--------|
+| KYC webhooks | v1.6.0 | Notify workspace when verification status changes |
+| Plan gating (KYC) | v1.6.0 | KYC enabled per Stripe subscription tier — part of general plan gating |
 
 ---
 
-## v1.5.0 — Extended usage billing 🚧
+## v1.5.0 — `agent_calls` usage meter ✅
 
-**Goal:** Expand meters introduced in v1.3.0 and link agent activity.
+**Goal:** Bill and monitor guided agent chat separately from API calls.
 
 | Item | Notes |
 |------|--------|
@@ -120,19 +121,37 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 | Stripe sync | ✅ Same `USAGE_SYNC_TO_STRIPE` + `STRIPE_METER_AGENT_CALLS` |
 | Billing UI / usage API | ✅ Auto via `config/usage.php` meters list |
 | Tests | ✅ `ApiOperatorChatTest` + `UsageBillingTest` |
-| Additional meters | Storage, outbound email, webhooks — deferred |
+
+**Release checklist:** ✅ — [v1.5.0](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.5.0)
+
+---
+
+## v1.5.1 — Remaining usage meters 💡
+
+**Goal:** Complete the usage-billing story deferred from v1.5.0.
+
+| Item | Notes |
+|------|--------|
+| Storage meter | Track per-workspace storage consumption |
+| Outbound email meter | Count transactional / outbound mail per workspace |
+| Webhooks usage meter | Count outbound webhook deliveries (usage billing — not platform webhooks) |
+| Stripe sync | Same pattern as existing meters + `.env.example` vars |
+| Tests | Extend `UsageBillingTest`; adapter `get_usage` if needed |
+
+Optional minor — ship when at least one meter is ready, or bundle all three.
 
 ---
 
 ## v1.6.0 — Platform + smarter agent 💡
 
-**Goal:** Integrations and agent UX for power users.
+**Goal:** Integrations, subscription-tier features, and agent UX for power users.
 
 | Item | Notes |
 |------|--------|
-| Outbound webhooks | Workspace created, suspended, invite sent |
-| Plan gating | Features enabled per Stripe subscription tier |
-| api-operator RAG | Answer from tenant-kit docs |
+| Outbound platform webhooks | Events: workspace created, suspended, invite sent |
+| Plan gating | Features (including KYC) enabled per Stripe subscription tier |
+| KYC webhooks | Notify workspace when verification status changes (from v1.4 stretch) |
+| api-operator RAG | Answer from tenant-kit docs ([api-operator](https://github.com/mohammedelkarsh/api-operator) repo) |
 | Filament agent UX | Confirm-before-write patterns in admin |
 | PostgreSQL-first docs | Docker profile as recommended production path |
 
@@ -146,6 +165,18 @@ Under consideration (not scoped):
 - Platform audit log (admin actions)
 - Tenant export / backup CLI
 - Multi-region tenancy notes
+
+---
+
+## Backlog & ecosystem (parallel)
+
+| Item | Target | Repo | Notes |
+|------|--------|------|--------|
+| French locale | Any release | tenant-kit | [#1](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) — good first issue |
+| Spanish locale | Any release | tenant-kit | [#6](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6) — good first issue |
+| Shufti external KYC driver | Before `KycLevel::Full` docs | [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | `kyc-ai/external-shufti` satellite package |
+| Other external verifiers (Onfido, …) | Later | satellite packages | Opt-in; not in tenant-kit core |
+| Government/registry APIs (e.g. Yakeen) | Later | country-specific packages | Separate from core KYC |
 
 ---
 
