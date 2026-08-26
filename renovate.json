@@ -18,7 +18,10 @@
       "description": "Group non-major dependency updates",
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
+      "groupSlug": "all-minor-patch",
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
     },
     {
       "description": "Keep major updates as separate PRs",
@@ -26,15 +29,23 @@
       "groupName": null
     },
     {
-      "description": "Laravel ecosystem often needs careful major bumps",
+      "description": "Group GitHub Actions major bumps",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "github-actions major",
+      "groupSlug": "github-actions-major"
+    },
+    {
+      "description": "Laravel ecosystem majors need manual review",
       "matchPackageNames": [
         "laravel/framework",
         "filament/filament",
         "stancl/tenancy",
-        "laravel/cashier"
+        "laravel/cashier",
+        "phpunit/phpunit"
       ],
       "matchUpdateTypes": ["major"],
-      "enabled": true
+      "dependencyDashboardApproval": true
     }
   ],
   "lockFileMaintenance": {
