@@ -23,6 +23,11 @@ return [
             'native' => 'العربية',
             'dir' => 'rtl',
         ],
+        'es' => [
+            'name' => 'Spanish',
+            'native' => 'Español',
+            'dir' => 'ltr',
+        ],
     ],
 
     /*
@@ -33,7 +38,7 @@ return [
 
     'enabled' => array_values(array_filter(array_map(
         trim(...),
-        explode(',', env('APP_AVAILABLE_LOCALES', 'en,ar'))
+        explode(',', env('APP_AVAILABLE_LOCALES', 'en,ar,es'))
     ))),
 
     'session_key' => 'locale',

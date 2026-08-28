@@ -62,7 +62,7 @@ Developers building **SaaS products with Laravel** who want a real starting poin
 - Stripe subscriptions (Laravel Cashier) per workspace
 - Filament admin panel (`/admin`)
 - Workspace signup + CLI provisioning
-- **English & Arabic** (RTL) — easy to add more languages
+- **English, Arabic (RTL) & Spanish** — easy to add more languages
 - GitHub Actions CI + **71 PHPUnit tests** + **43-point** smoke test + **44-scenario** page audit
 - **Docker Compose** dev stack (PHP, Nginx, MySQL, Redis)
 - **PostgreSQL** supported (Stancl database-per-tenant)
@@ -158,7 +158,7 @@ CENTRAL_DOMAIN=laravel-tenant-kit.test
 DB_DATABASE=laravel_tenant_kit
 DB_USERNAME=root
 DB_PASSWORD=your_password
-APP_AVAILABLE_LOCALES=en,ar
+APP_AVAILABLE_LOCALES=en,ar,es
 ```
 
 For Docker on port **8080**, set `APP_URL=http://laravel-tenant-kit.test:8080` (see `.env.docker`).
@@ -349,17 +349,17 @@ Full setup (tokens, HTTP server, integration test): **[docs/api-operator.md](doc
 
 ## Localization
 
-**English & Arabic included** — RTL works out of the box. Add more languages in `config/locales.php`.
+**English, Arabic & Spanish included** — RTL works out of the box. Add more languages in `config/locales.php`.
 
 ```env
-APP_AVAILABLE_LOCALES=en,ar
+APP_AVAILABLE_LOCALES=en,ar,es
 ```
 
 <details>
 <summary><strong>Add a new language (e.g. French)</strong></summary>
 
 1. Register in `config/locales.php`
-2. Set `APP_AVAILABLE_LOCALES=en,ar,fr`
+2. Set `APP_AVAILABLE_LOCALES=en,ar,es,fr`
 3. Copy `lang/en/app.php` → `lang/fr/app.php` and translate
 4. Run `php artisan optimize:clear`
 
