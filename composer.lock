@@ -1045,7 +1045,7 @@
         },
         {
             "name": "filament/actions",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/actions.git",
@@ -1094,7 +1094,7 @@
         },
         {
             "name": "filament/filament",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/panels.git",
@@ -1151,7 +1151,7 @@
         },
         {
             "name": "filament/forms",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/forms.git",
@@ -1201,7 +1201,7 @@
         },
         {
             "name": "filament/infolists",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/infolists.git",
@@ -1246,7 +1246,7 @@
         },
         {
             "name": "filament/notifications",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/notifications.git",
@@ -1293,7 +1293,7 @@
         },
         {
             "name": "filament/query-builder",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/query-builder.git",
@@ -1339,7 +1339,7 @@
         },
         {
             "name": "filament/schemas",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/schemas.git",
@@ -1384,16 +1384,16 @@
         },
         {
             "name": "filament/support",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
-                "reference": "f472f41ac967333fd27163c9df5a520f2736edc6"
+                "reference": "db044fa876c998aa55b867f5774a4eb5b42c75ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/support/zipball/f472f41ac967333fd27163c9df5a520f2736edc6",
-                "reference": "f472f41ac967333fd27163c9df5a520f2736edc6",
+                "url": "https://api.github.com/repos/filamentphp/support/zipball/db044fa876c998aa55b867f5774a4eb5b42c75ea",
+                "reference": "db044fa876c998aa55b867f5774a4eb5b42c75ea",
                 "shasum": ""
             },
             "require": {
@@ -1438,11 +1438,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2026-08-31T17:10:20+00:00"
+            "time": "2026-09-01T08:40:00+00:00"
         },
         {
             "name": "filament/tables",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/tables.git",
@@ -1488,7 +1488,7 @@
         },
         {
             "name": "filament/widgets",
-            "version": "v5.7.7",
+            "version": "v5.7.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/widgets.git",
@@ -2209,16 +2209,16 @@
         },
         {
             "name": "laravel/cashier",
-            "version": "v16.7.0",
+            "version": "v16.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/cashier-stripe.git",
-                "reference": "781ff517a544004f4ae0501f634c1ada40b78572"
+                "reference": "3741d81d0e2b7ca8de52c2f9a272d30edfa741b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/781ff517a544004f4ae0501f634c1ada40b78572",
-                "reference": "781ff517a544004f4ae0501f634c1ada40b78572",
+                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/3741d81d0e2b7ca8de52c2f9a272d30edfa741b9",
+                "reference": "3741d81d0e2b7ca8de52c2f9a272d30edfa741b9",
                 "shasum": ""
             },
             "require": {
@@ -2236,7 +2236,7 @@
                 "moneyphp/money": "^4.0",
                 "nesbot/carbon": "^2.0|^3.0",
                 "php": "^8.1",
-                "stripe/stripe-php": "^17.4|^18.0|^19.0|^20.0",
+                "stripe/stripe-php": "^17.4|^18.0|^19.0|^20.0|^21.0",
                 "symfony/console": "^6.0|^7.0|^8.0",
                 "symfony/http-kernel": "^6.0|^7.0|^8.0",
                 "symfony/polyfill-intl-icu": "^1.22.1",
@@ -2294,20 +2294,20 @@
                 "issues": "https://github.com/laravel/cashier/issues",
                 "source": "https://github.com/laravel/cashier"
             },
-            "time": "2026-08-05T23:53:36+00:00"
+            "time": "2026-09-01T13:29:00+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v13.29.0",
+            "version": "v13.30.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6e2c363716964d8238cee7097b258119a984f0cf"
+                "reference": "718d17db56861e0a49f644217c8853dab1bff8ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6e2c363716964d8238cee7097b258119a984f0cf",
-                "reference": "6e2c363716964d8238cee7097b258119a984f0cf",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/718d17db56861e0a49f644217c8853dab1bff8ce",
+                "reference": "718d17db56861e0a49f644217c8853dab1bff8ce",
                 "shasum": ""
             },
             "require": {
@@ -2521,7 +2521,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-08-25T20:57:16+00:00"
+            "time": "2026-09-01T21:42:30+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -2708,22 +2708,22 @@
         },
         {
             "name": "laravel/socialite",
-            "version": "v5.30.1",
+            "version": "v5.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
-                "reference": "5c79f43e48d518f0e82dff0a03009c4cbe794c4e"
+                "reference": "f721b2cbec327ab820bd6aabea6ab211cfcc9f08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/5c79f43e48d518f0e82dff0a03009c4cbe794c4e",
-                "reference": "5c79f43e48d518f0e82dff0a03009c4cbe794c4e",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/f721b2cbec327ab820bd6aabea6ab211cfcc9f08",
+                "reference": "f721b2cbec327ab820bd6aabea6ab211cfcc9f08",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "firebase/php-jwt": "^6.4|^7.0",
-                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "guzzlehttp/guzzle": "^6.0|^7.0|^8.0",
                 "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
                 "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
                 "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
@@ -2776,7 +2776,7 @@
                 "issues": "https://github.com/laravel/socialite/issues",
                 "source": "https://github.com/laravel/socialite"
             },
-            "time": "2026-08-24T13:31:12+00:00"
+            "time": "2026-08-31T13:49:19+00:00"
         },
         {
             "name": "laravel/tinker",
@@ -3659,16 +3659,16 @@
         },
         {
             "name": "livewire/livewire",
-            "version": "v4.3.1",
+            "version": "v4.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/livewire.git",
-                "reference": "6a9dd03f45a4b200abfd0ff644745b23fa7baaaa"
+                "reference": "92f1427022714b34024459167aa6a85d4fb4af44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/livewire/zipball/6a9dd03f45a4b200abfd0ff644745b23fa7baaaa",
-                "reference": "6a9dd03f45a4b200abfd0ff644745b23fa7baaaa",
+                "url": "https://api.github.com/repos/livewire/livewire/zipball/92f1427022714b34024459167aa6a85d4fb4af44",
+                "reference": "92f1427022714b34024459167aa6a85d4fb4af44",
                 "shasum": ""
             },
             "require": {
@@ -3723,7 +3723,7 @@
             "description": "A front-end framework for Laravel.",
             "support": {
                 "issues": "https://github.com/livewire/livewire/issues",
-                "source": "https://github.com/livewire/livewire/tree/v4.3.1"
+                "source": "https://github.com/livewire/livewire/tree/v4.4.3"
             },
             "funding": [
                 {
@@ -3731,7 +3731,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-02T08:58:52+00:00"
+            "time": "2026-08-31T15:40:58+00:00"
         },
         {
             "name": "moneyphp/money",
