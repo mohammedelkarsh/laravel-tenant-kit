@@ -64,7 +64,7 @@ services:
   # Optional: use profile "pgsql" → docker compose --profile pgsql up
   postgres:
     profiles: ["pgsql"]
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     ports:
       - "${FORWARD_PG_PORT:-5432}:5432"
     environment:
