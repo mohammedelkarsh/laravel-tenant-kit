@@ -25,6 +25,8 @@ class FilamentTenantsTest extends TestCase
 
         $admin = User::factory()->create();
 
+        config(['app.platform_admin_emails' => [$admin->email]]);
+
         Tenant::withoutEvents(function (): void {
             $tenant = Tenant::query()->create(['id' => 'demo', 'name' => 'Demo Workspace']);
             $tenant->domains()->create(['domain' => 'demo']);
