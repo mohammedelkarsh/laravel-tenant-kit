@@ -17,6 +17,11 @@ return [
 
     'central_domain' => env('CENTRAL_DOMAIN', 'localhost'),
 
+    'platform_admin_emails' => array_values(array_filter(array_map(
+        'trim',
+        explode(',', (string) env('PLATFORM_ADMIN_EMAILS', '')),
+    ))),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
