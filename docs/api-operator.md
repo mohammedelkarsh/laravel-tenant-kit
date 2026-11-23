@@ -7,13 +7,14 @@ Operate Tenant Kit from the command line or an HTTP agent — no Filament clicks
 ## Install
 
 ```bash
-pip install "api-operator>=0.11.0"
+pip install "api-operator>=1.1.0"
 ```
 
-Optional OpenAI planner (instead of rule-based mock planner):
+Optional OpenAI planner / RAG extras:
 
 ```bash
-pip install "api-operator[llm]>=0.11.0"
+pip install "api-operator[llm]>=1.1.0"
+pip install "api-operator[rag]>=1.1.0"   # embeddings + pgvector client
 ```
 
 Requires **Python 3.11+**.
@@ -30,6 +31,7 @@ Requires **Python 3.11+**.
 integrations/api-operator/
 ├── adapter.yaml   # HTTP tools for central + tenant API
 ├── policy.yaml    # Safe API Agent rules (api-operator >= 0.11)
+├── knowledge/     # Optional keyword/embedding docs for the agent (1.1+)
 └── README.md
 ```
 
@@ -159,7 +161,16 @@ When logged in on the **central** domain, a floating chat button appears (bottom
 1. Install and start the operator:
 
 ```bash
-pip install "api-operator>=0.11.0"
+pip install "api-operator>=1.1.0"
+api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
+```
+
+Optional knowledge (keyword L0 — set on the **Python** process, not Laravel):
+
+```bash
+export API_OPERATOR_KNOWLEDGE_ENABLED=true
+export API_OPERATOR_KNOWLEDGE_BACKEND=keyword
+export API_OPERATOR_KNOWLEDGE_PATHS=integrations/api-operator/knowledge/shared.md
 api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 ```
 

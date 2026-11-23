@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.4] — 2026-11-23
+
+### Added
+
+- **api-operator knowledge stub** — `integrations/api-operator/knowledge/shared.md` for keyword/embedding RAG (api-operator >= 1.1)
+
+### Changed
+
+- Docs recommend `api-operator>=1.1.0` and document sidecar `API_OPERATOR_KNOWLEDGE_*` settings
+
 ## [1.5.3] — 2026-11-23
 
 ### Added

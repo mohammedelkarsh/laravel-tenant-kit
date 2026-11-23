@@ -31,6 +31,7 @@ class ApiOperatorAdapterTest extends TestCase
         $this->assertFileExists(base_path('docs/api-operator.md'));
         $this->assertFileExists(base_path('integrations/api-operator/README.md'));
         $this->assertFileExists(base_path('integrations/api-operator/policy.yaml'));
+        $this->assertFileExists(base_path('integrations/api-operator/knowledge/shared.md'));
     }
 
     public function test_adapter_documents_api_operator_auth_env_var(): void
