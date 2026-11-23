@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.3] — 2026-11-23
+
+### Added
+
+- **api-operator policy.yaml** — Safe API Agent rules beside the adapter (`integrations/api-operator/policy.yaml`)
+- Proxy support for `dry_run`, `actor_id`, and `tenant_id` (api-operator >= 0.11)
+
+### Changed
+
+- `agent_calls` metering counts only completed tool runs (`status=ok` + `tool`); dry-run / deny / confirm are skipped
+- Docs recommend `api-operator>=0.11.0`
+
 ## [1.5.2] — 2026-11-23
 
 ### Added
