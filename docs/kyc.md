@@ -18,7 +18,14 @@ Optional country validators:
 composer require validators/ae validators/eg
 ```
 
-Do **not** add `kyc-ai/laravel` to Tenant Kit’s default `composer.json` `require`.
+For **full** level (external provider), also install the Shufti driver:
+
+```bash
+composer require kyc-ai/external-shufti
+php artisan vendor:publish --tag=kyc-shufti-config
+```
+
+Do **not** add `kyc-ai/laravel` (or satellite drivers) to Tenant Kit’s default `composer.json` `require`.
 
 ## Enable
 
@@ -72,7 +79,37 @@ $tenant->run(function () use ($user, $file) {
 
 `KycFilamentPlugin` from the package targets Filament ^3. Tenant Kit runs **Filament 5**, so the workspace panel registers a compatible bridge resource (`App\Filament\Workspace\...`). If you are on Filament 3, the package plugin is used instead.
 
-Prefer **`KycLevel::standard`** (and `KYC_EXTERNAL_ENABLED=false`) until external drivers such as Shufti are production-ready. Do not promote `full` in product docs yet.
+### Levels
+
+| Level | Behavior |
+|-------|----------|
+| `internal` / `standard` | Extraction + country validators only (`KYC_EXTERNAL_ENABLED=false`) |
+| `full` | Same as standard, then Shufti Pro via [`kyc-ai/external-shufti`](https://packagist.org/packages/kyc-ai/external-shufti) |
+
+Default to **`standard`** for local/demo. Use **`full`** when you have Shufti credentials and accept outbound document transfer.
+
+### External verification (Shufti)
+
+```bash
+composer require kyc-ai/laravel:^1.1.1 kyc-ai/external-shufti
+php artisan vendor:publish --tag=kyc-shufti-config
+```
+
+```env
+KYC_LEVEL=full
+KYC_EXTERNAL_ENABLED=true
+KYC_EXTERNAL_DRIVER=shufti
+
+SHUFTI_CLIENT_ID=
+SHUFTI_SECRET=
+SHUFTI_BASE_URL=https://api.shuftipro.com
+SHUFTI_CALLBACK_URL="${APP_URL}/kyc/webhooks/shufti"
+SHUFTI_POLL_SECONDS=30
+SHUFTI_POLL_INTERVAL=2
+SHUFTI_WEBHOOK_ROUTE=true
+```
+
+Flow: submit → poll (or webhook `POST /kyc/webhooks/shufti`) → `ShuftiVerificationCompleted`. Docs: [kyc-external-shufti](https://github.com/mohammedelkarsh/kyc-external-shufti).
 
 ## Test scenarios
 
