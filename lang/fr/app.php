@@ -1,0 +1,257 @@
+<?php
+
+return [
+
+    'nav' => [
+        'dashboard' => 'Tableau de bord',
+        'log_in' => 'Connexion',
+        'create_workspace' => 'Créer un espace',
+        'team' => 'Équipe',
+        'billing' => 'Facturation',
+        'kyc' => 'KYC',
+    ],
+
+    'landing' => [
+        'title' => 'Starter SaaS multi-locataire',
+        'meta_description' => 'Starter Laravel multi-locataire avec bases isolées, Breeze, Filament, équipes et facturation Stripe.',
+        'hero_title' => 'Starter SaaS multi-locataire pour',
+        'hero_highlight' => 'Laravel',
+        'hero_subtitle' => 'Base isolée par espace, sous-domaines, équipes, facturation Stripe, admin Filament.',
+        'live_demo' => 'Démo en direct',
+        'architecture' => 'Architecture',
+        'central' => 'Central',
+        'central_desc' => 'Admin, facturation, inscription des espaces',
+        'tenant' => 'Locataire',
+        'tenant_desc' => 'Auth, équipes, base isolée',
+        'included' => 'Inclus',
+        'features' => [
+            'multi_tenancy' => ['title' => 'Multi-locataire', 'desc' => 'Base isolée, sous-domaines et domaines personnalisés'],
+            'authentication' => ['title' => 'Authentification', 'desc' => 'Breeze sur le central et le locataire'],
+            'teams' => ['title' => 'Équipes et rôles', 'desc' => 'Propriétaire, admin, membre + invitations'],
+            'billing' => ['title' => 'Facturation Stripe', 'desc' => 'Cashier par espace'],
+            'filament' => ['title' => 'Admin Filament', 'desc' => 'Gérer les espaces sur /admin'],
+            'cli' => ['title' => 'CLI', 'desc' => 'commande tenant:provision'],
+        ],
+        'try_demo' => 'Essayer la démo',
+        'admin_panel' => 'Panneau d’admin',
+        'demo_login' => 'Connexion démo',
+    ],
+
+    'dashboard' => [
+        'title' => 'Tableau de bord',
+        'admin_panel' => 'Panneau d’admin',
+        'create_workspace' => 'Créer un espace',
+        'demo_workspace' => 'Espace démo',
+    ],
+
+    'tenant' => [
+        'sign_in' => 'Connexion',
+        'register' => 'Inscription',
+        'members' => 'Membres',
+        'url' => 'URL',
+        'suspended' => 'Cet espace a été suspendu. Contactez le support pour de l’aide.',
+    ],
+
+    'kyc' => [
+        'onboarding_title' => 'Vérification d’identité',
+        'onboarding_intro' => 'Téléversez une pièce d’identité officielle. La vérification utilise les réglages KYC de cet espace (pays, niveau, moteur d’extraction).',
+        'document' => 'Pièce d’identité',
+        'country' => 'Pays',
+        'level' => 'Niveau',
+        'status' => 'Statut',
+        'confidence' => 'Confiance',
+        'warnings' => 'Avertissements',
+        'queue_label' => 'Traiter en arrière-plan (file)',
+        'submit' => 'Vérifier le document',
+        'queued' => 'Document mis en file pour vérification. Consultez bientôt le panneau de revue.',
+        'result_title' => 'Résultat de la vérification',
+        'verify_another' => 'Vérifier un autre document',
+        'open_review' => 'Ouvrir le panneau de revue',
+        'back_dashboard' => 'Retour au tableau de bord',
+        'verification' => 'Vérification',
+        'verifications' => 'Vérifications',
+    ],
+
+    'workspace' => [
+        'create_title' => 'Créez votre espace',
+        'create_subtitle' => 'Démarrez un nouveau locataire sur :domain',
+        'name' => 'Nom de l’espace',
+        'url' => 'URL de l’espace',
+        'create_button' => 'Créer l’espace',
+        'created' => 'Votre espace a été créé avec succès.',
+    ],
+
+    'team' => [
+        'title' => 'Membres de l’équipe',
+        'members' => 'Membres',
+        'pending_invitations' => 'Invitations en attente',
+        'invite_title' => 'Inviter un collègue',
+        'email' => 'E-mail',
+        'role' => 'Rôle',
+        'role_member' => 'Membre',
+        'role_admin' => 'Admin',
+        'send_invitation' => 'Envoyer l’invitation',
+        'member_exists' => 'Cet utilisateur est déjà membre de l’espace.',
+        'invitation_sent' => 'Invitation envoyée à :email',
+        'invitation_subject' => 'Invitation à un espace',
+        'invitation_body' => 'Vous êtes invité(e) à rejoindre :workspace. Accepter ici : :url',
+    ],
+
+    'invitations' => [
+        'expired' => 'Cette invitation a expiré.',
+        'register_to_accept' => 'Créez un compte pour accepter votre invitation.',
+        'wrong_email' => 'Connectez-vous avec :email pour accepter cette invitation.',
+        'accepted' => 'Bienvenue dans l’équipe !',
+    ],
+
+    'billing' => [
+        'title' => 'Facturation — :name',
+        'checkout_success' => 'Abonnement mis à jour avec succès.',
+        'stripe_not_configured' => 'Stripe n’est pas configuré. Ajoutez les clés dans .env (voir le README).',
+        'workspace' => 'Espace',
+        'active_subscription' => 'Abonnement actif : :price',
+        'manage_payment' => 'Gérer le moyen de paiement et les factures →',
+        'no_subscription' => 'Aucun abonnement actif.',
+        'per_month' => '/mois',
+        'subscribe' => 'S’abonner',
+        'back_to_workspace' => '← Retour à l’espace',
+        'stripe_not_configured_error' => 'Stripe n’est pas configuré.',
+        'usage_title' => 'Usage de la période',
+        'usage_period' => ':start → :end',
+    ],
+
+    'plans' => [
+        'starter' => [
+            'name' => 'Starter',
+            'description' => 'Pour les petites équipes qui démarrent.',
+        ],
+        'pro' => [
+            'name' => 'Pro',
+            'description' => 'Pour les équipes en croissance qui ont besoin de plus de puissance.',
+        ],
+    ],
+
+    'oauth' => [
+        'or_continue_with' => 'Ou continuer avec',
+        'google' => 'Google',
+        'github' => 'GitHub',
+    ],
+
+    'filament' => [
+        'analytics_total_workspaces' => 'Espaces au total',
+        'analytics_new_this_month' => ':count nouveaux ce mois-ci',
+        'analytics_active_subscriptions' => 'Abonnements actifs',
+        'analytics_stripe_subscribers' => 'Abonnés Stripe',
+        'analytics_platform_users' => 'Utilisateurs de la plateforme',
+        'analytics_central_users' => 'Comptes de l’app centrale',
+        'analytics_growth_chart' => 'Croissance des espaces (6 mois)',
+        'workspaces' => 'Espaces',
+        'workspace' => 'espace',
+        'workspaces_plural' => 'espaces',
+        'subdomain' => 'Sous-domaine',
+        'url' => 'URL',
+        'open' => 'Ouvrir',
+        'domains' => 'Domaines',
+        'domain' => 'Domaine',
+        'domain_helper' => 'Utilisez le slug du sous-domaine (ex. demo) ou un domaine personnalisé complet (ex. app.acme.com).',
+        'type' => 'Type',
+        'subdomain_type' => 'Sous-domaine',
+        'custom_domain_type' => 'Domaine personnalisé',
+        'stats_workspaces' => 'Espaces',
+        'stats_workspaces_desc' => 'Espaces locataires au total',
+        'stats_admins' => 'Admins plateforme',
+        'stats_admins_desc' => 'Utilisateurs de l’app centrale',
+        'stats_domain' => 'Domaine central',
+        'stats_domain_desc' => 'Les sous-domaines sont créés sous cet hôte',
+        'status' => 'Statut',
+        'suspend' => 'Suspendre',
+        'unsuspend' => 'Réactiver',
+        'suspended' => 'Suspendu',
+        'active' => 'Actif',
+    ],
+
+    'api_operator' => [
+        'title' => 'Assistant Tenant',
+        'subtitle' => 'Votre agent d’espace guidé',
+        'greeting' => "Bonjour ! Je suis l’assistant Tenant Kit.\nChoisissez un sujet ci-dessous et je vous guiderai étape par étape — ou tapez librement à tout moment.",
+        'placeholder' => 'Tapez votre réponse…',
+        'send' => 'Envoyer',
+        'thinking' => 'Réflexion…',
+        'confirm_hint' => 'Les actions sensibles exigent de taper oui pour confirmer.',
+        'unavailable' => 'Le service API Operator n’est pas démarré. Lancez api-operator serve.',
+        'disabled' => 'Le chat API Operator est désactivé.',
+        'ui' => [
+            'chip_back' => '← Retour',
+            'chip_main_menu' => '← Menu principal',
+            'chip_cancel' => 'Annuler',
+            'chip_confirm' => 'Confirmer',
+            'chip_yes' => 'Oui, continuer',
+            'chip_no' => 'Non, annuler',
+            'flow_cancelled' => 'Pas de souci. Que puis-je faire d’autre ?',
+            'confirm_placeholder' => 'Tapez oui pour confirmer ou non pour annuler',
+            'confirm_hint' => 'Appuyez sur Oui ou Non ci-dessous, ou tapez oui / non.',
+            'help' => "Je peux vous aider avec :\n\n• Espaces — lister, créer ou voir les détails\n• Facturation — usage et abonnement d’un espace\n• Équipe — inviter un collègue\n\nChoisissez un sujet ci-dessous pour commencer. Je demanderai les détails une étape à la fois.",
+            'menus' => [
+                'main' => [
+                    'prompt' => 'Que souhaitez-vous faire ?',
+                    'options' => [
+                        ['id' => 'workspaces', 'label' => 'Espaces', 'menu' => 'workspaces'],
+                        ['id' => 'billing', 'label' => 'Facturation et usage', 'menu' => 'billing'],
+                        ['id' => 'team', 'label' => 'Équipe et invitations', 'menu' => 'team'],
+                        ['id' => 'help', 'label' => 'Comment pouvez-vous aider ?', 'help' => true],
+                    ],
+                ],
+                'workspaces' => [
+                    'prompt' => 'Espaces — de quoi avez-vous besoin ?',
+                    'options' => [
+                        ['id' => 'ws_list', 'label' => 'Lister mes espaces', 'command' => 'list workspaces'],
+                        ['id' => 'ws_create', 'label' => 'Créer un nouvel espace', 'flow' => 'create_workspace'],
+                        ['id' => 'back', 'label' => '← Menu principal', 'menu' => 'main'],
+                    ],
+                ],
+                'billing' => [
+                    'prompt' => 'Facturation — choisissez un rapport :',
+                    'options' => [
+                        ['id' => 'bill_usage', 'label' => 'Voir l’usage', 'flow' => 'usage'],
+                        ['id' => 'bill_sub', 'label' => 'Voir l’abonnement', 'flow' => 'subscription'],
+                        ['id' => 'back', 'label' => '← Menu principal', 'menu' => 'main'],
+                    ],
+                ],
+                'team' => [
+                    'prompt' => 'Équipe — que souhaitez-vous ?',
+                    'options' => [
+                        ['id' => 'team_invite', 'label' => 'Inviter un collègue', 'flow' => 'invite_member'],
+                        ['id' => 'back', 'label' => '← Menu principal', 'menu' => 'main'],
+                    ],
+                ],
+            ],
+            'flows' => [
+                'create_workspace' => [
+                    'name_prompt' => 'Parfait ! Comment appeler l’espace ? (ex. Acme Corp)',
+                    'subdomain_prompt' => 'Choisissez un sous-domaine — il fera partie de l’URL (ex. acme)',
+                    'confirm_prompt' => 'Prêt à créer l’espace « :name » sur :subdomain.:domain ?',
+                    'invalid_subdomain' => 'Utilisez uniquement des lettres, chiffres et tirets (ex. acme).',
+                ],
+                'usage' => [
+                    'workspace_prompt' => 'Pour quel espace dois-je vérifier l’usage ?',
+                ],
+                'subscription' => [
+                    'workspace_prompt' => 'Pour quel espace dois-je vérifier l’abonnement ?',
+                ],
+                'invite_member' => [
+                    'email_prompt' => 'À quelle adresse e-mail envoyer l’invitation ?',
+                    'workspace_prompt' => 'Quel sous-domaine d’espace ? (ex. demo)',
+                    'role_prompt' => 'Quel rôle doivent-ils avoir ?',
+                    'confirm_prompt' => 'Inviter :email sur :workspace en tant que :role ?',
+                    'invalid_email' => 'Veuillez saisir une adresse e-mail valide.',
+                ],
+            ],
+            'roles' => [
+                'member' => 'Membre',
+                'admin' => 'Admin',
+            ],
+            'workspace_suggestions' => ['demo', 'moh'],
+        ],
+    ],
+
+];

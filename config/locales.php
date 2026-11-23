@@ -23,6 +23,16 @@ return [
             'native' => 'العربية',
             'dir' => 'rtl',
         ],
+        'fr' => [
+            'name' => 'French',
+            'native' => 'Français',
+            'dir' => 'ltr',
+        ],
+        'es' => [
+            'name' => 'Spanish',
+            'native' => 'Español',
+            'dir' => 'ltr',
+        ],
     ],
 
     /*

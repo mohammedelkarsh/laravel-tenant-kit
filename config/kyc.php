@@ -18,7 +18,7 @@ return [
 
     /*
     | Default verification level for workspaces (internal | standard | full).
-    | Prefer "standard" until external drivers (e.g. Shufti) are production-ready.
+    | Use "full" with KYC_EXTERNAL_ENABLED + kyc-ai/external-shufti (see docs/kyc.md).
     */
     'default_level' => env('KYC_LEVEL', 'standard'),
 

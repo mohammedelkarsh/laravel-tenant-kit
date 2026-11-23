@@ -25,6 +25,8 @@ class FilamentTenantsTest extends TestCase
 
         $admin = User::factory()->create();
 
+        config(['app.platform_admin_emails' => [$admin->email]]);
+
         Tenant::withoutEvents(function (): void {
             $tenant = Tenant::query()->create(['id' => 'demo', 'name' => 'Demo Workspace']);
             $tenant->domains()->create(['domain' => 'demo']);
@@ -36,6 +38,18 @@ class FilamentTenantsTest extends TestCase
         $response->assertSee('Demo Workspace', false);
         $response->assertSee('demo.laravel-tenant-kit.test:8080', false);
         $response->assertSee('http://demo.laravel-tenant-kit.test:8080', false);
+    }
+
+    public function test_filament_admin_panel_denies_users_not_in_platform_admin_emails(): void
+    {
+        config(['app.url' => 'http://laravel-tenant-kit.test:8080']);
+        config(['app.platform_admin_emails' => ['admin@laravel-tenant-kit.test']]);
+
+        $user = User::factory()->create([
+            'email' => 'not-admin@example.test',
+        ]);
+
+        $this->actingAs($user)->get('/admin/tenants')->assertForbidden();
     }
 
 }

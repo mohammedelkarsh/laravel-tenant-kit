@@ -35,7 +35,8 @@
         "phpunit/phpunit": "^13.0.0"
     },
     "suggest": {
-        "kyc-ai/laravel": "Optional identity verification (v1.4) — composer require kyc-ai/laravel:^1.1.1; see docs/kyc.md"
+        "kyc-ai/laravel": "Optional identity verification (v1.4) — composer require kyc-ai/laravel:^1.1.1; see docs/kyc.md",
+        "kyc-ai/external-shufti": "Shufti Pro driver for KYC full level — composer require kyc-ai/external-shufti; see docs/kyc.md"
     },
     "autoload": {
         "psr-4": {

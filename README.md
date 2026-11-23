@@ -158,7 +158,7 @@ CENTRAL_DOMAIN=laravel-tenant-kit.test
 DB_DATABASE=laravel_tenant_kit
 DB_USERNAME=root
 DB_PASSWORD=your_password
-APP_AVAILABLE_LOCALES=en,ar
+APP_AVAILABLE_LOCALES=en,ar,fr,es
 ```
 
 For Docker on port **8080**, set `APP_URL=http://laravel-tenant-kit.test:8080` (see `.env.docker`).
@@ -169,6 +169,8 @@ For Docker on port **8080**, set `APP_URL=http://laravel-tenant-kit.test:8080` (
 |---------|-----|-------|----------|
 | Admin | `/admin` | `admin@laravel-tenant-kit.test` | `password` |
 | Demo workspace | `http://demo.laravel-tenant-kit.test` (Laragon) or `:8080` (Docker) | `demo@demo.test` | `password` |
+
+Platform admin access is gated by `PLATFORM_ADMIN_EMAILS` (comma-separated). The seeded admin email must be listed there — see `.env.example`.
 
 ### Verify
 
@@ -349,18 +351,18 @@ Full setup (tokens, HTTP server, integration test): **[docs/api-operator.md](doc
 
 ## Localization
 
-**English & Arabic included** — RTL works out of the box. Add more languages in `config/locales.php`.
+**English, Arabic, French & Spanish included** — RTL works out of the box for Arabic. Add more languages in `config/locales.php`.
 
 ```env
-APP_AVAILABLE_LOCALES=en,ar
+APP_AVAILABLE_LOCALES=en,ar,fr,es
 ```
 
 <details>
-<summary><strong>Add a new language (e.g. French)</strong></summary>
+<summary><strong>Add a new language (e.g. German)</strong></summary>
 
 1. Register in `config/locales.php`
-2. Set `APP_AVAILABLE_LOCALES=en,ar,fr`
-3. Copy `lang/en/app.php` → `lang/fr/app.php` and translate
+2. Set `APP_AVAILABLE_LOCALES=en,ar,fr,es,de`
+3. Copy `lang/en/app.php` → `lang/de/app.php` and translate
 4. Run `php artisan optimize:clear`
 
 </details>
