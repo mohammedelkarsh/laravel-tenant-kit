@@ -36,4 +36,34 @@ class LocalesTest extends TestCase
         $this->assertSame('Tableau de bord', data_get($strings, 'nav.dashboard'));
         $this->assertSame('Assistant Tenant', data_get($strings, 'api_operator.title'));
     }
+
+    public function test_spanish_locale_is_defined(): void
+    {
+        $this->assertArrayHasKey('es', Locales::definitions());
+        $this->assertSame('ltr', Locales::definitions()['es']['dir']);
+        $this->assertSame('Español', Locales::native('es'));
+    }
+
+    public function test_spanish_can_be_enabled(): void
+    {
+        config([
+            'locales.enabled' => ['en', 'ar', 'fr', 'es'],
+        ]);
+
+        $this->assertTrue(Locales::isEnabled('es'));
+        $this->assertContains('es', Locales::enabled());
+    }
+
+    public function test_spanish_translation_file_exists(): void
+    {
+        $path = lang_path('es/app.php');
+
+        $this->assertFileExists($path);
+
+        /** @var array<string, mixed> $strings */
+        $strings = require $path;
+
+        $this->assertSame('Panel', data_get($strings, 'nav.dashboard'));
+        $this->assertSame('Asistente Tenant', data_get($strings, 'api_operator.title'));
+    }
 }

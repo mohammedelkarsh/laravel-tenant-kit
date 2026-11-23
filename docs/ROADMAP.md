@@ -18,7 +18,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 
 **Semver:** patch (1.2.x) = fixes · minor (1.3.x–1.7) = new features · major (2.0) = breaking changes.
 
-**Contributors welcome:** [#1 French locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) · [#6 Spanish locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6) · ~~[#2 Laragon docs](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/2)~~ ✅ · ~~[#3 v1.4 KYC prep](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/3)~~ ✅
+**Contributors welcome:** ~~[#1 French locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1)~~ ✅ · ~~[#6 Spanish locale](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6)~~ ✅ · ~~[#2 Laragon docs](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/2)~~ ✅ · ~~[#3 v1.4 KYC prep](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/3)~~ ✅
 
 ---
 
@@ -172,8 +172,8 @@ Under consideration (not scoped):
 
 | Item | Target | Repo | Notes |
 |------|--------|------|--------|
-| French locale | Any release | tenant-kit | [#1](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) — good first issue |
-| Spanish locale | Any release | tenant-kit | [#6](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6) — good first issue |
+| French locale | ✅ Shipped | tenant-kit | [#1](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) |
+| Spanish locale | ✅ Shipped | tenant-kit | [#6](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6) |
 | Shufti external KYC driver | ✅ Packagist `kyc-ai/external-shufti` 1.0.0 | [kyc-external-shufti](https://github.com/mohammedelkarsh/kyc-external-shufti) | Full level documented in [docs/kyc.md](kyc.md) |
 | Other external verifiers (Onfido, …) | Later | satellite packages | Opt-in; not in tenant-kit core |
 | Government/registry APIs (e.g. Yakeen) | Later | country-specific packages | Separate from core KYC |
