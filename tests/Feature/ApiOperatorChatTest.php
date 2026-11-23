@@ -49,7 +49,9 @@ class ApiOperatorChatTest extends TestCase
             return $request->url() === 'http://api-operator.test/v1/chat'
                 && $request['message'] === 'list workspaces'
                 && $request['adapter'] === 'yaml'
-                && $request['adapter_config']['token'] === 'test-token';
+                && $request['adapter_config']['token'] === 'test-token'
+                && $request['dry_run'] === false
+                && isset($request['actor_id']);
         });
     }
 
@@ -185,6 +187,7 @@ class ApiOperatorChatTest extends TestCase
                 'session_id' => 'sess-usage',
                 'message' => 'ok',
                 'status' => 'ok',
+                'tool' => 'list_workspaces',
             ]),
         ]);
 
@@ -204,6 +207,58 @@ class ApiOperatorChatTest extends TestCase
 
         $this->assertNotNull($record);
         $this->assertSame(1, (int) $record->quantity);
+    }
+
+    public function test_dry_run_and_deny_do_not_increment_agent_calls(): void
+    {
+        config([
+            'api_operator.enabled' => true,
+            'api_operator.url' => 'http://api-operator.test',
+            'api_operator.token' => 'test-token',
+            'usage.enabled' => true,
+        ]);
+
+        Tenant::withoutEvents(function (): void {
+            $tenant = Tenant::query()->create(['id' => 'dryws', 'name' => 'Dry WS']);
+            $tenant->domains()->create(['domain' => 'dryws']);
+        });
+
+        Http::fake([
+            'http://api-operator.test/v1/chat' => Http::sequence()
+                ->push([
+                    'session_id' => 'sess-dry',
+                    'message' => '[dry-run] Would call list_workspaces',
+                    'status' => 'ok',
+                    'tool' => 'list_workspaces',
+                    'dry_run_report' => ['dry_run' => true],
+                ])
+                ->push([
+                    'session_id' => 'sess-deny',
+                    'message' => 'Permission denied',
+                    'status' => 'deny',
+                    'tool' => 'create_workspace',
+                ]),
+        ]);
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->postJson(route('api-operator.chat'), [
+                'message' => 'list workspaces',
+                'workspace_id' => 'dryws',
+                'dry_run' => true,
+            ])
+            ->assertOk();
+
+        $this->actingAs($user)
+            ->postJson(route('api-operator.chat'), [
+                'message' => 'create workspace',
+                'workspace_id' => 'dryws',
+            ])
+            ->assertOk()
+            ->assertJsonPath('status', 'deny');
+
+        $this->assertSame(0, UsageRecord::query()->where('meter', 'agent_calls')->count());
     }
 
     public function test_chat_uses_configured_billing_workspace_when_omitted(): void
@@ -227,13 +282,14 @@ class ApiOperatorChatTest extends TestCase
                 'session_id' => 'sess-cfg',
                 'message' => 'ok',
                 'status' => 'ok',
+                'tool' => 'list_workspaces',
             ]),
         ]);
 
         $user = User::factory()->create();
 
         $this->actingAs($user)
-            ->postJson(route('api-operator.chat'), ['message' => 'hello'])
+            ->postJson(route('api-operator.chat'), ['message' => 'list workspaces'])
             ->assertOk();
 
         $this->assertSame(1, (int) UsageRecord::query()

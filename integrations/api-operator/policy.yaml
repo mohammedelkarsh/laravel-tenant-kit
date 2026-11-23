@@ -1,0 +1,24 @@
+# Optional Safe API Agent policy (api-operator >= 0.11).
+# Loaded automatically when placed next to adapter.yaml, or via API_OPERATOR_POLICY_PATH.
+version: 1
+name: tenant_kit
+description: Conservative defaults for workspace/team tools
+default: allow
+
+confirm_tools:
+  - create_workspace
+  - invite_team_member
+
+max_calls:
+  list_workspaces: 50
+  get_usage: 30
+
+rules:
+  - id: block_viewer_writes
+    tools:
+      - create_workspace
+      - invite_team_member
+    roles:
+      - viewer
+    effect: deny
+    reason: "Viewer role cannot mutate workspaces or team."
