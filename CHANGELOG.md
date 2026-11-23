@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.2] — 2026-11-23
+
+### Added
+
+- **French locale** (`lang/fr`) — full UI + guided agent copy (#31, closes #1)
+- **Spanish locale** (`lang/es`) — full UI + guided agent copy (#32, closes #6)
+- Document **KYC full** level with `kyc-ai/external-shufti` in `docs/kyc.md`; Composer `suggest` for the driver (#30)
+
+### Changed
+
+- Default example `APP_AVAILABLE_LOCALES=en,ar,fr,es`
+
 ## [1.5.1] — 2026-11-23
 
 ### Security
