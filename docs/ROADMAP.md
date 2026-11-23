@@ -174,7 +174,7 @@ Under consideration (not scoped):
 |------|--------|------|--------|
 | French locale | Any release | tenant-kit | [#1](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/1) — good first issue |
 | Spanish locale | Any release | tenant-kit | [#6](https://github.com/mohammedelkarsh/laravel-tenant-kit/issues/6) — good first issue |
-| Shufti external KYC driver | Before `KycLevel::Full` docs | [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | `kyc-ai/external-shufti` satellite package |
+| Shufti external KYC driver | ✅ Packagist `kyc-ai/external-shufti` 1.0.0 | [kyc-external-shufti](https://github.com/mohammedelkarsh/kyc-external-shufti) | Full level documented in [docs/kyc.md](kyc.md) |
 | Other external verifiers (Onfido, …) | Later | satellite packages | Opt-in; not in tenant-kit core |
 | Government/registry APIs (e.g. Yakeen) | Later | country-specific packages | Separate from core KYC |
 
