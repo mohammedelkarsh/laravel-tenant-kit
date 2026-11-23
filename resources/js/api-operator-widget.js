@@ -107,7 +107,7 @@ function bootApiOperatorWidget(root) {
                     bg = '#4f46e5';
                     color = '#fff';
                     border = 'none';
-                } else if (msg.status === 'error') {
+                } else if (msg.status === 'error' || msg.status === 'deny') {
                     bg = '#fef2f2';
                     color = '#991b1b';
                     border = '1px solid #fecaca';
@@ -564,6 +564,11 @@ function bootApiOperatorWidget(root) {
             }
 
             awaitingConfirmation = false;
+            if (agentStatus === 'deny') {
+                // Policy/quota/ability rejection — keep menu available to try another action
+                showMenu('main', false);
+                return;
+            }
             if (options.restoreMenu) {
                 showMenu('main', agentStatus === 'ok');
             }

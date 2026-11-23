@@ -11,7 +11,8 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.3.1** | [api-operator](https://pypi.org/project/api-operator/) (PyPI) + in-app guided agent | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
 | **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | ✅ Released |
 | **v1.5.0** | `agent_calls` usage meter + Stripe | tenant-kit | ✅ Released |
-| **v1.5.1** | Remaining usage meters (storage, email, webhooks) | tenant-kit | 💡 Planned |
+| **v1.5.3** | api-operator 0.11 Safe API Agent (policy / dry-run / metering) | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
+| **v1.5.x** | Remaining usage meters (storage, email, webhooks) | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
@@ -55,11 +56,26 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | README + screenshots + demo GIF | ✅ |
 | `ApiOperatorChatTest` + adapter tests | ✅ |
 | Sync with api-operator `examples/tenant-kit-adapter/` | ✅ |
-| PyPI `api-operator==0.10.0` | ✅ |
+| PyPI `api-operator==0.10.0` | ✅ (superseded by 0.11.0 — see v1.5.3) |
 
 The Python package lives in a **separate repo**: [api-operator](https://github.com/mohammedelkarsh/api-operator). Tenant Kit stays PHP-only; the operator runs as a sidecar.
 
 **Still out of scope for v1.3.1:** embedding Python in PHP, AI usage meters (see v1.5.0).
+
+---
+
+## v1.5.3 — api-operator Safe API Agent ✅
+
+**Goal:** Opt-in upgrade path for [api-operator](https://pypi.org/project/api-operator/) **0.11+** (policy, dry-run, audit/quota hooks) without breaking installs that leave the agent disabled.
+
+| Item | Status |
+|------|--------|
+| `integrations/api-operator/policy.yaml` | ✅ |
+| Proxy `dry_run` / `actor_id` / `tenant_id` | ✅ |
+| `agent_calls` only on completed tools | ✅ |
+| Docs + `.env.example` (`>=0.11`) | ✅ |
+| Widget styling for `status=deny` | ✅ |
+| PyPI `api-operator==0.11.0` | ✅ |
 
 ---
 

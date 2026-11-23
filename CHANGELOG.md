@@ -13,6 +13,7 @@ All notable changes to this project are documented here.
 
 - `agent_calls` metering counts only completed tool runs (`status=ok` + `tool`); dry-run / deny / confirm are skipped
 - Docs recommend `api-operator>=0.11.0`
+- Guided agent widget styles `status=deny` (policy/quota) like errors and keeps the menu usable
 
 ## [1.5.2] — 2026-11-23
 
