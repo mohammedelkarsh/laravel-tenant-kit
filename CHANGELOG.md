@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.1] — 2026-11-23
+
+### Security
+
+- **`PLATFORM_ADMIN_EMAILS`** — only listed emails can access the Filament admin panel (`User::canAccessPanel`); based on report from [@p-w](https://github.com/p-w) (#25)
+
+### Changed
+
+- Non-major Composer / Docker dependency updates (Renovate)
+
 ## [1.5.0] — 2026-08-20
 
 ### Added
