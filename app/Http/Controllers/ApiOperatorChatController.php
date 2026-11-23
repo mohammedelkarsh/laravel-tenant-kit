@@ -34,13 +34,18 @@ class ApiOperatorChatController extends Controller
             'message' => ['required', 'string', 'max:2000'],
             'session_id' => ['nullable', 'string', 'max:64'],
             'workspace_id' => ['nullable', 'string', 'max:64'],
+            'dry_run' => ['sometimes', 'boolean'],
         ]);
+
+        $dryRun = (bool) ($data['dry_run'] ?? false);
 
         try {
             $response = $client->chat(
                 message: $data['message'],
                 sessionId: $data['session_id'] ?? null,
                 user: $request->user(),
+                dryRun: $dryRun,
+                workspaceId: $data['workspace_id'] ?? null,
             );
         } catch (ConnectionException) {
             return response()->json(['message' => __('app.api_operator.unavailable')], 503);
@@ -50,9 +55,25 @@ class ApiOperatorChatController extends Controller
             return response()->json(['message' => (string) $detail], 502);
         }
 
-        $this->recordAgentCall($request, $usageMeter, $data['workspace_id'] ?? null);
+        if ($this->shouldMeterAgentCall($response, $dryRun)) {
+            $this->recordAgentCall($request, $usageMeter, $data['workspace_id'] ?? null);
+        }
 
         return response()->json($response);
+    }
+
+    /**
+     * @param  array<string, mixed>  $response
+     */
+    private function shouldMeterAgentCall(array $response, bool $dryRun): bool
+    {
+        if ($dryRun) {
+            return false;
+        }
+
+        // Count completed tool actions only — not confirm prompts or policy/quota denials
+        return ($response['status'] ?? null) === 'ok'
+            && ! empty($response['tool']);
     }
 
     private function recordAgentCall(Request $request, UsageMeter $usageMeter, ?string $workspaceId): void

@@ -13,7 +13,7 @@ When `API_OPERATOR_ENABLED=true` and the operator is running, logged-in users on
 
 1. Tenant Kit running (match `APP_URL` in `.env`)
 2. `php artisan migrate --seed`
-3. `pip install api-operator==0.10.0`
+3. `pip install "api-operator>=0.11.0"`
 
 ## Quick start
 
@@ -50,6 +50,7 @@ python scripts/integration_tenant_kit.py --base-url http://laravel-tenant-kit.te
 | File | Purpose |
 |------|---------|
 | `adapter.yaml` | HTTP tools for Sanctum API |
+| `policy.yaml` | Safe API Agent rules (confirm/deny/caps) |
 | `README.md` | This guide |
 
 Keep in sync with `api-operator/examples/tenant-kit-adapter/` when upgrading either repo.

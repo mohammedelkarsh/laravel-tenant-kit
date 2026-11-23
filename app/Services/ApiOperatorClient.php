@@ -4,26 +4,51 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 class ApiOperatorClient
 {
     /**
-     * @return array{session_id: string, message: string, status: string, tool?: string|null, tool_result?: array<string, mixed>|null}
+     * @return array{
+     *     session_id: string,
+     *     message: string,
+     *     status: string,
+     *     tool?: string|null,
+     *     tool_result?: array<string, mixed>|null,
+     *     metadata?: array<string, mixed>,
+     *     dry_run_report?: array<string, mixed>|null
+     * }
      */
-    public function chat(string $message, ?string $sessionId, User $user): array
-    {
+    public function chat(
+        string $message,
+        ?string $sessionId,
+        User $user,
+        bool $dryRun = false,
+        ?string $workspaceId = null,
+    ): array {
+        $payload = [
+            'message' => $message,
+            'session_id' => $sessionId,
+            'adapter' => 'yaml',
+            'config_path' => config('api_operator.adapter_path'),
+            'abilities' => config('api_operator.abilities'),
+            'adapter_config' => $this->adapterConfig($user),
+            'dry_run' => $dryRun,
+            'actor_id' => (string) $user->getAuthIdentifier(),
+        ];
+
+        if ($workspaceId) {
+            $payload['tenant_id'] = $workspaceId;
+        }
+
+        $policyPath = config('api_operator.policy_path');
+        if (is_string($policyPath) && $policyPath !== '') {
+            $payload['policy_path'] = $policyPath;
+        }
+
         $response = Http::timeout(config('api_operator.timeout'))
-            ->post($this->baseUrl().'/v1/chat', [
-                'message' => $message,
-                'session_id' => $sessionId,
-                'adapter' => 'yaml',
-                'config_path' => config('api_operator.adapter_path'),
-                'abilities' => config('api_operator.abilities'),
-                'adapter_config' => $this->adapterConfig($user),
-            ]);
+            ->post($this->baseUrl().'/v1/chat', $payload);
 
         $response->throw();
 

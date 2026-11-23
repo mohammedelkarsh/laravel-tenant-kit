@@ -7,13 +7,13 @@ Operate Tenant Kit from the command line or an HTTP agent — no Filament clicks
 ## Install
 
 ```bash
-pip install api-operator==0.10.0
+pip install "api-operator>=0.11.0"
 ```
 
 Optional OpenAI planner (instead of rule-based mock planner):
 
 ```bash
-pip install "api-operator[llm]==0.10.0"
+pip install "api-operator[llm]>=0.11.0"
 ```
 
 Requires **Python 3.11+**.
@@ -29,6 +29,7 @@ Requires **Python 3.11+**.
 ```text
 integrations/api-operator/
 ├── adapter.yaml   # HTTP tools for central + tenant API
+├── policy.yaml    # Safe API Agent rules (api-operator >= 0.11)
 └── README.md
 ```
 
@@ -158,7 +159,7 @@ When logged in on the **central** domain, a floating chat button appears (bottom
 1. Install and start the operator:
 
 ```bash
-pip install api-operator==0.10.0
+pip install "api-operator>=0.11.0"
 api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 ```
 
@@ -168,19 +169,36 @@ api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 API_OPERATOR_ENABLED=true
 API_OPERATOR_URL=http://127.0.0.1:8100
 API_OPERATOR_ADAPTER_PATH=integrations/api-operator/adapter.yaml
+# optional override; sibling policy.yaml loads automatically with api-operator >= 0.11
+# API_OPERATOR_POLICY_PATH=integrations/api-operator/policy.yaml
 ```
 
 Run `api-operator serve` from the **tenant-kit repo root** so the adapter path resolves.
 
 3. Log in as platform admin → open any central page → click the chat button.
 
+### Policy, dry-run, and deny
+
+- `integrations/api-operator/policy.yaml` — confirm dangerous tools, session caps, viewer deny rules
+- Proxy accepts optional `dry_run: true` (no upstream side effects; no `agent_calls` meter)
+- Operator may return `status: deny` for policy/quota/ability failures — surface the message as-is
+
+CLI dry-run:
+
+```bash
+api-operator chat \
+  --adapter yaml \
+  --config integrations/api-operator/adapter.yaml \
+  --dry-run
+```
+
 ### Usage metering (`agent_calls`)
 
-Successful `POST /api-operator/chat` responses increment the workspace **`agent_calls`** meter (same `usage_records` table as `api_calls` / `team_seats`).
+Only **completed tool calls** increment the workspace **`agent_calls`** meter (`status=ok` and a `tool` name). Dry-run, confirm prompts, and deny responses do not count.
 
 Attribution (first match wins):
 
-1. Optional JSON body field `workspace_id`
+1. Optional JSON body field `workspace_id` (also forwarded as `tenant_id` to the operator)
 2. Else `API_OPERATOR_BILLING_WORKSPACE` in `.env` (Docker defaults to `demo`)
 3. Else no record is written
 

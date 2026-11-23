@@ -26,6 +26,12 @@ return [
         base_path('integrations/api-operator/adapter.yaml'),
     ),
 
+    /*
+    | Optional policy.yaml for api-operator >= 0.11 (allow/deny/confirm rules).
+    | Null = let the operator auto-load sibling policy.yaml next to the adapter.
+    */
+    'policy_path' => env('API_OPERATOR_POLICY_PATH'),
+
     'planner' => env('API_OPERATOR_PLANNER', 'mock'),
 
     'timeout' => (int) env('API_OPERATOR_TIMEOUT', 60),
