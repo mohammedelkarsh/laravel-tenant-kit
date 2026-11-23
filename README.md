@@ -351,18 +351,18 @@ Full setup (tokens, HTTP server, integration test): **[docs/api-operator.md](doc
 
 ## Localization
 
-**English & Arabic included** — RTL works out of the box. Add more languages in `config/locales.php`.
+**English, Arabic & French included** — RTL works out of the box for Arabic. Add more languages in `config/locales.php`.
 
 ```env
-APP_AVAILABLE_LOCALES=en,ar
+APP_AVAILABLE_LOCALES=en,ar,fr
 ```
 
 <details>
-<summary><strong>Add a new language (e.g. French)</strong></summary>
+<summary><strong>Add a new language (e.g. Spanish)</strong></summary>
 
 1. Register in `config/locales.php`
-2. Set `APP_AVAILABLE_LOCALES=en,ar,fr`
-3. Copy `lang/en/app.php` → `lang/fr/app.php` and translate
+2. Set `APP_AVAILABLE_LOCALES=en,ar,fr,es`
+3. Copy `lang/en/app.php` → `lang/es/app.php` and translate
 4. Run `php artisan optimize:clear`
 
 </details>
