@@ -170,6 +170,8 @@ For Docker on port **8080**, set `APP_URL=http://laravel-tenant-kit.test:8080` (
 | Admin | `/admin` | `admin@laravel-tenant-kit.test` | `password` |
 | Demo workspace | `http://demo.laravel-tenant-kit.test` (Laragon) or `:8080` (Docker) | `demo@demo.test` | `password` |
 
+Platform admin access is gated by `PLATFORM_ADMIN_EMAILS` (comma-separated). The seeded admin email must be listed there — see `.env.example`.
+
 ### Verify
 
 ```bash
