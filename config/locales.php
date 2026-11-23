@@ -28,6 +28,11 @@ return [
             'native' => 'Français',
             'dir' => 'ltr',
         ],
+        'es' => [
+            'name' => 'Spanish',
+            'native' => 'Español',
+            'dir' => 'ltr',
+        ],
     ],
 
     /*
