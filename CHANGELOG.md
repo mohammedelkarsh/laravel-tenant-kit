@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [1.6.1] — 2026-11-24
+
+### Added
+
+- **Plan feature gating** (opt-in) — `PLAN_GATING_ENABLED`; features per plan in `config/plans.php` (`free` / `starter` / `pro`)
+- `PlanFeatures` helper; KYC requires plan feature `kyc` when gating is on
+- Subscription payload includes `features` + `plan_gating`; KYC status includes `plan_allows`
+- Docs: `docs/plan-gating.md`
+
 ## [1.6.0] — 2026-11-24
 
 ### Added

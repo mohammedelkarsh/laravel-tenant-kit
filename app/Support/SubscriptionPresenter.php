@@ -13,17 +13,23 @@ class SubscriptionPresenter
     {
         $subscription = $tenant->subscription('default');
         $stripePrice = $subscription?->items->first()?->stripe_price;
+        $resolved = self::resolvePlanKey($stripePrice);
+        $planKey = PlanFeatures::enabled()
+            ? PlanFeatures::planKeyFor($tenant)
+            : $resolved;
 
         return [
             'subscribed' => $tenant->subscribed('default'),
             'status' => $subscription?->stripe_status,
-            'plan' => self::resolvePlanKey($stripePrice),
-            'plan_name' => self::resolvePlanName($stripePrice),
+            'plan' => $planKey,
+            'plan_name' => $planKey ? (config("plans.{$planKey}.name") ?? null) : null,
             'stripe_price' => $stripePrice,
             'on_trial' => $subscription?->onTrial() ?? false,
             'cancelled' => $subscription?->cancelled() ?? false,
             'ends_at' => $subscription?->ends_at?->toIso8601String(),
             'trial_ends_at' => $subscription?->trial_ends_at?->toIso8601String(),
+            'features' => PlanFeatures::featuresFor($tenant),
+            'plan_gating' => PlanFeatures::enabled(),
         ];
     }
 
@@ -42,10 +48,4 @@ class SubscriptionPresenter
         return null;
     }
 
-    private static function resolvePlanName(?string $stripePrice): ?string
-    {
-        $key = self::resolvePlanKey($stripePrice);
-
-        return $key ? (config("plans.{$key}.name") ?? null) : null;
-    }
 }

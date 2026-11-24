@@ -15,10 +15,26 @@ class Kyc
     }
 
     /**
-     * Feature flag on and kyc-ai/laravel available.
+     * Feature flag on, package available, and (when plan gating is on) plan allows `kyc`.
      */
     public static function ready(): bool
     {
-        return self::enabled() && self::packageInstalled();
+        if (! self::enabled() || ! self::packageInstalled()) {
+            return false;
+        }
+
+        if (! PlanFeatures::enabled()) {
+            return true;
+        }
+
+        // Panel providers boot without tenancy; enforce plan only in tenant context.
+        if (! tenancy()->initialized) {
+            return true;
+        }
+
+        $tenant = tenant();
+
+        return $tenant instanceof \App\Models\Tenant
+            && PlanFeatures::allows($tenant, 'kyc');
     }
 }
