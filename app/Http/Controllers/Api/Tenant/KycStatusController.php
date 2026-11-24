@@ -3,17 +3,24 @@
 namespace App\Http\Controllers\Api\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tenant;
 use App\Support\Kyc;
+use App\Support\PlanFeatures;
 use Illuminate\Http\JsonResponse;
 
 class KycStatusController extends Controller
 {
     public function show(): JsonResponse
     {
+        $tenant = tenant();
+
         $payload = [
             'enabled' => Kyc::enabled(),
             'package_installed' => Kyc::packageInstalled(),
             'ready' => Kyc::ready(),
+            'plan_allows' => $tenant instanceof Tenant
+                ? PlanFeatures::allows($tenant, 'kyc')
+                : true,
             'latest' => null,
         ];
 

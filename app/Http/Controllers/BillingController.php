@@ -17,9 +17,13 @@ class BillingController extends Controller
             app(UsageMeter::class)->snapshotGauges($tenant);
         }
 
+        $plans = collect(config('plans', []))
+            ->filter(fn (array $plan): bool => filled($plan['stripe_price'] ?? null))
+            ->all();
+
         return view('billing.show', [
             'tenant' => $tenant,
-            'plans' => config('plans'),
+            'plans' => $plans,
             'subscription' => $tenant->subscription('default'),
             'stripeConfigured' => filled(config('cashier.key')),
             'usage' => UsagePresenter::forTenant($tenant),

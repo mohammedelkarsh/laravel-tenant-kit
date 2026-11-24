@@ -67,12 +67,14 @@ class KycStatusApiTest extends TestCase
                 'enabled',
                 'package_installed',
                 'ready',
+                'plan_allows',
                 'latest',
             ]);
 
         $this->assertSame(Kyc::enabled(), $response->json('enabled'));
         $this->assertSame(Kyc::packageInstalled(), $response->json('package_installed'));
         $this->assertSame(Kyc::ready(), $response->json('ready'));
+        $this->assertTrue($response->json('plan_allows'));
     }
 
     public function test_kyc_status_requires_kyc_read_ability(): void
