@@ -10,6 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.5.6** — `outbound_emails` usage meter · [CHANGELOG](CHANGELOG.md)  
 > **v1.5.5** — KYC status/retry Sanctum APIs + api-operator tools · [CHANGELOG](CHANGELOG.md)  
 > **v1.5.0** — `agent_calls` usage meter for guided agent · [CHANGELOG](CHANGELOG.md)  
 > **v1.4.0** — Optional KYC module · [docs/kyc.md](docs/kyc.md)  
