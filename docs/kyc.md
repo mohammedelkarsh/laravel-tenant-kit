@@ -133,6 +133,7 @@ php artisan test --filter=Kyc
 | `GET /api/kyc/status` | Sanctum `kyc:read` — readiness + latest verification (`plan_allows` when gating on) |
 | `POST /api/kyc/verifications/{uuid}/retry` | Sanctum `kyc:retry` — national_id-only re-queue (document not retained) |
 | Plan gating | With `PLAN_GATING_ENABLED=true`, KYC needs plan feature `kyc` (Pro by default) — [plan-gating.md](plan-gating.md) |
+| Platform webhooks | `kyc.verification.passed` / `failed` / `pending_review` when `PLATFORM_WEBHOOKS_ENABLED` — [webhooks.md](webhooks.md) |
 
 > Packagist `1.1.0` may need `symfony/process` ^8 for Laravel 13. If install fails, use a path/VCS install of [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) that allows `symfony/process` `^6.4\|^7.0\|^8.0`.
 

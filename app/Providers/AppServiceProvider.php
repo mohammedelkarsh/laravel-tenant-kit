@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Listeners\DispatchKycPlatformWebhook;
 use App\Listeners\RecordOutboundEmailUsage;
 use App\Models\Tenant;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -37,5 +38,29 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Event::listen(MessageSent::class, RecordOutboundEmailUsage::class);
+
+        $this->registerKycWebhookListeners();
+    }
+
+    private function registerKycWebhookListeners(): void
+    {
+        if (! class_exists(\KycAi\Laravel\Events\KycVerified::class)) {
+            return;
+        }
+
+        Event::listen(
+            \KycAi\Laravel\Events\KycVerified::class,
+            [DispatchKycPlatformWebhook::class, 'handle'],
+        );
+        Event::listen(
+            \KycAi\Laravel\Events\KycFailed::class,
+            [DispatchKycPlatformWebhook::class, 'handle'],
+        );
+
+        if (class_exists(\KycAi\Laravel\Models\KycVerification::class)) {
+            \KycAi\Laravel\Models\KycVerification::updated(function ($verification): void {
+                app(DispatchKycPlatformWebhook::class)->handleVerificationUpdated($verification);
+            });
+        }
     }
 }

@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [1.6.2] — 2026-11-24
+
+### Added
+
+- **KYC platform webhooks** — `kyc.verification.passed` / `failed` / `pending_review` via kyc-ai events + Filament status updates (no PII in payload)
+
 ## [1.6.1] — 2026-11-24
 
 ### Added
