@@ -40,8 +40,17 @@ class TenantProvisioner
             );
         }
 
+        $tenant = $tenant->fresh();
+
+        app(PlatformWebhookDispatcher::class)->dispatch('workspace.created', [
+            'workspace_id' => $tenant->id,
+            'name' => $tenant->name,
+            'url' => $tenant->url(),
+            'admin_email' => $adminEmail ? Str::lower($adminEmail) : null,
+        ]);
+
         return [
-            'tenant' => $tenant->fresh(),
+            'tenant' => $tenant,
             'url' => $tenant->url(),
         ];
     }

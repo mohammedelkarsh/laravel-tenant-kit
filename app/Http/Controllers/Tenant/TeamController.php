@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Models\TeamInvitation;
 use App\Models\User;
+use App\Services\PlatformWebhookDispatcher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -54,6 +55,13 @@ class TeamController extends Controller
             __('app.team.invitation_body', ['workspace' => tenant('name'), 'url' => $acceptUrl]),
             fn ($message) => $message->to($email)->subject(__('app.team.invitation_subject'))
         );
+
+        app(PlatformWebhookDispatcher::class)->dispatch('workspace.invite_sent', [
+            'workspace_id' => tenant('id'),
+            'email' => $invitation->email,
+            'role' => $invitation->role,
+            'expires_at' => $invitation->expires_at?->toIso8601String(),
+        ]);
 
         return back()->with('status', __('app.team.invitation_sent', ['email' => $email]));
     }

@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [1.6.0] — 2026-11-24
+
+### Added
+
+- **Platform outbound webhooks** (opt-in) — signed POSTs for `workspace.created`, `workspace.suspended` / `unsuspended`, `workspace.invite_sent`
+- `config/webhooks.php`, queued `DeliverPlatformWebhook` job, docs: `docs/webhooks.md`
+
 ## [1.5.7] — 2026-11-24
 
 ### Added

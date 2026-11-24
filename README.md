@@ -10,6 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.6.0** — Platform outbound webhooks (opt-in) · [docs/webhooks.md](docs/webhooks.md)  
 > **v1.5.7** — `storage_bytes` usage meter · [CHANGELOG](CHANGELOG.md)  
 > **v1.5.6** — `outbound_emails` usage meter · [CHANGELOG](CHANGELOG.md)  
 > **v1.5.5** — KYC status/retry Sanctum APIs + api-operator tools · [CHANGELOG](CHANGELOG.md)  
@@ -448,7 +449,7 @@ Full plan: [docs/ROADMAP.md](docs/ROADMAP.md)
 - [x] Optional KYC module (v1.4.0) — enable with `composer require kyc-ai/laravel` · [docs/kyc.md](docs/kyc.md)
 - [x] Extended usage meters — `agent_calls` (v1.5.0), `outbound_emails` (v1.5.6), `storage_bytes` (v1.5.7)
 - [ ] Remaining usage meters — webhooks deliveries (after v1.6 platform webhooks)
-- [ ] Platform outbound webhooks (v1.6.0)
+- [x] Platform outbound webhooks (v1.6.0) · [docs/webhooks.md](docs/webhooks.md)
 - [ ] Plan gating per Stripe tier + KYC webhooks (v1.6.0)
 - [ ] api-operator RAG + Filament confirm-before-write (v1.6.0)
 - [ ] PostgreSQL-first production docs (v1.6.0)
