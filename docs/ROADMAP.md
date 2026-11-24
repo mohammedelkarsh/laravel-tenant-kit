@@ -15,7 +15,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.5.4** | api-operator 1.1 knowledge docs (keyword/embedding/pgvector) | tenant-kit + api-operator | ✅ Released |
 | **v1.5.5** | KYC Sanctum status + retry APIs for api-operator | tenant-kit + api-operator | ✅ Released |
 | **v1.5.6** | `outbound_emails` usage meter | tenant-kit | ✅ Released |
-| **v1.5.7** | `storage_bytes` usage meter | tenant-kit | 💡 In progress |
+| **v1.5.7** | `storage_bytes` usage meter | tenant-kit | ✅ Released |
 | **v1.5.x** | Remaining usage meters (webhooks) | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
@@ -158,13 +158,15 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 **Release:** [v1.5.6](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.5.6)
 
-## v1.5.7 — `storage_bytes` usage meter 💡
+## v1.5.7 — `storage_bytes` usage meter ✅
 
 | Item | Notes |
 |------|--------|
 | Storage meter | ✅ Gauge bytes under tenant `storage/app` (local disk) |
 | Snapshot | ✅ On usage/billing API + `php artisan usage:snapshot-gauges` (daily) |
 | Stripe sync | ✅ `STRIPE_METER_STORAGE_BYTES` |
+
+**Release:** [v1.5.7](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.5.7)
 
 ## Remaining usage meters 💡
 
