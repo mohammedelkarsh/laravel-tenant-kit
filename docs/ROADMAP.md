@@ -14,7 +14,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.5.3** | api-operator 0.11 Safe API Agent (policy / dry-run / metering) | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
 | **v1.5.4** | api-operator 1.1 knowledge docs (keyword/embedding/pgvector) | tenant-kit + api-operator | ✅ Released |
 | **v1.5.5** | KYC Sanctum status + retry APIs for api-operator | tenant-kit + api-operator | ✅ Released |
-| **v1.5.6** | `outbound_emails` usage meter | tenant-kit | 💡 In progress |
+| **v1.5.6** | `outbound_emails` usage meter | tenant-kit | ✅ Released |
 | **v1.5.x** | Remaining usage meters (storage, webhooks) | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
@@ -145,7 +145,7 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 ---
 
-## v1.5.6 — `outbound_emails` usage meter 💡
+## v1.5.6 — `outbound_emails` usage meter ✅
 
 **Goal:** Start remaining usage meters deferred from v1.5.0 / v1.5.1.
 
@@ -154,6 +154,8 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 | Outbound email meter | ✅ `MessageSent` while tenancy initialized → `outbound_emails` |
 | Stripe sync | ✅ `STRIPE_METER_OUTBOUND_EMAILS` via existing `USAGE_SYNC_TO_STRIPE` |
 | Tests | ✅ `UsageBillingTest` |
+
+**Release:** [v1.5.6](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.5.6)
 
 ## Remaining usage meters 💡
 
