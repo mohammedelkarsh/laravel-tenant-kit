@@ -94,6 +94,63 @@ class UsageMeter
     }
 
     /**
+     * Gauge: bytes under the tenant-suffixed storage/app tree (local disk).
+     */
+    public function snapshotStorage(Tenant $tenant): ?UsageRecord
+    {
+        try {
+            $bytes = 0;
+
+            $tenant->run(function () use (&$bytes): void {
+                $bytes = $this->directorySize(storage_path('app'));
+            });
+        } catch (Throwable $exception) {
+            Log::debug('usage.storage_snapshot_skipped', [
+                'tenant_id' => $tenant->id,
+                'message' => $exception->getMessage(),
+            ]);
+
+            return null;
+        } finally {
+            if (tenancy()->initialized) {
+                tenancy()->end();
+            }
+        }
+
+        return $this->setGauge($tenant, 'storage_bytes', $bytes);
+    }
+
+    /**
+     * Refresh gauge meters commonly shown on billing/usage surfaces.
+     */
+    public function snapshotGauges(Tenant $tenant): void
+    {
+        $this->snapshotTeamSeats($tenant);
+        $this->snapshotStorage($tenant);
+    }
+
+    private function directorySize(string $path): int
+    {
+        if (! is_dir($path)) {
+            return 0;
+        }
+
+        $total = 0;
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $total += (int) $file->getSize();
+            }
+        }
+
+        return $total;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function summarize(Tenant $tenant): array

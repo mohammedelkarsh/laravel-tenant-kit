@@ -14,7 +14,7 @@ class BillingController extends Controller
     public function show(Tenant $tenant): View
     {
         if (config('usage.enabled')) {
-            app(UsageMeter::class)->snapshotTeamSeats($tenant);
+            app(UsageMeter::class)->snapshotGauges($tenant);
         }
 
         return view('billing.show', [
