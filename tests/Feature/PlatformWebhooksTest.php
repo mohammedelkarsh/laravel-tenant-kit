@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use App\Jobs\DeliverPlatformWebhook;
 use App\Listeners\DispatchKycPlatformWebhook;
 use App\Models\Tenant;
+use App\Models\UsageRecord;
 use App\Services\PlatformWebhookDispatcher;
 use App\Services\TenantProvisioner;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
@@ -104,6 +106,79 @@ class PlatformWebhooksTest extends TestCase
                 && $request->hasHeader('X-Tenant-Kit-Signature', $expected)
                 && ($decoded['event'] ?? null) === 'workspace.created';
         });
+    }
+
+    public function test_successful_delivery_increments_webhook_deliveries_meter(): void
+    {
+        Tenant::withoutEvents(function (): void {
+            Tenant::query()->create(['id' => 'hookmeter', 'name' => 'Hook Meter']);
+        });
+
+        Http::fake([
+            'hooks.example.test/*' => Http::response(['ok' => true], 200),
+        ]);
+
+        (new DeliverPlatformWebhook('workspace.created', [
+            'id' => (string) Str::uuid(),
+            'event' => 'workspace.created',
+            'created_at' => now()->toIso8601String(),
+            'data' => ['workspace_id' => 'hookmeter', 'name' => 'Hook Meter'],
+        ]))->handle();
+
+        $record = UsageRecord::query()
+            ->where('tenant_id', 'hookmeter')
+            ->where('meter', 'webhook_deliveries')
+            ->first();
+
+        $this->assertNotNull($record);
+        $this->assertSame(1, $record->quantity);
+    }
+
+    public function test_delivery_without_workspace_id_does_not_meter(): void
+    {
+        Http::fake([
+            'hooks.example.test/*' => Http::response(['ok' => true], 200),
+        ]);
+
+        (new DeliverPlatformWebhook('workspace.created', [
+            'id' => (string) Str::uuid(),
+            'event' => 'workspace.created',
+            'created_at' => now()->toIso8601String(),
+            'data' => ['name' => 'No Workspace'],
+        ]))->handle();
+
+        $this->assertSame(
+            0,
+            UsageRecord::query()->where('meter', 'webhook_deliveries')->count(),
+        );
+    }
+
+    public function test_failed_delivery_does_not_meter(): void
+    {
+        Tenant::withoutEvents(function (): void {
+            Tenant::query()->create(['id' => 'hookfail', 'name' => 'Hook Fail']);
+        });
+
+        Http::fake([
+            'hooks.example.test/*' => Http::response(['error' => true], 500),
+        ]);
+
+        try {
+            (new DeliverPlatformWebhook('workspace.created', [
+                'id' => (string) Str::uuid(),
+                'event' => 'workspace.created',
+                'created_at' => now()->toIso8601String(),
+                'data' => ['workspace_id' => 'hookfail', 'name' => 'Hook Fail'],
+            ]))->handle();
+            $this->fail('Expected RequestException was not thrown.');
+        } catch (RequestException) {
+            // expected
+        }
+
+        $this->assertSame(
+            0,
+            UsageRecord::query()->where('meter', 'webhook_deliveries')->count(),
+        );
     }
 
     public function test_kyc_verification_status_update_queues_webhook(): void

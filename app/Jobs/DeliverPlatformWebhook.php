@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\Tenant;
+use App\Services\UsageMeter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -69,6 +71,8 @@ class DeliverPlatformWebhook implements ShouldQueue
 
                 $response->throw();
             }
+
+            $this->recordSuccessfulDelivery();
         } catch (Throwable $exception) {
             Log::warning('webhooks.delivery_error', [
                 'event' => $this->event,
@@ -78,5 +82,22 @@ class DeliverPlatformWebhook implements ShouldQueue
 
             throw $exception;
         }
+    }
+
+    private function recordSuccessfulDelivery(): void
+    {
+        $workspaceId = $this->envelope['data']['workspace_id'] ?? null;
+
+        if (! is_string($workspaceId) || $workspaceId === '') {
+            return;
+        }
+
+        $tenant = Tenant::query()->find($workspaceId);
+
+        if (! $tenant instanceof Tenant) {
+            return;
+        }
+
+        app(UsageMeter::class)->record($tenant, 'webhook_deliveries');
     }
 }

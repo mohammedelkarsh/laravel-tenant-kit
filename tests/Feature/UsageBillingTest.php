@@ -52,6 +52,7 @@ class UsageBillingTest extends TestCase
                         'agent_calls' => ['label', 'quantity', 'event_name'],
                         'outbound_emails' => ['label', 'quantity', 'event_name'],
                         'storage_bytes' => ['label', 'quantity', 'event_name'],
+                        'webhook_deliveries' => ['label', 'quantity', 'event_name'],
                     ],
                 ],
             ]);

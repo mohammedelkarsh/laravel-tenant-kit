@@ -64,7 +64,10 @@ hash_equals($expected, $signature);
 
 `DeliverPlatformWebhook` is queued with **3 tries**. Failures are logged (`webhooks.delivery_failed` / `webhooks.delivery_error`).
 
+## Usage metering
+
+Successful deliveries increment the `webhook_deliveries` meter for the tenant matching `data.workspace_id` (when present). Failed attempts and payloads without a workspace id are not metered. Stripe event name: `STRIPE_METER_WEBHOOK_DELIVERIES` (default `webhook_deliveries`).
+
 ## Not in scope (yet)
 
 - Per-tenant webhook endpoints (customer-configured)
-- Usage meter for customer webhook deliveries (see ROADMAP remaining meters)

@@ -16,8 +16,8 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.5.5** | KYC Sanctum status + retry APIs for api-operator | tenant-kit + api-operator | ✅ Released |
 | **v1.5.6** | `outbound_emails` usage meter | tenant-kit | ✅ Released |
 | **v1.5.7** | `storage_bytes` usage meter | tenant-kit | ✅ Released |
-| **v1.5.x** | Remaining usage meters (webhooks) | tenant-kit | 💡 Planned |
-| **v1.6.0–1.6.4** | Platform webhooks, plan gating, KYC hooks, Postgres docs, agent UX, RAG corpus | tenant-kit + api-operator | ✅ Shipped |
+| **v1.5.x** | Remaining usage meters (webhooks) | tenant-kit | ✅ Shipped as v1.6.5 |
+| **v1.6.0–1.6.5** | Platform webhooks, plan gating, KYC hooks, Postgres docs, agent UX, RAG corpus, webhook meter | tenant-kit + api-operator | ✅ Shipped |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
 
@@ -168,17 +168,17 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 **Release:** [v1.5.7](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.5.7)
 
-## Remaining usage meters 💡
+## Remaining usage meters ✅
 
 | Item | Notes |
 |------|--------|
-| Webhooks usage meter | Count outbound webhook deliveries (usage billing — not platform webhooks; needs platform webhook sender first → v1.6) |
+| Webhooks usage meter | ✅ `webhook_deliveries` on successful platform deliveries with `workspace_id` (v1.6.5); per-tenant customer endpoints still backlog |
 
-Ship when ready (patch).
+**Release:** [v1.6.5](https://github.com/mohammedelkarsh/laravel-tenant-kit/releases/tag/v1.6.5)
 
 ---
 
-## v1.6.0 — Platform + smarter agent 💡
+## v1.6.0 — Platform + smarter agent ✅
 
 **Goal:** Integrations, subscription-tier features, and agent UX for power users.
 
@@ -190,6 +190,7 @@ Ship when ready (patch).
 | api-operator RAG | ✅ Curated knowledge folder + Docker wiring (v1.6.4; api-operator 1.1.1 dirs) |
 | Filament agent UX | ✅ Dry-run preview before create/invite writes (v1.6.3) |
 | PostgreSQL-first docs | ✅ [production.md](production.md) + `.env.docker.pgsql` (v1.6.3) |
+| Webhooks usage meter | ✅ `webhook_deliveries` attributed by `workspace_id` (v1.6.5) |
 
 ---
 

@@ -14,6 +14,7 @@ Configured in `config/usage.php`:
 - `agent_calls` — completed guided-agent tool runs (not dry-run/deny/confirm)
 - `outbound_emails` — MessageSent while tenancy is active
 - `storage_bytes` — gauge of tenant `storage/app` size
+- `webhook_deliveries` — successful platform webhook POSTs attributed by `workspace_id`
 
 ## Plan gating
 

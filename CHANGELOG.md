@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [1.6.5] — 2026-11-24
+
+### Added
+
+- **`webhook_deliveries` usage meter** — counts successful platform webhook POSTs attributed via `data.workspace_id`
+- Stripe meter name: `STRIPE_METER_WEBHOOK_DELIVERIES` (optional sync via `USAGE_SYNC_TO_STRIPE`)
+
 ## [1.6.4] — 2026-11-24
 
 ### Added

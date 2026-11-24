@@ -12,7 +12,7 @@ More detail: sibling files `billing.md`, `kyc.md`, `webhooks.md`, `ops.md` in th
 ## Billing
 
 - `get_subscription` returns Stripe subscription status for a workspace.
-- `get_usage` returns meters for the current billing period (`api_calls`, `agent_calls`, `outbound_emails`, `storage_bytes`, seats, etc.).
+- `get_usage` returns meters for the current billing period (`api_calls`, `agent_calls`, `outbound_emails`, `storage_bytes`, `webhook_deliveries`, seats, etc.).
 
 ## Team
 
