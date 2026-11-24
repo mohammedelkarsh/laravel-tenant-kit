@@ -17,7 +17,7 @@ When issuing a token you may pass an optional `abilities` array. If omitted, all
 
 **Central abilities:** `user:read`, `workspaces:read`, `workspaces:write`
 
-**Tenant abilities:** `user:read`, `team:read`, `team:invite`, `kyc:read`
+**Tenant abilities:** `user:read`, `team:read`, `team:invite`, `kyc:read`, `kyc:retry`
 
 ```bash
 curl -X POST http://laravel-tenant-kit.test/api/auth/token \
@@ -165,6 +165,8 @@ curl -X POST http://demo.laravel-tenant-kit.test/api/auth/token \
 | GET | `/api/user` | `user:read` | Current user + tenant context |
 | GET | `/api/team` | `team:read` | Team members |
 | POST | `/api/team/invitations` | `team:invite` | Invite member (`email`, `role`: `admin` or `member`) |
+| GET | `/api/kyc/status` | `kyc:read` | KYC readiness + latest verification (no secrets) |
+| POST | `/api/kyc/verifications/{uuid}/retry` | `kyc:retry` | Re-queue failed/pending verification (national_id only) |
 
 ### Invite example
 

@@ -18,6 +18,7 @@ return [
         'team:read',
         'team:invite',
         'kyc:read',
+        'kyc:retry',
     ],
 
 ];

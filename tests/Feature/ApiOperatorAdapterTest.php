@@ -22,6 +22,7 @@ class ApiOperatorAdapterTest extends TestCase
             'get_usage',
             'invite_team_member',
             'get_kyc_status',
+            'retry_kyc_verification',
         ] as $tool) {
             $this->assertStringContainsString("name: {$tool}", $contents, "Missing tool: {$tool}");
         }

@@ -102,3 +102,24 @@ tools:
       subdomain:
         type: string
         required: true
+
+  - name: retry_kyc_verification
+    description: Re-queue a failed or pending KYC verification by uuid (national_id only; original document is not retained). Dangerous — needs confirmation.
+    method: POST
+    path: /api/kyc/verifications/{uuid}/retry
+    host: tenant
+    tenant_param: subdomain
+    requires_ability: kyc:retry
+    parameters:
+      subdomain:
+        type: string
+        required: true
+      uuid:
+        type: string
+        required: true
+      queue:
+        type: boolean
+        required: false
+        default: true
+    body:
+      queue: "{queue}"

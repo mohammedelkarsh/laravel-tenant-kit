@@ -22,6 +22,8 @@ Use these notes when helping operators via api-operator.
 
 - `get_kyc_status` runs on the tenant host and needs ability `kyc:read`.
 - It returns whether KYC is ready and the latest verification (if any). No secrets are exposed.
+- `retry_kyc_verification` needs ability `kyc:retry`, confirmation, and a verification `uuid` from status.
+- Retry re-queues using the stored national_id only (original document is not retained). Passed verifications cannot be retried; otherwise re-upload via `/kyc`.
 
 ## Safety
 

@@ -8,18 +8,21 @@ default: allow
 confirm_tools:
   - create_workspace
   - invite_team_member
+  - retry_kyc_verification
 
 max_calls:
   list_workspaces: 50
   get_usage: 30
   get_kyc_status: 40
+  retry_kyc_verification: 10
 
 rules:
   - id: block_viewer_writes
     tools:
       - create_workspace
       - invite_team_member
+      - retry_kyc_verification
     roles:
       - viewer
     effect: deny
-    reason: "Viewer role cannot mutate workspaces or team."
+    reason: "Viewer role cannot mutate workspaces, team, or KYC."
