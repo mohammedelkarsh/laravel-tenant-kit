@@ -62,4 +62,65 @@ class TenantKycService
 
         return $pipeline->verify();
     }
+
+    /**
+     * Re-run verification from a stored national_id (documents are not retained after verify).
+     *
+     * @param  \KycAi\Laravel\Models\KycVerification  $verification
+     * @return array{queued: bool, mode: string, result: mixed}
+     */
+    public function retryFromVerification(object $verification, User $user, bool $queue = true): array
+    {
+        if (! Kyc::ready()) {
+            throw new RuntimeException('KYC is not enabled or kyc-ai/laravel is not installed.');
+        }
+
+        $nationalId = is_string($verification->national_id ?? null)
+            ? trim((string) $verification->national_id)
+            : '';
+
+        if ($nationalId === '') {
+            throw new RuntimeException(
+                'Cannot retry: no national_id on this verification. Re-upload a document via /kyc.'
+            );
+        }
+
+        $status = (string) ($verification->status ?? '');
+        if ($status === 'passed') {
+            throw new RuntimeException('Cannot retry an already passed verification.');
+        }
+
+        $this->applyTenantConfig();
+
+        $originalLevel = (string) ($verification->level ?? 'internal');
+        $level = \KycAi\Laravel\KycLevel::tryFrom($originalLevel) ?? \KycAi\Laravel\KycLevel::Internal;
+
+        // Documents are deleted after verify; retry without a file is national_id-only.
+        $mode = 'national_id_only';
+        if ($level->requiresExtraction()) {
+            $level = \KycAi\Laravel\KycLevel::Internal;
+        }
+
+        /** @var \KycAi\Laravel\KycPipeline $pipeline */
+        $pipeline = \KycAi\Laravel\Facades\Kyc::number($nationalId)
+            ->country((string) ($verification->country ?? 'sa'))
+            ->level($level)
+            ->forUser((int) ($verification->user_id ?? $user->id));
+
+        if ($queue) {
+            $pipeline->dispatch();
+
+            return [
+                'queued' => true,
+                'mode' => $mode,
+                'result' => null,
+            ];
+        }
+
+        return [
+            'queued' => false,
+            'mode' => $mode,
+            'result' => $pipeline->verify(),
+        ];
+    }
 }

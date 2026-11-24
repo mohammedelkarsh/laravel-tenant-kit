@@ -130,6 +130,8 @@ php artisan test --filter=Kyc
 | Sync upload | Result page + `kyc_verifications` row in tenant DB |
 | Queue checkbox | `ProcessKycDocument` dispatched |
 | Per-tenant settings | `kyc_country` / `kyc_level` / `kyc_extraction_driver` applied via `TenantKycService` |
+| `GET /api/kyc/status` | Sanctum `kyc:read` — readiness + latest verification |
+| `POST /api/kyc/verifications/{uuid}/retry` | Sanctum `kyc:retry` — national_id-only re-queue (document not retained) |
 
 > Packagist `1.1.0` may need `symfony/process` ^8 for Laravel 13. If install fails, use a path/VCS install of [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) that allows `symfony/process` `^6.4\|^7.0\|^8.0`.
 

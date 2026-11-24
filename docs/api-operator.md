@@ -125,6 +125,8 @@ Example prompts:
 - `get usage for demo`
 - `get subscription for demo`
 - `invite new@example.test to demo as member` (requires tenant token configured for tenant host)
+- `get kyc status for demo` (tenant token with `kyc:read`)
+- `retry kyc verification <uuid> for demo` (tenant token with `kyc:retry`; confirms first)
 
 ## HTTP server
 

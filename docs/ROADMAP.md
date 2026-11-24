@@ -12,7 +12,8 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.4.0** | Optional KYC module | tenant-kit + [laravel-kyc-ai](https://github.com/mohammedelkarsh/laravel-kyc-ai) | ✅ Released |
 | **v1.5.0** | `agent_calls` usage meter + Stripe | tenant-kit | ✅ Released |
 | **v1.5.3** | api-operator 0.11 Safe API Agent (policy / dry-run / metering) | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
-| **v1.5.4** | api-operator 1.1 knowledge docs (keyword/embedding/pgvector) | tenant-kit + api-operator | 💡 In progress |
+| **v1.5.4** | api-operator 1.1 knowledge docs (keyword/embedding/pgvector) | tenant-kit + api-operator | ✅ Released |
+| **v1.5.5** | KYC Sanctum status + retry APIs for api-operator | tenant-kit + api-operator | 💡 In progress |
 | **v1.5.x** | Remaining usage meters (storage, email, webhooks) | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |

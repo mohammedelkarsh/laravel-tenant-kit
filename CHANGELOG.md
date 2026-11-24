@@ -7,7 +7,8 @@ All notable changes to this project are documented here.
 ### Added
 
 - **Tenant KYC status API** — `GET /api/kyc/status` (Sanctum ability `kyc:read`)
-- api-operator tool `get_kyc_status` in the YAML adapter
+- **Tenant KYC retry API** — `POST /api/kyc/verifications/{uuid}/retry` (Sanctum ability `kyc:retry`; national_id-only re-queue)
+- api-operator tools `get_kyc_status` and `retry_kyc_verification` in the YAML adapter
 
 ### Changed
 
