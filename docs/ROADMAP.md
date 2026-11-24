@@ -17,7 +17,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.5.6** | `outbound_emails` usage meter | tenant-kit | ✅ Released |
 | **v1.5.7** | `storage_bytes` usage meter | tenant-kit | ✅ Released |
 | **v1.5.x** | Remaining usage meters (webhooks) | tenant-kit | 💡 Planned |
-| **v1.6.0** | Platform webhooks (+ plan gating / smarter agent follow-ups) | tenant-kit + api-operator | ✅ Webhooks shipped; follow-ups open |
+| **v1.6.0–1.6.4** | Platform webhooks, plan gating, KYC hooks, Postgres docs, agent UX, RAG corpus | tenant-kit + api-operator | ✅ Shipped |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
 
