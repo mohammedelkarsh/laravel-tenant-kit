@@ -177,7 +177,7 @@ return [
         'placeholder' => 'Type your answer…',
         'send' => 'Send',
         'thinking' => 'Thinking…',
-        'confirm_hint' => 'Sensitive actions need typing yes to confirm.',
+        'confirm_hint' => 'Writes preview with dry-run first, then Apply — or type yes when the API asks to confirm.',
         'unavailable' => 'API Operator service is not running. Start api-operator serve.',
         'disabled' => 'API Operator chat is disabled.',
         'ui' => [
@@ -185,11 +185,13 @@ return [
             'chip_main_menu' => '← Main menu',
             'chip_cancel' => 'Cancel',
             'chip_confirm' => 'Confirm',
+            'chip_apply' => 'Apply change',
             'chip_yes' => 'Yes, proceed',
             'chip_no' => 'No, cancel',
             'flow_cancelled' => 'No problem. What else can I help you with?',
             'confirm_placeholder' => 'Type yes to confirm or no to cancel',
             'confirm_hint' => 'Please tap Yes or No below, or type yes / no.',
+            'dry_run_label' => 'Dry-run preview:',
             'help' => "I can help you with:\n\n• Workspaces — list, create, or view details\n• Billing — usage and subscription for a workspace\n• Team — invite a teammate\n\nChoose a topic below to get started. I'll ask for details one step at a time.",
             'menus' => [
                 'main' => [

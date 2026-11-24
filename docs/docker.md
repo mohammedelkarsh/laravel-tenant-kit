@@ -1,6 +1,8 @@
 # Docker development environment
 
-Run the full stack (PHP 8.4, Nginx, MySQL, Redis) without Laragon or Valet.
+Run the full stack (PHP 8.4, Nginx, MySQL or **PostgreSQL**, Redis) without Laragon or Valet.
+
+> **Production tip:** Prefer the **`pgsql` profile** for production-shaped deploys. See [production.md](production.md). MySQL below is the fastest local default (especially with Laragon).
 
 ## Prerequisites
 
@@ -91,33 +93,19 @@ curl http://127.0.0.1:8100/health
 
 `.env.docker` sets `API_OPERATOR_ENABLED=true` and `API_OPERATOR_URL=http://api-operator:8100`. Log in on the central domain to use the in-app guided agent. See [api-operator.md](api-operator.md).
 
-## PostgreSQL variant
+## PostgreSQL variant (recommended for production-shaped work)
 
 Start with Postgres instead of MySQL:
 
 ```bash
-docker compose --profile pgsql up -d --build
-docker compose exec app cp .env.docker .env
-```
-
-Edit `.env` inside the container (or locally):
-
-```env
-DB_CONNECTION=pgsql
-DB_HOST=postgres
-DB_PORT=5432
-DB_DATABASE=laravel_tenant_kit
-DB_USERNAME=laravel
-DB_PASSWORD=secret
-```
-
-Then migrate:
-
-```bash
+docker compose --profile pgsql --profile operator up -d --build
+docker compose exec app cp .env.docker.pgsql .env
+docker compose exec app php artisan key:generate
 docker compose exec app php artisan migrate --seed
+docker compose --profile build run --rm node
 ```
 
-Stancl Tenancy creates isolated databases per workspace on PostgreSQL automatically.
+Stancl Tenancy creates isolated databases per workspace on PostgreSQL automatically. Full production checklist: [production.md](production.md).
 
 ## Redis & tenant isolation
 

@@ -43,6 +43,8 @@ function bootApiOperatorWidget(root) {
     let flow = null;
     let menuInitialized = false;
     let awaitingConfirmation = false;
+    /** @type {string|null} pending write command after dry-run preview */
+    let pendingWriteCommand = null;
 
     function initialMessages() {
         const bubble = messagesEl?.querySelector('[data-initial-agent-message] div');
@@ -210,6 +212,13 @@ function bootApiOperatorWidget(root) {
         ];
     }
 
+    function dryRunConfirmChips() {
+        return [
+            { label: t('chip_apply', 'Apply change'), data: { agentChip: 'apply-write' } },
+            { label: t('chip_cancel', 'Cancel'), secondary: true, data: { agentChip: 'cancel-write' } },
+        ];
+    }
+
     function apiConfirmChips() {
         return [
             { label: t('chip_yes', 'Yes, proceed'), data: { agentChip: 'api-confirm', value: 'yes' } },
@@ -311,19 +320,25 @@ function bootApiOperatorWidget(root) {
             return;
         }
         let command = '';
+        let isWrite = false;
         if (flow.id === 'create_workspace') {
             command = `create workspace ${flow.data.name} subdomain ${flow.data.subdomain}`;
+            isWrite = true;
         } else if (flow.id === 'usage') {
             command = `get usage for ${flow.data.workspace}`;
         } else if (flow.id === 'subscription') {
             command = `get subscription for ${flow.data.workspace}`;
         } else if (flow.id === 'invite_member') {
             command = `invite ${flow.data.email} to ${flow.data.workspace} ${flow.data.role}`;
+            isWrite = true;
         }
-        const doneFlow = flow.id;
         flow = null;
+        if (isWrite) {
+            // Filament/admin UX: dry-run preview before applying writes
+            sendToApi(command, { restoreMenu: false, silentUser: true, dryRun: true, pendingWrite: command });
+            return;
+        }
         sendToApi(command, { restoreMenu: true, silentUser: true });
-        void doneFlow;
     }
 
     function handleFlowInput(text) {
@@ -402,6 +417,26 @@ function bootApiOperatorWidget(root) {
             pushUser(btn.textContent.trim());
             awaitingConfirmation = false;
             sendToApi(answer, { restoreMenu: true, silentUser: true });
+            return;
+        }
+
+        if (kind === 'apply-write') {
+            if (!healthy || !pendingWriteCommand) {
+                pushAgent(unavailable, 'error');
+                return;
+            }
+            pushUser(btn.textContent.trim());
+            const command = pendingWriteCommand;
+            pendingWriteCommand = null;
+            sendToApi(command, { restoreMenu: true, silentUser: true });
+            return;
+        }
+
+        if (kind === 'cancel-write') {
+            pushUser(btn.textContent.trim());
+            pendingWriteCommand = null;
+            pushAgent(i18n.flow_cancelled || 'Cancelled. What else can I help with?');
+            showMenu('main', false);
             return;
         }
 
@@ -539,7 +574,11 @@ function bootApiOperatorWidget(root) {
                     'X-CSRF-TOKEN': csrf,
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({ message: normalized, session_id: sessionId }),
+                body: JSON.stringify({
+                    message: normalized,
+                    session_id: sessionId,
+                    dry_run: Boolean(options.dryRun),
+                }),
             });
             const data = await res.json();
             if (!res.ok) {
@@ -547,12 +586,28 @@ function bootApiOperatorWidget(root) {
             }
             sessionId = data.session_id;
             const agentStatus = data.status ?? 'ok';
+            let agentText = data.message;
+            if (options.dryRun && data.dry_run_report) {
+                const report = typeof data.dry_run_report === 'string'
+                    ? data.dry_run_report
+                    : JSON.stringify(data.dry_run_report, null, 2);
+                agentText = `${data.message}\n\n${i18n.dry_run_label || 'Dry-run preview:'}\n${report}`;
+            }
             messages.push({
                 role: 'agent',
-                text: data.message,
-                status: agentStatus,
+                text: agentText,
+                status: options.dryRun ? 'confirm' : agentStatus,
             });
             renderMessages();
+
+            if (options.dryRun && options.pendingWrite) {
+                pendingWriteCommand = options.pendingWrite;
+                renderChips(dryRunConfirmChips());
+                if (input) {
+                    input.placeholder = i18n.confirm_placeholder || 'Apply the change or cancel';
+                }
+                return;
+            }
 
             if (agentStatus === 'confirm') {
                 awaitingConfirmation = true;
@@ -566,6 +621,7 @@ function bootApiOperatorWidget(root) {
             awaitingConfirmation = false;
             if (agentStatus === 'deny') {
                 // Policy/quota/ability rejection — keep menu available to try another action
+                pendingWriteCommand = null;
                 showMenu('main', false);
                 return;
             }

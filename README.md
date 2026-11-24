@@ -10,6 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.6.3** — Postgres-first production docs + agent dry-run writes · [docs/production.md](docs/production.md)  
 > **v1.6.2** — KYC platform webhooks · [docs/webhooks.md](docs/webhooks.md)  
 > **v1.6.1** — Plan feature gating (opt-in) · [docs/plan-gating.md](docs/plan-gating.md)  
 > **v1.6.0** — Platform outbound webhooks (opt-in) · [docs/webhooks.md](docs/webhooks.md)  
@@ -455,7 +456,8 @@ Full plan: [docs/ROADMAP.md](docs/ROADMAP.md)
 - [x] Plan gating per Stripe tier (v1.6.1) · [docs/plan-gating.md](docs/plan-gating.md)
 - [x] KYC webhooks via platform outbound webhooks (v1.6.2)
 - [ ] api-operator RAG + Filament confirm-before-write (v1.6.0)
-- [ ] PostgreSQL-first production docs (v1.6.0)
+- [x] PostgreSQL-first production docs (v1.6.3) · [docs/production.md](docs/production.md)
+- [x] Filament/admin agent dry-run before writes (v1.6.3)
 - [ ] Enterprise — SSO, audit log, tenant export (v1.7+)
 
 ---
@@ -480,6 +482,7 @@ docker-compose.yml                   # PHP + Nginx + MySQL + Redis + api-operato
 integrations/api-operator/           # api-operator YAML adapter
 docs/api-operator.md                 # AI operator setup guide
 docs/docker.md                       # Docker & PostgreSQL guide
+docs/production.md                   # Production checklist (Postgres-first)
 docs/api.md                          # Sanctum API & OAuth setup
 ```
 

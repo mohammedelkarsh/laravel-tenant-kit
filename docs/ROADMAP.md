@@ -188,8 +188,8 @@ Ship when ready (patch).
 | Plan gating | ✅ Opt-in — [docs/plan-gating.md](plan-gating.md) (v1.6.1) |
 | KYC webhooks | ✅ Via platform webhooks — `kyc.verification.*` (v1.6.2) |
 | api-operator RAG | Answer from tenant-kit docs ([api-operator](https://github.com/mohammedelkarsh/api-operator) repo) |
-| Filament agent UX | Confirm-before-write patterns in admin |
-| PostgreSQL-first docs | Docker profile as recommended production path |
+| Filament agent UX | ✅ Dry-run preview before create/invite writes (v1.6.3) |
+| PostgreSQL-first docs | ✅ [production.md](production.md) + `.env.docker.pgsql` (v1.6.3) |
 
 ---
 
