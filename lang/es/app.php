@@ -185,11 +185,13 @@ return [
             'chip_main_menu' => '← Menú principal',
             'chip_cancel' => 'Cancelar',
             'chip_confirm' => 'Confirmar',
+            'chip_apply' => 'Aplicar cambio',
             'chip_yes' => 'Sí, continuar',
             'chip_no' => 'No, cancelar',
             'flow_cancelled' => 'Sin problema. ¿En qué más puedo ayudarte?',
             'confirm_placeholder' => 'Escribe sí para confirmar o no para cancelar',
             'confirm_hint' => 'Pulsa Sí o No abajo, o escribe sí / no.',
+            'dry_run_label' => 'Vista previa dry-run:',
             'help' => "Puedo ayudarte con:\n\n• Espacios — listar, crear o ver detalles\n• Facturación — uso y suscripción de un espacio\n• Equipo — invitar a un compañero\n\nElige un tema abajo para empezar. Pediré los detalles paso a paso.",
             'menus' => [
                 'main' => [

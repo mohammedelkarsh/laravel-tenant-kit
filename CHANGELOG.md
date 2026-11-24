@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## [1.6.3] — 2026-11-24
+
+### Added
+
+- **PostgreSQL-first production guide** — `docs/production.md` + `.env.docker.pgsql`
+- Guided agent **dry-run before write** for create workspace / invite flows (Apply change chip)
+
+### Changed
+
+- `docs/docker.md` recommends `pgsql` profile for production-shaped deploys
+
 ## [1.6.2] — 2026-11-24
 
 ### Added

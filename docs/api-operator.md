@@ -206,6 +206,7 @@ Run `api-operator serve` from the **tenant-kit repo root** so the adapter path r
 - `integrations/api-operator/policy.yaml` — confirm dangerous tools, session caps, viewer deny rules
 - Proxy accepts optional `dry_run: true` (no upstream side effects; no `agent_calls` meter)
 - Operator may return `status: deny` for policy/quota/ability failures — surface the message as-is
+- **In-app widget (Filament/admin):** create-workspace and invite flows call the proxy with `dry_run: true` first, show the preview, then **Apply change** runs the real tool call
 
 CLI dry-run:
 
