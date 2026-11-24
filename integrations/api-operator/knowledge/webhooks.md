@@ -12,6 +12,7 @@ Opt-in signed HTTP callbacks (`PLATFORM_WEBHOOKS_ENABLED`).
 ## Delivery
 
 Queued job `DeliverPlatformWebhook`, HMAC header `X-Tenant-Kit-Signature` (`sha256=` + body).
+Successful deliveries with `workspace_id` increment the `webhook_deliveries` usage meter.
 
 ## Operator guidance
 

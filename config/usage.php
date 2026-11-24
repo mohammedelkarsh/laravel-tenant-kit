@@ -37,6 +37,11 @@ return [
             'description' => 'Bytes used under the tenant storage/app directory (local disk gauge).',
             'event_name' => env('STRIPE_METER_STORAGE_BYTES', 'storage_bytes'),
         ],
+        'webhook_deliveries' => [
+            'label' => 'Webhook deliveries',
+            'description' => 'Successful platform webhook deliveries attributed to a workspace_id.',
+            'event_name' => env('STRIPE_METER_WEBHOOK_DELIVERIES', 'webhook_deliveries'),
+        ],
     ],
 
 ];
