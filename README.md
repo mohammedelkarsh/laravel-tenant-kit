@@ -10,6 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.6.4** — api-operator RAG knowledge corpus · [integrations/api-operator/knowledge](integrations/api-operator/knowledge)  
 > **v1.6.3** — Postgres-first production docs + agent dry-run writes · [docs/production.md](docs/production.md)  
 > **v1.6.2** — KYC platform webhooks · [docs/webhooks.md](docs/webhooks.md)  
 > **v1.6.1** — Plan feature gating (opt-in) · [docs/plan-gating.md](docs/plan-gating.md)  

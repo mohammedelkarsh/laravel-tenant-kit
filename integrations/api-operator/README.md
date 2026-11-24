@@ -63,7 +63,7 @@ Knowledge is configured on the **sidecar** process:
 ```bash
 export API_OPERATOR_KNOWLEDGE_ENABLED=true
 export API_OPERATOR_KNOWLEDGE_BACKEND=keyword
-export API_OPERATOR_KNOWLEDGE_PATHS=integrations/api-operator/knowledge/shared.md
+export API_OPERATOR_KNOWLEDGE_PATHS=integrations/api-operator/knowledge
 ```
 
-See [api-operator docs/knowledge.md](https://github.com/mohammedelkarsh/api-operator/blob/main/docs/knowledge.md).
+Requires **api-operator >= 1.1.1** for directory expansion (`*.md` / `*.txt`). See [api-operator docs/knowledge.md](https://github.com/mohammedelkarsh/api-operator/blob/main/docs/knowledge.md).
