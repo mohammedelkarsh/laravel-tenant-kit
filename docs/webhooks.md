@@ -22,6 +22,11 @@ Use a queue worker in production (`PLATFORM_WEBHOOKS_QUEUE=true`, the default). 
 | `workspace.suspended` | `suspended_at` set on the workspace |
 | `workspace.unsuspended` | `suspended_at` cleared |
 | `workspace.invite_sent` | Team invite created (web UI or tenant API) |
+| `kyc.verification.passed` | KYC pipeline approved, or Filament review approved |
+| `kyc.verification.failed` | KYC pipeline failed, or Filament review rejected |
+| `kyc.verification.pending_review` | KYC pipeline recommends manual review |
+
+KYC events require `kyc-ai/laravel` and fire only while platform webhooks are enabled. Payloads **omit** `national_id` and document paths.
 
 ## Envelope
 
@@ -63,4 +68,3 @@ hash_equals($expected, $signature);
 
 - Per-tenant webhook endpoints (customer-configured)
 - Usage meter for customer webhook deliveries (see ROADMAP remaining meters)
-- KYC status webhooks (planned under v1.6 stretch)

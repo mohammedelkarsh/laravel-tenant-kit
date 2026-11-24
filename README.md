@@ -10,6 +10,7 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.6.2** — KYC platform webhooks · [docs/webhooks.md](docs/webhooks.md)  
 > **v1.6.1** — Plan feature gating (opt-in) · [docs/plan-gating.md](docs/plan-gating.md)  
 > **v1.6.0** — Platform outbound webhooks (opt-in) · [docs/webhooks.md](docs/webhooks.md)  
 > **v1.5.7** — `storage_bytes` usage meter · [CHANGELOG](CHANGELOG.md)  
@@ -452,7 +453,7 @@ Full plan: [docs/ROADMAP.md](docs/ROADMAP.md)
 - [ ] Remaining usage meters — webhooks deliveries (after v1.6 platform webhooks)
 - [x] Platform outbound webhooks (v1.6.0) · [docs/webhooks.md](docs/webhooks.md)
 - [x] Plan gating per Stripe tier (v1.6.1) · [docs/plan-gating.md](docs/plan-gating.md)
-- [ ] KYC webhooks (v1.6.x)
+- [x] KYC webhooks via platform outbound webhooks (v1.6.2)
 - [ ] api-operator RAG + Filament confirm-before-write (v1.6.0)
 - [ ] PostgreSQL-first production docs (v1.6.0)
 - [ ] Enterprise — SSO, audit log, tenant export (v1.7+)

@@ -186,7 +186,7 @@ Ship when ready (patch).
 |------|--------|
 | Outbound platform webhooks | ✅ Opt-in signed POSTs — [docs/webhooks.md](webhooks.md) |
 | Plan gating | ✅ Opt-in — [docs/plan-gating.md](plan-gating.md) (v1.6.1) |
-| KYC webhooks | Notify workspace when verification status changes (from v1.4 stretch) |
+| KYC webhooks | ✅ Via platform webhooks — `kyc.verification.*` (v1.6.2) |
 | api-operator RAG | Answer from tenant-kit docs ([api-operator](https://github.com/mohammedelkarsh/api-operator) repo) |
 | Filament agent UX | Confirm-before-write patterns in admin |
 | PostgreSQL-first docs | Docker profile as recommended production path |
