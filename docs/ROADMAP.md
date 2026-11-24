@@ -17,7 +17,7 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.5.6** | `outbound_emails` usage meter | tenant-kit | ✅ Released |
 | **v1.5.7** | `storage_bytes` usage meter | tenant-kit | ✅ Released |
 | **v1.5.x** | Remaining usage meters (webhooks) | tenant-kit | 💡 Planned |
-| **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
+| **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 In progress |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
 
@@ -184,7 +184,7 @@ Ship when ready (patch).
 
 | Item | Notes |
 |------|--------|
-| Outbound platform webhooks | Events: workspace created, suspended, invite sent |
+| Outbound platform webhooks | ✅ Opt-in signed POSTs — [docs/webhooks.md](webhooks.md) |
 | Plan gating | Features (including KYC) enabled per Stripe subscription tier |
 | KYC webhooks | Notify workspace when verification status changes (from v1.4 stretch) |
 | api-operator RAG | Answer from tenant-kit docs ([api-operator](https://github.com/mohammedelkarsh/api-operator) repo) |

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PlatformWebhookDispatcher;
 use App\Support\TenantUrls;
 use Laravel\Cashier\Billable;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
@@ -12,6 +13,25 @@ use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 class Tenant extends BaseTenant implements TenantWithDatabase
 {
     use Billable, HasDatabase, HasDomains;
+
+    protected static function booted(): void
+    {
+        static::updated(function (Tenant $tenant): void {
+            if (! $tenant->wasChanged('suspended_at')) {
+                return;
+            }
+
+            $event = $tenant->suspended_at !== null
+                ? 'workspace.suspended'
+                : 'workspace.unsuspended';
+
+            app(PlatformWebhookDispatcher::class)->dispatch($event, [
+                'workspace_id' => $tenant->id,
+                'name' => $tenant->name,
+                'suspended_at' => optional($tenant->suspended_at)?->toIso8601String(),
+            ]);
+        });
+    }
 
     public static function getCustomColumns(): array
     {
