@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.5] — 2026-11-24
+
+### Added
+
+- **Tenant KYC status API** — `GET /api/kyc/status` (Sanctum ability `kyc:read`)
+- api-operator tool `get_kyc_status` in the YAML adapter
+
+### Changed
+
+- Windows docs: prefer `python -m api_operator.server.cli` when the `api-operator` script is not on PATH
+
 ## [1.5.4] — 2026-11-23
 
 ### Added

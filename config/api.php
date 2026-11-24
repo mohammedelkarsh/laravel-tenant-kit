@@ -17,6 +17,7 @@ return [
         'user:read',
         'team:read',
         'team:invite',
+        'kyc:read',
     ],
 
 ];
