@@ -13,8 +13,9 @@ Planned releases from the current stable tag through **v1.7+**. Dates are not co
 | **v1.5.0** | `agent_calls` usage meter + Stripe | tenant-kit | ✅ Released |
 | **v1.5.3** | api-operator 0.11 Safe API Agent (policy / dry-run / metering) | tenant-kit + [api-operator](https://github.com/mohammedelkarsh/api-operator) | ✅ Released |
 | **v1.5.4** | api-operator 1.1 knowledge docs (keyword/embedding/pgvector) | tenant-kit + api-operator | ✅ Released |
-| **v1.5.5** | KYC Sanctum status + retry APIs for api-operator | tenant-kit + api-operator | 💡 In progress |
-| **v1.5.x** | Remaining usage meters (storage, email, webhooks) | tenant-kit | 💡 Planned |
+| **v1.5.5** | KYC Sanctum status + retry APIs for api-operator | tenant-kit + api-operator | ✅ Released |
+| **v1.5.6** | `outbound_emails` usage meter | tenant-kit | 💡 In progress |
+| **v1.5.x** | Remaining usage meters (storage, webhooks) | tenant-kit | 💡 Planned |
 | **v1.6.0** | Platform webhooks + plan gating + smarter agent | tenant-kit + api-operator | 💡 Planned |
 | **v1.7+** | Enterprise (SSO, audit, export) | tenant-kit | 🔭 Under consideration |
 | **v2.0** | Breaking changes | — | Not planned yet |
@@ -144,19 +145,24 @@ The Python package lives in a **separate repo**: [api-operator](https://github.c
 
 ---
 
-## v1.5.1 — Remaining usage meters 💡
+## v1.5.6 — `outbound_emails` usage meter 💡
 
-**Goal:** Complete the usage-billing story deferred from v1.5.0.
+**Goal:** Start remaining usage meters deferred from v1.5.0 / v1.5.1.
+
+| Item | Notes |
+|------|--------|
+| Outbound email meter | ✅ `MessageSent` while tenancy initialized → `outbound_emails` |
+| Stripe sync | ✅ `STRIPE_METER_OUTBOUND_EMAILS` via existing `USAGE_SYNC_TO_STRIPE` |
+| Tests | ✅ `UsageBillingTest` |
+
+## Remaining usage meters 💡
 
 | Item | Notes |
 |------|--------|
 | Storage meter | Track per-workspace storage consumption |
-| Outbound email meter | Count transactional / outbound mail per workspace |
 | Webhooks usage meter | Count outbound webhook deliveries (usage billing — not platform webhooks) |
-| Stripe sync | Same pattern as existing meters + `.env.example` vars |
-| Tests | Extend `UsageBillingTest`; adapter `get_usage` if needed |
 
-Optional minor — ship when at least one meter is ready, or bundle all three.
+Ship when each meter is ready (patch), or bundle.
 
 ---
 

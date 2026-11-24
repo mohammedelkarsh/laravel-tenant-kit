@@ -11,7 +11,7 @@ Use these notes when helping operators via api-operator.
 ## Billing
 
 - `get_subscription` returns Stripe subscription status for a workspace.
-- `get_usage` returns meters for the current billing period (`api_calls`, `agent_calls`, seats, etc.).
+- `get_usage` returns meters for the current billing period (`api_calls`, `agent_calls`, `outbound_emails`, seats, etc.).
 
 ## Team
 

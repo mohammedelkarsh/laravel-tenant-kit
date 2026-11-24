@@ -27,6 +27,11 @@ return [
             'description' => 'Successful in-app guided agent / api-operator chat proxy requests.',
             'event_name' => env('STRIPE_METER_AGENT_CALLS', 'agent_calls'),
         ],
+        'outbound_emails' => [
+            'label' => 'Outbound emails',
+            'description' => 'Transactional mail sent from a workspace tenant context.',
+            'event_name' => env('STRIPE_METER_OUTBOUND_EMAILS', 'outbound_emails'),
+        ],
     ],
 
 ];
