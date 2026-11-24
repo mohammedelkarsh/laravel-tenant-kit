@@ -90,3 +90,15 @@ tools:
     body:
       email: "{email}"
       role: "{role}"
+
+  - name: get_kyc_status
+    description: Get KYC readiness and latest verification status for a workspace tenant
+    method: GET
+    path: /api/kyc/status
+    host: tenant
+    tenant_param: subdomain
+    requires_ability: kyc:read
+    parameters:
+      subdomain:
+        type: string
+        required: true

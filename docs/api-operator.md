@@ -162,16 +162,27 @@ When logged in on the **central** domain, a floating chat button appears (bottom
 
 ```bash
 pip install "api-operator>=1.1.0"
+```
+
+On **Windows PowerShell**, if `api-operator` is not recognized (Scripts folder not on PATH), use:
+
+```powershell
+python -m api_operator.server.cli serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
+```
+
+On Linux/macOS (or when the script is on PATH):
+
+```bash
 api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 ```
 
-Optional knowledge (keyword L0 — set on the **Python** process, not Laravel):
+Optional knowledge (keyword L0 — set on the **Python** process, not Laravel). Run from the **tenant-kit repo root** so relative paths resolve:
 
-```bash
-export API_OPERATOR_KNOWLEDGE_ENABLED=true
-export API_OPERATOR_KNOWLEDGE_BACKEND=keyword
-export API_OPERATOR_KNOWLEDGE_PATHS=integrations/api-operator/knowledge/shared.md
-api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
+```powershell
+$env:API_OPERATOR_KNOWLEDGE_ENABLED = "true"
+$env:API_OPERATOR_KNOWLEDGE_BACKEND = "keyword"
+$env:API_OPERATOR_KNOWLEDGE_PATHS = "integrations/api-operator/knowledge/shared.md"
+python -m api_operator.server.cli serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 ```
 
 2. In Tenant Kit `.env`:

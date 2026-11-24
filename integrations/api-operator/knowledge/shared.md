@@ -18,6 +18,11 @@ Use these notes when helping operators via api-operator.
 - `invite_team_member` runs on the tenant host (`host: tenant`) and needs a tenant-scoped token with `team:invite`.
 - Prefer role `member` unless the user asks for admin.
 
+## KYC
+
+- `get_kyc_status` runs on the tenant host and needs ability `kyc:read`.
+- It returns whether KYC is ready and the latest verification (if any). No secrets are exposed.
+
 ## Safety
 
 - Prefer dry-run when the user wants to preview an action.

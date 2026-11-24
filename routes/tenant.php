@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\Tenant\AuthTokenController as TenantAuthTokenController;
+use App\Http\Controllers\Api\Tenant\KycStatusController as TenantKycStatusController;
 use App\Http\Controllers\Api\Tenant\TeamController as TenantTeamApiController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Tenant\Auth\AuthenticatedSessionController;
@@ -88,5 +89,7 @@ Route::middleware([
             ->middleware('abilities:team:read');
         Route::post('team/invitations', [TenantTeamApiController::class, 'invite'])
             ->middleware(['abilities:team:invite', 'role:owner|admin']);
+        Route::get('kyc/status', [TenantKycStatusController::class, 'show'])
+            ->middleware('abilities:kyc:read');
     });
 });

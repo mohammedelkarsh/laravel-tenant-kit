@@ -17,7 +17,7 @@ When issuing a token you may pass an optional `abilities` array. If omitted, all
 
 **Central abilities:** `user:read`, `workspaces:read`, `workspaces:write`
 
-**Tenant abilities:** `user:read`, `team:read`, `team:invite`
+**Tenant abilities:** `user:read`, `team:read`, `team:invite`, `kyc:read`
 
 ```bash
 curl -X POST http://laravel-tenant-kit.test/api/auth/token \

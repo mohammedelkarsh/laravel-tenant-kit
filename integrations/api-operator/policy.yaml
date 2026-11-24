@@ -12,6 +12,7 @@ confirm_tools:
 max_calls:
   list_workspaces: 50
   get_usage: 30
+  get_kyc_status: 40
 
 rules:
   - id: block_viewer_writes
