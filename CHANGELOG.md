@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.7] — 2026-11-24
+
+### Added
+
+- **`storage_bytes` usage meter** — gauge of bytes under the tenant `storage/app` tree (local disk)
+- `usage:snapshot-gauges` Artisan command + daily schedule (when usage billing is enabled)
+- Usage/subscription/billing surfaces refresh seats + storage via `UsageMeter::snapshotGauges()`
+
+### Changed
+
+- Stripe meter name: `STRIPE_METER_STORAGE_BYTES` (optional sync via `USAGE_SYNC_TO_STRIPE`)
+
 ## [1.5.6] — 2026-11-24
 
 ### Added

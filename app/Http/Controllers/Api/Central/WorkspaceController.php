@@ -36,7 +36,7 @@ class WorkspaceController extends Controller
     public function subscription(Tenant $tenant): JsonResponse
     {
         if (config('usage.enabled')) {
-            app(\App\Services\UsageMeter::class)->snapshotTeamSeats($tenant);
+            app(\App\Services\UsageMeter::class)->snapshotGauges($tenant);
         }
 
         return response()->json([
@@ -51,7 +51,7 @@ class WorkspaceController extends Controller
     public function usage(Tenant $tenant): JsonResponse
     {
         if (config('usage.enabled')) {
-            app(\App\Services\UsageMeter::class)->snapshotTeamSeats($tenant);
+            app(\App\Services\UsageMeter::class)->snapshotGauges($tenant);
         }
 
         return response()->json([

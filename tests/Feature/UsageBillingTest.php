@@ -51,6 +51,7 @@ class UsageBillingTest extends TestCase
                         'team_seats' => ['label', 'quantity', 'event_name'],
                         'agent_calls' => ['label', 'quantity', 'event_name'],
                         'outbound_emails' => ['label', 'quantity', 'event_name'],
+                        'storage_bytes' => ['label', 'quantity', 'event_name'],
                     ],
                 ],
             ]);
@@ -110,6 +111,33 @@ class UsageBillingTest extends TestCase
 
         $this->assertNotNull($record);
         $this->assertSame(1, $record->quantity);
+    }
+
+    public function test_usage_meter_snapshots_storage_bytes_for_tenant(): void
+    {
+        $result = $this->provisionTenant(
+            subdomain: 'storagemeter',
+            name: 'Storage Meter Workspace',
+            adminEmail: 'owner@storagemeter.test',
+        );
+
+        $bytesWritten = 0;
+
+        $result['tenant']->run(function () use (&$bytesWritten): void {
+            $dir = storage_path('app/private');
+            if (! is_dir($dir)) {
+                mkdir($dir, 0777, true);
+            }
+            $path = $dir.DIRECTORY_SEPARATOR.'usage-probe.bin';
+            $payload = str_repeat('x', 2048);
+            file_put_contents($path, $payload);
+            $bytesWritten = strlen($payload);
+        });
+
+        $record = app(UsageMeter::class)->snapshotStorage($result['tenant']);
+
+        $this->assertNotNull($record);
+        $this->assertGreaterThanOrEqual($bytesWritten, $record->quantity);
     }
 
     public function test_tenant_outbound_mail_increments_outbound_emails_meter(): void
