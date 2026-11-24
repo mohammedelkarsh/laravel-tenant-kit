@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Tenant;
 use App\Models\UsageRecord;
 use App\Models\User;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -21,14 +22,21 @@ class UsageMeter
             return null;
         }
 
-        $record = UsageRecord::query()->firstOrCreate(
-            [
-                'tenant_id' => $tenant->id,
-                'meter' => $meter,
-                'period_start' => $this->periodStart(),
-            ],
-            ['quantity' => 0],
-        );
+        $keys = [
+            'tenant_id' => $tenant->id,
+            'meter' => $meter,
+            'period_start' => $this->periodStart(),
+        ];
+
+        try {
+            $record = UsageRecord::query()->firstOrCreate($keys, ['quantity' => 0]);
+        } catch (UniqueConstraintViolationException) {
+            $record = UsageRecord::query()
+                ->where('tenant_id', $tenant->id)
+                ->where('meter', $meter)
+                ->whereDate('period_start', $this->periodStart())
+                ->firstOrFail();
+        }
 
         $record->increment('quantity', $quantity);
 

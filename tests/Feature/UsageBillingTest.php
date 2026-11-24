@@ -9,6 +9,7 @@ use App\Services\TenantProvisioner;
 use App\Services\UsageMeter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Stancl\Tenancy\Contracts\TenantDatabaseManager;
 use Tests\TestCase;
 
@@ -49,6 +50,7 @@ class UsageBillingTest extends TestCase
                         'api_calls' => ['label', 'quantity', 'event_name'],
                         'team_seats' => ['label', 'quantity', 'event_name'],
                         'agent_calls' => ['label', 'quantity', 'event_name'],
+                        'outbound_emails' => ['label', 'quantity', 'event_name'],
                     ],
                 ],
             ]);
@@ -108,6 +110,45 @@ class UsageBillingTest extends TestCase
 
         $this->assertNotNull($record);
         $this->assertSame(1, $record->quantity);
+    }
+
+    public function test_tenant_outbound_mail_increments_outbound_emails_meter(): void
+    {
+        $result = $this->provisionTenant(
+            subdomain: 'mailmeter',
+            name: 'Mail Meter Workspace',
+            adminEmail: 'owner@mailmeter.test',
+        );
+
+        $result['tenant']->run(function (): void {
+            Mail::raw('usage meter probe', function ($message): void {
+                $message->to('invitee@example.test')->subject('Meter probe');
+            });
+        });
+
+        $record = UsageRecord::query()
+            ->where('tenant_id', 'mailmeter')
+            ->where('meter', 'outbound_emails')
+            ->first();
+
+        $this->assertNotNull($record);
+        $this->assertGreaterThanOrEqual(1, $record->quantity);
+    }
+
+    public function test_central_mail_does_not_increment_outbound_emails_meter(): void
+    {
+        Tenant::withoutEvents(function (): void {
+            Tenant::query()->create(['id' => 'centralmail', 'name' => 'Central Mail']);
+        });
+
+        Mail::raw('central probe', function ($message): void {
+            $message->to('ops@example.test')->subject('Central probe');
+        });
+
+        $this->assertSame(
+            0,
+            UsageRecord::query()->where('meter', 'outbound_emails')->count(),
+        );
     }
 
     public function test_usage_billing_can_be_disabled(): void

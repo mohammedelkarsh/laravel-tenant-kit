@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [1.5.6] — 2026-11-24
+
+### Added
+
+- **`outbound_emails` usage meter** — counts `MessageSent` events while tenant context is active (invites, etc.)
+- Stripe meter name: `STRIPE_METER_OUTBOUND_EMAILS` (optional sync via `USAGE_SYNC_TO_STRIPE`)
+
 ## [1.5.5] — 2026-11-24
 
 ### Added

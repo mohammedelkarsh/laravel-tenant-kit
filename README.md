@@ -10,10 +10,10 @@
 Laravel-based, scalable, and ready for real customers.  
 One codebase · isolated database per workspace · Stripe billing · Filament admin.
 
+> **v1.5.5** — KYC status/retry Sanctum APIs + api-operator tools · [CHANGELOG](CHANGELOG.md)  
 > **v1.5.0** — `agent_calls` usage meter for guided agent · [CHANGELOG](CHANGELOG.md)  
 > **v1.4.0** — Optional KYC module · [docs/kyc.md](docs/kyc.md)  
-> **v1.3.1** — [api-operator](https://pypi.org/project/api-operator/) + **in-app guided agent** · [docs/api-operator.md](docs/api-operator.md)  
-> **v1.3.0** — Usage-based billing · [CHANGELOG](CHANGELOG.md)
+> **v1.3.1** — [api-operator](https://pypi.org/project/api-operator/) + **in-app guided agent** · [docs/api-operator.md](docs/api-operator.md)
 
 ---
 
@@ -444,8 +444,8 @@ Full plan: [docs/ROADMAP.md](docs/ROADMAP.md)
 - [x] Usage-based billing meters (v1.3.0)
 - [x] api-operator integration + in-app guided agent (v1.3.1)
 - [x] Optional KYC module (v1.4.0) — enable with `composer require kyc-ai/laravel` · [docs/kyc.md](docs/kyc.md)
-- [x] Extended usage meters — `agent_calls` (v1.5.0)
-- [ ] Remaining usage meters — storage, outbound email, webhooks (v1.5.1)
+- [x] Extended usage meters — `agent_calls` (v1.5.0), `outbound_emails` (v1.5.6)
+- [ ] Remaining usage meters — storage, webhooks (v1.5.x)
 - [ ] Platform outbound webhooks (v1.6.0)
 - [ ] Plan gating per Stripe tier + KYC webhooks (v1.6.0)
 - [ ] api-operator RAG + Filament confirm-before-write (v1.6.0)
