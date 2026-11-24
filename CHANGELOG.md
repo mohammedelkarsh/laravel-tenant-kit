@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [1.6.4] — 2026-11-24
+
+### Added
+
+- **api-operator RAG corpus** — curated `integrations/api-operator/knowledge/` (`shared`, `billing`, `kyc`, `webhooks`, `ops`)
+- Docker `operator` profile enables knowledge by default (directory path; needs api-operator >= 1.1.1)
+
 ## [1.6.3] — 2026-11-24
 
 ### Added

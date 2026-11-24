@@ -34,6 +34,9 @@ class ApiOperatorAdapterTest extends TestCase
         $this->assertFileExists(base_path('integrations/api-operator/README.md'));
         $this->assertFileExists(base_path('integrations/api-operator/policy.yaml'));
         $this->assertFileExists(base_path('integrations/api-operator/knowledge/shared.md'));
+        foreach (['billing.md', 'kyc.md', 'webhooks.md', 'ops.md'] as $doc) {
+            $this->assertFileExists(base_path("integrations/api-operator/knowledge/{$doc}"), "Missing knowledge doc: {$doc}");
+        }
     }
 
     public function test_adapter_documents_api_operator_auth_env_var(): void

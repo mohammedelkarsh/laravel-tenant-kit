@@ -178,14 +178,16 @@ On Linux/macOS (or when the script is on PATH):
 api-operator serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 ```
 
-Optional knowledge (keyword L0 — set on the **Python** process, not Laravel). Run from the **tenant-kit repo root** so relative paths resolve:
+Optional knowledge / RAG (keyword L0 — set on the **Python** process, not Laravel). Run from the **tenant-kit repo root** so relative paths resolve. Point at the whole curated folder (api-operator **>= 1.1.1** expands directories):
 
 ```powershell
 $env:API_OPERATOR_KNOWLEDGE_ENABLED = "true"
 $env:API_OPERATOR_KNOWLEDGE_BACKEND = "keyword"
-$env:API_OPERATOR_KNOWLEDGE_PATHS = "integrations/api-operator/knowledge/shared.md"
+$env:API_OPERATOR_KNOWLEDGE_PATHS = "integrations/api-operator/knowledge"
 python -m api_operator.server.cli serve --host 127.0.0.1 --port 8100 --adapter yaml --planner mock
 ```
+
+Corpus: `shared.md`, `billing.md`, `kyc.md`, `webhooks.md`, `ops.md`. Docker `operator` profile enables this by default.
 
 2. In Tenant Kit `.env`:
 

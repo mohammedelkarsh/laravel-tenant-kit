@@ -98,9 +98,13 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/tenant-kit:ro
+    working_dir: /tenant-kit
     environment:
       API_OPERATOR_CORS_ORIGINS: ${APP_URL:-http://laravel-tenant-kit.test:8080}
       TENANT_KIT_API_TOKEN: ${TENANT_KIT_API_TOKEN:-}
+      API_OPERATOR_KNOWLEDGE_ENABLED: ${API_OPERATOR_KNOWLEDGE_ENABLED:-true}
+      API_OPERATOR_KNOWLEDGE_BACKEND: ${API_OPERATOR_KNOWLEDGE_BACKEND:-keyword}
+      API_OPERATOR_KNOWLEDGE_PATHS: ${API_OPERATOR_KNOWLEDGE_PATHS:-integrations/api-operator/knowledge}
     ports:
       - "${API_OPERATOR_PORT:-8100}:8100"
     networks:
